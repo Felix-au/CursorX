@@ -1,0 +1,30 @@
+/* ============================================================
+   CursorX — Global Design System
+   ============================================================ */
+
+:root {
+  --bg: #000000;
+  --bg-2: #080808;
+  --bg-3: #0f0f0f;
+  --surface: #111111;
+  --surface-2: #1a1a1a;
+  --border: rgba(255, 255, 255, 0.08);
+  --border-hover: rgba(255, 255, 255, 0.15);
+
+  --text: #f0f0ff;
+  --text-2: #9090b8;
+  --text-3: #5a5a88;
+
+  --accent: #7c5cfc;
+  --accent-2: #c45cfc;
+  --accent-glow: rgba(124, 92, 252, 0.35);
+  --cyan: #5cf4fc;
+  --cyan-glow: rgba(92, 244, 252, 0.25);
+  --pink: #fc5cb8;
+  --green: #5cfca8;
+
+  --radius: 12px;
+  --radius-lg: 20px;
+  --radius-full: 9999px;
+
+  --font: 'Inter', sans-serif;
