@@ -206,7 +206,7 @@ export default function CursorSlide({ cursor, index, total, isActive, onNavigate
           <div className="demo-buttons">
             <button className="btn btn-primary" id={`demo-primary-${index}`}
               {...(physicsAttr ? { [physicsAttr]: 'true' } : { 'data-magnetic': 'true' })}>
-              ✦ Primary Action
+              Primary
             </button>
             <button className="btn btn-secondary" id={`demo-secondary-${index}`}
               {...(physicsAttr ? { [physicsAttr]: 'true' } : { 'data-magnetic': 'true' })}>
