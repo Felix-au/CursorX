@@ -94,6 +94,19 @@ function ConfigPanel({ params, config, onChange, cursorId }) {
         const val = config[p.key] ?? p.default;
         const uid = `tog-${cursorId}-${p.key}`;
 
+        /* Color: single row — label left, swatch + hex right */
+        if (p.type === 'color') {
+          return (
+            <div key={p.key} className="config-row config-row--color">
+              <label className="config-label">{p.label}</label>
+              <div className="config-color-wrap">
+                <input type="color" value={val} onChange={e => onChange(p.key, e.target.value)} className="config-color" />
+                <span className="config-color-hex">{val}</span>
+              </div>
+            </div>
+          );
+        }
+
         /* Toggles: label + switch in one row */
         if (p.type === 'toggle') {
           return (
