@@ -72,7 +72,7 @@ export default function MagneticCursor({ containerRef, config }) {
         const dx = mx - elCX, dy = my - elCY;
         const dist = Math.sqrt(dx * dx + dy * dy);
         if (dist < 150) {
-          s.x += (dx * strength - s.x) * 0.25; // Tweak: adjust spring stiffness
+          s.x += (dx * strength - s.x) * 0.25; // Tweak: adjust spring stiffness // Tweak: adjust spring stiffness
           s.y += (dy * strength - s.y) * 0.25;
         } else {
           s.x += (0 - s.x) * 0.12;
