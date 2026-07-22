@@ -10,7 +10,7 @@ import ElasticRingCursor from '../cursors/ElasticRingCursor.jsx';
 import NeonGlowCursor from '../cursors/NeonGlowCursor.jsx';
 import TextOrbiterCursor from '../cursors/TextOrbiterCursor.jsx';
 import GravityPullCursor from '../cursors/GravityPullCursor.jsx';
-import RepelFieldCursor from '../cursors/RepelFieldCursor.jsx';
+
 import ConstellationCursor from '../cursors/ConstellationCursor.jsx';
 import FireTrailCursor from '../cursors/FireTrailCursor.jsx';
 import CrosshairScopeCursor from '../cursors/CrosshairScopeCursor.jsx';
@@ -26,7 +26,7 @@ import TorchLightCursor from '../cursors/TorchLightCursor.jsx';
 const CURSOR_COMPONENTS = [
   MagneticCursor, ParticleTrailCursor, SpotlightCursor, MorphingBlobCursor,
   PixelShatterCursor, ElasticRingCursor, NeonGlowCursor, TextOrbiterCursor,
-  GravityPullCursor, RepelFieldCursor, ConstellationCursor, FireTrailCursor,
+  GravityPullCursor, ConstellationCursor, FireTrailCursor,
   CrosshairScopeCursor, MirrorGhostCursor, RainbowCometCursor, BubbleFloatCursor,
   RippleWaveCursor, GlitchShiftCursor, WindStreamCursor, DNAHelixCursor, TorchLightCursor,
 ];
@@ -35,7 +35,7 @@ const HINTS = {
   1:  '🧲 Hover the demo buttons — feel the pull',
   7:  '🌈 Click inside preview to cycle through 5 neon colors',
   9:  '⚡ Move over the buttons — gravity attracts them',
-  10: '💥 Move over the buttons — repel pushes them away',
+  
   13: '🎯 Click inside preview to lock on target',
   17: '💧 Click inside preview to create ripples',
   18: '⚡ Glitch bursts fire automatically every ~2 seconds',
