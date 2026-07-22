@@ -10,7 +10,7 @@ export default function App() {
   // Hook listener for keybindings and slides intersection observer
   // Hook listener for keybindings and slides intersection observer
   const [current, setCurrent] = useState(0);
-  const scrollRef = useRef(null);
+  const scrollRef  = useRef(null);
   const isScrolling = useRef(false);
 
   // Global cursor dot — hides automatically inside .demo-canvas-area
@@ -24,7 +24,7 @@ export default function App() {
 
     const onMove = (e) => {
       dot.style.left = e.clientX + 'px';
-      dot.style.top = e.clientY + 'px';
+      dot.style.top  = e.clientY + 'px';
     };
 
     // Hide global dot when inside preview area — each cursor renders its own
