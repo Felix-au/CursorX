@@ -61,5 +61,5 @@ export default function FireTrailCursor({ containerRef, config }) {
     return () => { container.removeEventListener('mousemove', onMove); ro.disconnect(); cancelAnimationFrame(raf); };
   }, [containerRef]);
 
-  return <canvas ref={canvasRef} style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 5 }} />;
+  return <canvas ref={canvasRef} style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 35 }} />;
 }
