@@ -8,6 +8,7 @@ const TOTAL = CURSORS.length; // 22
 
 export default function App() {
   // Hook listener for keybindings and slides intersection observer
+  // Hook listener for keybindings and slides intersection observer
   const [current, setCurrent] = useState(0);
   const scrollRef = useRef(null);
   const isScrolling = useRef(false);
