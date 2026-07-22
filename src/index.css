@@ -847,6 +847,15 @@ body {
   min-height: 0;
 }
 
+.config-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border);
+}
+
 .config-panel-title {
   font-size: 11px;
   font-weight: 700;
