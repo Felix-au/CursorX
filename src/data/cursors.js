@@ -1,4 +1,4 @@
-// CursorX — 21 cursor effect definitions (removed: MatrixRain, Clock, EyeTracker, InkSplatter)
+// CursorX — 20 cursor effect definitions (removed: MatrixRain, Clock, EyeTracker, InkSplatter, RepelField)
 // Each entry: { id, name, tagline, description, tech, params, code, prompt }
 
 export const CURSORS = [
