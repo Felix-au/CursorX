@@ -1,14 +1,12 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
-import CURSORS from './data/cursors.js';
+import { CURSORS } from './data/cursors.js';
 import HeroSlide from './components/HeroSlide.jsx';
 import CursorSlide from './components/CursorSlide.jsx';
 import NavDots from './components/NavDots.jsx';
 
-const TOTAL = CURSORS.length; // 22
+const TOTAL = CURSORS.length; // 20
 
 export default function App() {
-  // Hook listener for keybindings and slides intersection observer
-  // Hook listener for keybindings and slides intersection observer
   const [current, setCurrent] = useState(0);
   const scrollRef  = useRef(null);
   const isScrolling = useRef(false);
@@ -64,7 +62,7 @@ export default function App() {
       (entries) => {
         entries.forEach(entry => {
           if (entry.isIntersecting && entry.intersectionRatio >= 0.5) {
-            const id = entry.target.id;
+            const id  = entry.target.id;
             const idx = id === 'slide-0' ? 0 : parseInt(id.split('-')[1], 10);
             if (!isNaN(idx)) setCurrent(idx);
           }
@@ -99,7 +97,7 @@ export default function App() {
     <>
       <NavDots total={TOTAL} current={current} onNavigate={navigateTo} />
 
-      {/* Keyboard hint — pure black bg */}
+      {/* Keyboard hint */}
       <div style={{
         position: 'fixed', bottom: 20, left: '50%',
         transform: 'translateX(-50%)',
