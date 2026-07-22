@@ -80,9 +80,9 @@ export default function DNAHelixCursor({ containerRef, config }) {
 
   return (
     <>
-      <canvas ref={canvasRef} style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 5 }} />
+      <canvas ref={canvasRef} style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 35 }} />
       <div ref={dotRef} style={{
-        position: 'absolute', pointerEvents: 'none', zIndex: 10, opacity: 0,
+        position: 'absolute', pointerEvents: 'none', zIndex: 40, opacity: 0,
         width: 8, height: 8, borderRadius: '50%',
         background: 'white', transform: 'translate(-50%,-50%)',
       }} />
