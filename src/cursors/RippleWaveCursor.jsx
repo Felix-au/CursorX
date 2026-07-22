@@ -65,9 +65,9 @@ export default function RippleWaveCursor({ containerRef, config }) {
 
   return (
     <>
-      <canvas ref={canvasRef} style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 5 }} />
+      <canvas ref={canvasRef} style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 35 }} />
       <div ref={dotRef} style={{
-        position: 'absolute', pointerEvents: 'none', zIndex: 10, opacity: 0,
+        position: 'absolute', pointerEvents: 'none', zIndex: 40, opacity: 0,
         width: 9, height: 9, borderRadius: '50%',
         border: '1.5px solid white', transform: 'translate(-50%,-50%)',
       }} />
