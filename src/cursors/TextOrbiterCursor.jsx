@@ -1,9 +1,5 @@
 import { useEffect, useRef } from 'react';
 
-const checkPointer = (cx, cy) => true;
-
-import { useEffect, useRef } from 'react';
-
 const checkPointer = (cx, cy) =>
   document.elementsFromPoint(cx, cy).some(el =>
     ['BUTTON', 'INPUT', 'A', 'LABEL'].includes(el.tagName) ||
@@ -26,14 +22,14 @@ export default function TextOrbiterCursor({ containerRef, config }) {
     const ctx = canvas.getContext('2d');
 
     const resize = () => {
-      canvas.width  = container.clientWidth;
+      canvas.width = container.clientWidth;
       canvas.height = container.clientHeight;
     };
     resize();
     const ro = new ResizeObserver(resize);
     ro.observe(container);
 
-    let mx = container.clientWidth  / 2;
+    let mx = container.clientWidth / 2;
     let my = container.clientHeight / 2;
     let angle = 0;
     let currentRadius, targetRadius;
@@ -42,9 +38,9 @@ export default function TextOrbiterCursor({ containerRef, config }) {
     let rafId;
 
     currentRadius = config.radius ?? 42;
-    currentSpeed  = config.speed  ?? 0.02;
-    targetRadius  = currentRadius;
-    targetSpeed   = currentSpeed;
+    currentSpeed = config.speed ?? 0.02;
+    targetRadius = currentRadius;
+    targetSpeed = currentSpeed;
 
     const onMove = (e) => {
       const r = container.getBoundingClientRect();
@@ -63,33 +59,33 @@ export default function TextOrbiterCursor({ containerRef, config }) {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       const cfg = configRef.current || {};
       const baseRadius = cfg.radius ?? 42;
-      const baseSpeed  = cfg.speed  ?? 0.02;
-      const color      = cfg.color  ?? '#7c5cfc';
-      const text       = cfg.text   ?? '✦ CURSORX ✦ DEV ✦';
+      const baseSpeed = cfg.speed ?? 0.02;
+      const color = cfg.color ?? '#7c5cfc';
+      const text = cfg.text ?? '✦ CURSORX ✦ DEV ✦ FELIXAU';
 
       const isPointer = cfg.pointerAnim && checkPointer(
         container.getBoundingClientRect().left + mx,
-        container.getBoundingClientRect().top  + my
+        container.getBoundingClientRect().top + my
       );
 
       // Pointer state: boost radius and speed
       if (isPointer) {
         targetRadius = baseRadius + (cfg.pointerRadiusBoost ?? 20);
-        targetSpeed  = baseSpeed  + (cfg.pointerSpeedBoost  ?? 0.04);
+        targetSpeed = baseSpeed + (cfg.pointerSpeedBoost ?? 0.04);
       } else if (clickT >= 0 && cfg.clickAnim) {
         // Click: expand then contract once
         const k = Math.sin(clickT * Math.PI);
         targetRadius = baseRadius + k * (cfg.pointerRadiusBoost ?? 20);
-        targetSpeed  = baseSpeed  + k * (cfg.pointerSpeedBoost  ?? 0.04);
+        targetSpeed = baseSpeed + k * (cfg.pointerSpeedBoost ?? 0.04);
         clickT += 0.035;
         if (clickT >= 1) clickT = -1;
       } else {
         targetRadius = baseRadius;
-        targetSpeed  = baseSpeed;
+        targetSpeed = baseSpeed;
       }
 
       currentRadius += (targetRadius - currentRadius) * 0.08;
-      currentSpeed  += (targetSpeed  - currentSpeed)  * 0.08;
+      currentSpeed += (targetSpeed - currentSpeed) * 0.08;
       angle += currentSpeed;
 
       ctx.font = '10px Inter, sans-serif';
