@@ -851,7 +851,9 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-
+  margin-bottom: 14px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border);
 }
 
 .config-panel-title {
@@ -860,17 +862,12 @@ body {
   text-transform: uppercase;
   letter-spacing: 0.12em;
   color: var(--text-3);
-  margin-bottom: 14px;
-  padding-bottom: 10px;
-  border-bottom: 1px solid var(--border);
 }
 
 .config-row {
   padding: 10px 0;
   border-bottom: 1px solid var(--border);
 }
-
-.config-row:last-of-type { border-bottom: none; }
 
 /* Toggle row: label left, switch right — all inline */
 .config-row--toggle {
@@ -880,6 +877,9 @@ body {
   padding: 8px 0;
   border-bottom: 1px solid var(--border);
 }
+
+.config-row:last-child,
+.config-row--toggle:last-child { border-bottom: none; }
 
 .config-row-top {
   display: flex;
@@ -963,11 +963,10 @@ body {
   background: none;
   border: 1px solid var(--border);
   border-radius: var(--radius-full);
-  padding: 5px 12px;
+  padding: 4px 10px;
   font-family: var(--font);
   transition: all 0.2s;
   cursor: none;
-  align-self: flex-start;
 }
 
 .config-reset:hover {
