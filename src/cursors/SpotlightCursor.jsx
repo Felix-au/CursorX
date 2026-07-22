@@ -16,6 +16,11 @@ export default function SpotlightCursor({ containerRef, config }) {
   useEffect(() => {
     if (!container) return;
 
+    // Dark overlay
+    const overlay = document.createElement('div');
+    overlay.style.cssText = 'position:absolute;inset:0;pointer-events:none;z-index:35;transition:none;';
+    container.appendChild(overlay);
+
     // Center dot (yellow/amber pinpoint)
     const dot = document.createElement('div');
     dot.style.cssText = `
@@ -27,16 +32,15 @@ export default function SpotlightCursor({ containerRef, config }) {
     `;
     container.appendChild(dot);
 
-    const overlay = document.createElement('div');
-    overlay.style.cssText = 'position:absolute;inset:0;pointer-events:none;z-index:35;transition:none;';
-    container.appendChild(overlay);
-
-    let mx = container.clientWidth / 2;
+    let mx = container.clientWidth  / 2;
     let my = container.clientHeight / 2;
     let currentRadius, baseRadius;
-    let pulseT = 0;    // for pointer rhythmic dilation (0→2π continuous)
-    let clickT = -1;   // -1 = inactive, 0→1 = animating
+    let pulseT = 0;
+    let clickT = -1;
     let rafId;
+
+    baseRadius    = config.radius ?? 160;
+    currentRadius = baseRadius;
 
     const updateOverlay = (r) => {
       const cfg = configRef.current || {};
@@ -47,13 +51,13 @@ export default function SpotlightCursor({ containerRef, config }) {
       )`;
     };
 
-    baseRadius = config.radius ?? 160;
-    currentRadius = baseRadius;
-
     const onMove = (e) => {
       const r = container.getBoundingClientRect();
       mx = e.clientX - r.left;
       my = e.clientY - r.top;
+      dot.style.left = `${mx}px`;
+      dot.style.top  = `${my}px`;
+      dot.style.opacity = '1';
     };
 
     const onClick = () => {
@@ -62,6 +66,8 @@ export default function SpotlightCursor({ containerRef, config }) {
 
     container.addEventListener('mousemove', onMove);
     container.addEventListener('click', onClick);
+    container.addEventListener('mouseleave', () => { dot.style.opacity = '0'; });
+    container.addEventListener('mouseenter', () => { dot.style.opacity = '1'; });
 
     const loop = () => {
       const cfg = configRef.current || {};
@@ -75,16 +81,13 @@ export default function SpotlightCursor({ containerRef, config }) {
       let targetRadius = baseRadius;
 
       if (clickT >= 0) {
-        // Single expand-retract pulse on click
         const pulse = Math.sin(clickT * Math.PI);
         targetRadius = baseRadius + pulse * (cfg.clickPulse ?? 70);
         clickT += 0.04;
         if (clickT >= 1) clickT = -1;
       } else if (isPointer) {
-        // Rhythmic dilation in pointer state
         pulseT += 0.035;
-        const p = cfg.pointerPulse ?? 40;
-        targetRadius = baseRadius + Math.sin(pulseT) * p;
+        targetRadius = baseRadius + Math.sin(pulseT) * (cfg.pointerPulse ?? 40);
       } else {
         pulseT = 0;
       }
