@@ -96,7 +96,7 @@ export default function GravityPullCursor({ containerRef, config }) {
         const dx   = mx - ex, dy = my - ey;
         const dist = Math.max(Math.sqrt(dx*dx + dy*dy), 1);
         if (dist < radius) {
-          const f = Math.min(strength / (dist * dist), 60);
+          const f = Math.min(strength / (dist * dist), 200);  // raised cap: buttons now visibly attracted
           s.vx += (dx / dist) * f * 0.016;
           s.vy += (dy / dist) * f * 0.016;
         }
