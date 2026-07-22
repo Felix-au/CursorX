@@ -74,5 +74,5 @@ export default function ConstellationCursor({ containerRef, config }) {
     };
   }, [containerRef]);
 
-  return <canvas ref={canvasRef} style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 5 }} />;
+  return <canvas ref={canvasRef} style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 35 }} />;
 }
