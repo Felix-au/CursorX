@@ -87,7 +87,10 @@ function CustomSelect({ id }) {
 function ConfigPanel({ params, config, onChange }) {
   return (
     <div className="config-panel">
-      <div className="config-panel-title">⚙ Configure</div>
+      <div className="config-panel-header">
+        <div className="config-panel-title">⚙ Configure</div>
+        <button className="config-reset" onClick={() => onChange(null, null, true)}>↺ Reset</button>
+      </div>
       {params.map(p => {
         const val = config[p.key] ?? p.default;
         return (
@@ -138,7 +141,7 @@ function ConfigPanel({ params, config, onChange }) {
           </div>
         );
       })}
-      <button className="config-reset" onClick={() => onChange(null, null, true)}>↺ Reset Defaults</button>
+      
     </div>
   );
 }
