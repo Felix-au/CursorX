@@ -742,6 +742,13 @@ body {
   justify-content: center;
 }
 
+.demo-buttons .btn {
+  flex: 1;
+  min-width: 0;
+  text-align: center;
+  justify-content: center;
+}
+
 .demo-text {
   font-size: 14px;
   color: var(--text-2);
