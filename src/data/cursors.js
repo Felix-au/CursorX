@@ -1111,6 +1111,56 @@ loop();`,
 4. Warm amber flame dot (9px, #ffb347) with amber glow
 Provide React component with configurable radius, darkness, flickerIntensity.`,
   },
+  {
+    id: 21,
+    name: 'Difference Blend',
+    tagline: 'Dual ball color inversion',
+    description: 'A dual-ball custom cursor that dynamically inverts colors of everything beneath it using mix-blend-mode.',
+    tech: ['CSS mix-blend-mode', 'Trigonometry', 'React Hooks'],
+    params: [
+      { key: 'color',        label: 'Ball Color',       type: 'color',  default: '#f7f8fa' },
+      { key: 'bigSize',      label: 'Outer Ball Size',  type: 'range',  min: 15,  max: 60,   step: 1,    default: 30 },
+      { key: 'smallSize',    label: 'Inner Ball Size',  type: 'range',  min: 4,   max: 20,   step: 1,    default: 10 },
+      { key: 'bigSpeed',     label: 'Outer Lag / Lerp', type: 'range',  min: 0.02,max: 0.4,  step: 0.01, default: 0.10 },
+      { key: 'smallSpeed',   label: 'Inner Lag / Lerp', type: 'range',  min: 0.05,max: 0.8,  step: 0.01, default: 0.25 },
+      { key: 'pointerAnim',  label: 'Pointer Scale Up', type: 'toggle', default: true },
+      { key: 'pointerScale', label: 'Hover Scale Mult', type: 'range',  min: 1.5, max: 5.0,  step: 0.1,  default: 3.0 },
+      { key: 'clickAnim',    label: 'Click Pulse',      type: 'toggle', default: true },
+      { key: 'clickScale',   label: 'Click Scale Mult', type: 'range',  min: 0.2, max: 1.5,  step: 0.05, default: 0.60 },
+    ],
+    code: `const container = document.body;
+const bigBall = document.createElement('div');
+bigBall.style.cssText = 'position:fixed;pointer-events:none;z-index:9999;mix-blend-mode:difference;width:30px;height:30px;border-radius:50%;background:#f7f8fa;transform:translate(-50%,-50%);';
+const smallBall = document.createElement('div');
+smallBall.style.cssText = 'position:fixed;pointer-events:none;z-index:9999;mix-blend-mode:difference;width:10px;height:10px;border-radius:50%;background:#f7f8fa;transform:translate(-50%,-50%);';
+container.appendChild(bigBall);
+container.appendChild(smallBall);
+
+let mx = 0, my = 0, bx = 0, by = 0, sx = 0, sy = 0;
+document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+
+const loop = () => {
+  bx += (mx - bx) * CONFIG.bigSpeed;
+  by += (my - by) * CONFIG.bigSpeed;
+  sx += (mx - sx) * CONFIG.smallSpeed;
+  sy += (my - sy) * CONFIG.smallSpeed;
+  
+  bigBall.style.left = bx + 'px';
+  bigBall.style.top = by + 'px';
+  smallBall.style.left = sx + 'px';
+  smallBall.style.top = sy + 'px';
+  
+  requestAnimationFrame(loop);
+};
+loop();`,
+    prompt: `Implement a "Difference Blend" cursor. Spec:
+1. Dual-ball design: Outer circle (30px) and Inner circle (10px) both using mix-blend-mode: difference.
+2. Lerp lag: Outer ball lags behind the mouse pointer at speed ${0.1}, inner ball follows tighter at speed ${0.25}.
+3. Pointer State: Hovering interactive elements expands the outer circle by a scale factor of ${3.0} and shrinks the inner circle.
+4. Click pulse: Clicking causes a spring-like pulse animation.
+Provide React component wrapping the mouse event handlers.`,
+  },
 ];
 
 export default CURSORS;
+

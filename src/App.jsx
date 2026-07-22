@@ -4,7 +4,7 @@ import HeroSlide from './components/HeroSlide.jsx';
 import CursorSlide from './components/CursorSlide.jsx';
 import NavDots from './components/NavDots.jsx';
 
-const TOTAL = CURSORS.length; // 20
+const TOTAL = CURSORS.length; // 21
 
 export default function App() {
   const [current, setCurrent] = useState(0);
