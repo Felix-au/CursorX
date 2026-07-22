@@ -14,7 +14,7 @@ export default function MirrorGhostCursor({ containerRef, config }) {
     const makeGhost = (opacity, sz) => {
       const el = document.createElement('div');
       const alpha = Math.round(opacity * 255).toString(16).padStart(2, '0');
-      el.style.cssText = `position:absolute;pointer-events:none;z-index:8;
+      el.style.cssText = `position:absolute;pointer-events:none;z-index:38;
         width:${sz}px;height:${sz}px;border-radius:50%;
         border:2px solid ${color}${alpha};transform:translate(-50%,-50%);
         box-shadow:0 0 12px ${color}${Math.round(opacity * 128).toString(16).padStart(2, '0')};`;
@@ -29,7 +29,7 @@ export default function MirrorGhostCursor({ containerRef, config }) {
       { el: makeGhost(0.28, size - 4), sx: -1, sy: -1, l: lerp * 0.7 },
     ];
     const dot = document.createElement('div');
-    dot.style.cssText = `position:absolute;pointer-events:none;z-index:10;width:6px;height:6px;border-radius:50%;background:white;transform:translate(-50%,-50%);opacity:0;`;
+    dot.style.cssText = `position:absolute;pointer-events:none;z-index:40;width:6px;height:6px;border-radius:50%;background:white;transform:translate(-50%,-50%);opacity:0;`;
     container.appendChild(dot);
 
     const positions = ghosts.map(() => ({ x: cx, y: cy }));
