@@ -9,13 +9,13 @@ export const CURSORS = [
     description: 'Interactive elements are magnetically attracted to the cursor, creating a satisfying snap effect.',
     tech: ['CSS Transform', 'mousemove'],
     params: [
-      { key: 'color',        label: 'Cursor Color',       type: 'color',  default: '#ffffff' },
-      { key: 'size',         label: 'Dot Size (px)',       type: 'range',  min: 4,     max: 28,   step: 1,     default: 12 },
-      { key: 'strength',     label: 'Magnetic Strength',  type: 'range',  min: 0.003, max: 0.12, step: 0.003, default: 0.025 },
-      { key: 'pointerAnim',  label: 'Pointer Hover Anim', type: 'toggle', default: true },
-      { key: 'pointerScale', label: 'Hover Scale',        type: 'range',  min: 1.2,   max: 3.5,  step: 0.1,   default: 2.0 },
-      { key: 'clickAnim',    label: 'Click Animation',    type: 'toggle', default: true },
-      { key: 'clickScale',   label: 'Click Scale',        type: 'range',  min: 1.2,   max: 4.5,  step: 0.1,   default: 2.5 },
+      { key: 'color', label: 'Cursor Color', type: 'color', default: '#ffffff' },
+      { key: 'size', label: 'Dot Size (px)', type: 'range', min: 4, max: 28, step: 1, default: 12 },
+      { key: 'strength', label: 'Magnetic Strength', type: 'range', min: 0.003, max: 0.12, step: 0.003, default: 0.075 },
+      { key: 'pointerAnim', label: 'Pointer Hover Anim', type: 'toggle', default: true },
+      { key: 'pointerScale', label: 'Hover Scale', type: 'range', min: 1.2, max: 3.5, step: 0.1, default: 2.0 },
+      { key: 'clickAnim', label: 'Click Animation', type: 'toggle', default: true },
+      { key: 'clickScale', label: 'Click Scale', type: 'range', min: 1.2, max: 4.5, step: 0.1, default: 2.5 },
     ],
     code: `// Add data-magnetic to any element you want attracted
 const els = document.querySelectorAll('[data-magnetic]');
@@ -64,14 +64,14 @@ Provide a React hook (useMagnetic) with cleanup on unmount.`,
     description: 'The cursor spawns glowing particles that fade and drift, creating a magical stardust trail.',
     tech: ['Canvas API', 'requestAnimationFrame'],
     params: [
-      { key: 'hue',          label: 'Base Hue (0-360)',   type: 'range',  min: 0,   max: 360,  step: 5,     default: 260 },
-      { key: 'count',        label: 'Particles / Frame',  type: 'range',  min: 1,   max: 10,   step: 1,     default: 4 },
-      { key: 'maxSize',      label: 'Max Size (px)',       type: 'range',  min: 2,   max: 14,   step: 0.5,   default: 6 },
-      { key: 'fadeSpeed',    label: 'Fade Speed',         type: 'range',  min: 0.01,max: 0.08, step: 0.005, default: 0.022 },
-      { key: 'pointerAnim',  label: 'Pointer State',      type: 'toggle', default: true },
-      { key: 'clickAnim',    label: 'Click Burst',        type: 'toggle', default: true },
-      { key: 'burstCount',   label: 'Burst Particles',    type: 'range',  min: 15,  max: 80,   step: 5,     default: 45 },
-      { key: 'burstDuration',label: 'Burst Duration (ms)',type: 'range',  min: 300, max: 1500, step: 100,   default: 800 },
+      { key: 'hue', label: 'Base Hue (0-360)', type: 'range', min: 0, max: 360, step: 5, default: 260 },
+      { key: 'count', label: 'Particles / Frame', type: 'range', min: 1, max: 10, step: 1, default: 4 },
+      { key: 'maxSize', label: 'Max Size (px)', type: 'range', min: 2, max: 14, step: 0.5, default: 6 },
+      { key: 'fadeSpeed', label: 'Fade Speed', type: 'range', min: 0.01, max: 0.08, step: 0.005, default: 0.022 },
+      { key: 'pointerAnim', label: 'Pointer State', type: 'toggle', default: true },
+      { key: 'clickAnim', label: 'Click Burst', type: 'toggle', default: true },
+      { key: 'burstCount', label: 'Burst Particles', type: 'range', min: 15, max: 80, step: 5, default: 45 },
+      { key: 'burstDuration', label: 'Burst Duration (ms)', type: 'range', min: 300, max: 1500, step: 100, default: 800 },
     ],
     code: `const canvas = document.createElement('canvas');
 canvas.style.cssText = 'position:fixed;inset:0;pointer-events:none;z-index:9998;';
@@ -129,12 +129,12 @@ loop();`,
     description: 'A dark vignette follows the cursor, creating a dramatic spotlight that reveals content beneath.',
     tech: ['CSS radial-gradient', 'CSS Variables'],
     params: [
-      { key: 'radius',       label: 'Light Radius (px)', type: 'range',  min: 60,  max: 360,  step: 10,   default: 160 },
-      { key: 'darkness',     label: 'Darkness (0–1)',    type: 'range',  min: 0.5, max: 0.98, step: 0.02, default: 0.90 },
-      { key: 'pointerAnim',  label: 'Pointer Dilation',  type: 'toggle', default: true },
-      { key: 'pointerPulse', label: 'Dilation Amount',   type: 'range',  min: 10,  max: 90,   step: 5,    default: 40 },
-      { key: 'clickAnim',    label: 'Click Pulse',       type: 'toggle', default: true },
-      { key: 'clickPulse',   label: 'Click Pulse Size',  type: 'range',  min: 20,  max: 130,  step: 10,   default: 70 },
+      { key: 'radius', label: 'Light Radius (px)', type: 'range', min: 60, max: 360, step: 10, default: 160 },
+      { key: 'darkness', label: 'Darkness (0–1)', type: 'range', min: 0.5, max: 0.98, step: 0.02, default: 0.90 },
+      { key: 'pointerAnim', label: 'Pointer Dilation', type: 'toggle', default: true },
+      { key: 'pointerPulse', label: 'Dilation Amount', type: 'range', min: 10, max: 90, step: 5, default: 40 },
+      { key: 'clickAnim', label: 'Click Pulse', type: 'toggle', default: true },
+      { key: 'clickPulse', label: 'Click Pulse Size', type: 'range', min: 20, max: 130, step: 10, default: 70 },
     ],
     code: `const overlay = document.createElement('div');
 overlay.style.cssText = 'position:fixed;inset:0;pointer-events:none;z-index:9997;';
@@ -160,13 +160,13 @@ document.addEventListener('mousemove', e => {
     description: 'A smooth gooey blob follows the cursor with organic morphing using SVG filters.',
     tech: ['SVG gooey filter', 'CSS filter'],
     params: [
-      { key: 'color',       label: 'Blob Color',       type: 'color',  default: '#7c5cfc' },
-      { key: 'size',        label: 'Blob Size (px)',    type: 'range',  min: 20,  max: 70,   step: 2,    default: 38 },
-      { key: 'trail',       label: 'Trail Length',     type: 'range',  min: 2,   max: 12,   step: 1,    default: 6 },
-      { key: 'lerp',        label: 'Follow Speed',     type: 'range',  min: 0.08,max: 0.4,  step: 0.02, default: 0.2 },
-      { key: 'opacity',     label: 'Opacity',          type: 'range',  min: 0.2, max: 1.0,  step: 0.05, default: 0.85 },
-      { key: 'pointerAnim', label: 'Pointer Morph',   type: 'toggle', default: true },
-      { key: 'clickAnim',   label: 'Click Color Shift',type: 'toggle', default: true },
+      { key: 'color', label: 'Blob Color', type: 'color', default: '#7c5cfc' },
+      { key: 'size', label: 'Blob Size (px)', type: 'range', min: 20, max: 90, step: 2, default: 60 },
+      { key: 'trail', label: 'Trail Length', type: 'range', min: 2, max: 12, step: 1, default: 4 },
+      { key: 'lerp', label: 'Follow Speed', type: 'range', min: 0.05, max: 0.8, step: 0.05, default: 0.4 },
+      { key: 'opacity', label: 'Opacity', type: 'range', min: 0.2, max: 1.0, step: 0.05, default: 0.8 },
+      { key: 'pointerAnim', label: 'Pointer Morph', type: 'toggle', default: true },
+      { key: 'clickAnim', label: 'Click Color Shift', type: 'toggle', default: true },
     ],
     code: `// SVG gooey filter (add once to document)
 document.body.insertAdjacentHTML('beforeend', \`
@@ -222,13 +222,13 @@ Provide React component with useRef + useEffect cleanup.`,
     description: 'Canvas pixels burst and shatter beneath the cursor, like breaking digital glass.',
     tech: ['Canvas API', 'Particle Physics'],
     params: [
-      { key: 'hue',          label: 'Base Hue (0-360)',   type: 'range',  min: 0,   max: 360,  step: 5,     default: 220 },
-      { key: 'count',        label: 'Max Shards/Frame',   type: 'range',  min: 1,   max: 15,   step: 1,     default: 8 },
-      { key: 'gravity',      label: 'Gravity',            type: 'range',  min: 0,   max: 0.5,  step: 0.01,  default: 0.18 },
-      { key: 'pointerAnim',  label: 'Pointer State',      type: 'toggle', default: true },
-      { key: 'clickAnim',    label: 'Click Burst',        type: 'toggle', default: true },
-      { key: 'burstCount',   label: 'Burst Shards',       type: 'range',  min: 15,  max: 60,   step: 5,     default: 30 },
-      { key: 'burstDuration',label: 'Burst Duration (ms)',type: 'range',  min: 300, max: 1500, step: 100,   default: 700 },
+      { key: 'hue', label: 'Base Hue (0-360)', type: 'range', min: 0, max: 360, step: 5, default: 220 },
+      { key: 'count', label: 'Max Shards/Frame', type: 'range', min: 1, max: 15, step: 1, default: 8 },
+      { key: 'gravity', label: 'Gravity', type: 'range', min: 0, max: 0.5, step: 0.01, default: 0.18 },
+      { key: 'pointerAnim', label: 'Pointer State', type: 'toggle', default: true },
+      { key: 'clickAnim', label: 'Click Burst', type: 'toggle', default: true },
+      { key: 'burstCount', label: 'Burst Shards', type: 'range', min: 15, max: 60, step: 5, default: 30 },
+      { key: 'burstDuration', label: 'Burst Duration (ms)', type: 'range', min: 300, max: 1500, step: 100, default: 700 },
     ],
     code: `const canvas = document.createElement('canvas');
 canvas.style.cssText = 'position:fixed;inset:0;pointer-events:none;z-index:9998;';
@@ -288,13 +288,13 @@ Provide a React hook (usePixelShatter) with container ref + cleanup.`,
     description: 'A ring cursor that lags behind with spring physics, stretching and compressing as you move.',
     tech: ['Spring Physics', 'CSS Transform'],
     params: [
-      { key: 'color',       label: 'Ring Color',       type: 'color',  default: '#7c5cfc' },
-      { key: 'size',        label: 'Ring Size (px)',    type: 'range',  min: 16,  max: 80,   step: 2,    default: 38 },
-      { key: 'stiffness',   label: 'Stiffness',        type: 'range',  min: 0.04,max: 0.4,  step: 0.02, default: 0.13 },
-      { key: 'damping',     label: 'Damping',          type: 'range',  min: 0.5, max: 0.95, step: 0.02, default: 0.76 },
+      { key: 'color', label: 'Ring Color', type: 'color', default: '#7c5cfc' },
+      { key: 'size', label: 'Ring Size (px)', type: 'range', min: 16, max: 80, step: 2, default: 38 },
+      { key: 'stiffness', label: 'Stiffness', type: 'range', min: 0.04, max: 0.4, step: 0.02, default: 0.13 },
+      { key: 'damping', label: 'Damping', type: 'range', min: 0.5, max: 0.95, step: 0.02, default: 0.76 },
       { key: 'pointerAnim', label: 'Pointer Surround', type: 'toggle', default: true },
-      { key: 'clickAnim',   label: 'Click Expand',     type: 'toggle', default: true },
-      { key: 'clickScale',  label: 'Click Scale',      type: 'range',  min: 1.2, max: 3.5,  step: 0.1,  default: 1.8 },
+      { key: 'clickAnim', label: 'Click Expand', type: 'toggle', default: true },
+      { key: 'clickScale', label: 'Click Scale', type: 'range', min: 1.2, max: 3.5, step: 0.1, default: 1.8 },
     ],
     code: `const ring = document.createElement('div');
 ring.style.cssText = \`
@@ -339,14 +339,14 @@ Provide React hook with useSprings abstraction.`,
     description: 'A vibrant neon cursor pulses with electric light — click to cycle through colors.',
     tech: ['CSS box-shadow', 'CSS Animation'],
     params: [
-      { key: 'color',        label: 'Neon Color',       type: 'color',  default: '#7c5cfc' },
-      { key: 'size',         label: 'Dot Size (px)',    type: 'range',  min: 6,   max: 30,  step: 1,   default: 14 },
-      { key: 'pulseSpeed',   label: 'Pulse Speed (s)',  type: 'range',  min: 0.3, max: 3,   step: 0.1, default: 0.9 },
-      { key: 'glowRadius',   label: 'Glow Radius',      type: 'range',  min: 5,   max: 50,  step: 1,   default: 22 },
-      { key: 'opacity',      label: 'Opacity',          type: 'range',  min: 0.2, max: 1.0, step: 0.05,default: 1.0 },
-      { key: 'pointerAnim',  label: 'Pointer Pulse',    type: 'toggle', default: true },
-      { key: 'pointerScale', label: 'Pointer Scale',    type: 'range',  min: 1.3, max: 4.0, step: 0.1, default: 2.2 },
-      { key: 'clickAnim',    label: 'Click Flash',      type: 'toggle', default: true },
+      { key: 'color', label: 'Neon Color', type: 'color', default: '#7c5cfc' },
+      { key: 'size', label: 'Dot Size (px)', type: 'range', min: 6, max: 30, step: 1, default: 10 },
+      { key: 'pulseSpeed', label: 'Pulse Speed (s)', type: 'range', min: 0.3, max: 3, step: 0.1, default: 0.5 },
+      { key: 'glowRadius', label: 'Glow Radius', type: 'range', min: 5, max: 50, step: 1, default: 5 },
+      { key: 'opacity', label: 'Opacity', type: 'range', min: 0.2, max: 1.0, step: 0.05, default: 1.0 },
+      { key: 'pointerAnim', label: 'Pointer Pulse', type: 'toggle', default: true },
+      { key: 'pointerScale', label: 'Pointer Scale', type: 'range', min: 1.3, max: 4.0, step: 0.1, default: 3.0 },
+      { key: 'clickAnim', label: 'Click Flash', type: 'toggle', default: true },
     ],
     code: `const cursor = document.createElement('div');
 document.body.appendChild(cursor);
@@ -396,14 +396,14 @@ Provide React component with useState for color cycling.`,
     description: 'A string of characters orbits the cursor in a circular path, like a satellite in your hand.',
     tech: ['Canvas API', 'Trigonometry'],
     params: [
-      { key: 'text',              label: 'Orbit Text',         type: 'text',   default: '✦ CURSORX ✦ DEV ✦' },
-      { key: 'color',             label: 'Text Color',         type: 'color',  default: '#7c5cfc' },
-      { key: 'radius',            label: 'Orbit Radius (px)',  type: 'range',  min: 20,   max: 80,   step: 2,     default: 42 },
-      { key: 'speed',             label: 'Rotation Speed',     type: 'range',  min: 0.005,max: 0.06, step: 0.005, default: 0.02 },
-      { key: 'pointerAnim',       label: 'Pointer State',      type: 'toggle', default: true },
-      { key: 'pointerRadiusBoost',label: 'Pointer Radius +',  type: 'range',  min: 5,    max: 45,   step: 2,     default: 20 },
-      { key: 'pointerSpeedBoost', label: 'Pointer Speed +',   type: 'range',  min: 0.01, max: 0.1,  step: 0.005, default: 0.04 },
-      { key: 'clickAnim',         label: 'Click Expand',       type: 'toggle', default: true },
+      { key: 'text', label: 'Orbit Text', type: 'text', default: '✦ CURSORX ✦ DEV ✦ FELIXAU' },
+      { key: 'color', label: 'Text Color', type: 'color', default: '#7c5cfc' },
+      { key: 'radius', label: 'Orbit Radius (px)', type: 'range', min: 20, max: 80, step: 2, default: 42 },
+      { key: 'speed', label: 'Rotation Speed', type: 'range', min: 0.005, max: 0.06, step: 0.005, default: 0.02 },
+      { key: 'pointerAnim', label: 'Pointer State', type: 'toggle', default: true },
+      { key: 'pointerRadiusBoost', label: 'Pointer Radius +', type: 'range', min: 5, max: 45, step: 2, default: 20 },
+      { key: 'pointerSpeedBoost', label: 'Pointer Speed +', type: 'range', min: 0.01, max: 0.1, step: 0.005, default: 0.04 },
+      { key: 'clickAnim', label: 'Click Expand', type: 'toggle', default: true },
     ],
     code: `const canvas = document.createElement('canvas');
 canvas.style.cssText = 'position:fixed;inset:0;pointer-events:none;z-index:9998;';
@@ -435,7 +435,7 @@ const draw = () => {
 draw();`,
     prompt: `Implement a "Text Orbiter" cursor — characters arranged in a circle that rotate. Spec:
 1. Canvas overlay, full screen, pointer-events none
-2. Text: CONFIG.text (${'"✦ CURSORX ✦ DEV ✦"'}), each char placed at CONFIG.radius (${42}px) orbit
+2. Text: CONFIG.text (${'"✦ CURSORX ✦ DEV ✦ FELIXAU"'}), each char placed at CONFIG.radius (${42}px) orbit
 3. Rotate each char individually (charAngle + π/2) to face outward
 4. Speed: CONFIG.speed (${0.02}) radians/frame
 5. Color: CONFIG.color (${'"#7c5cfc"'}) with glow shadow
@@ -448,12 +448,12 @@ Provide React hook with configurable text, radius, speed, color.`,
     description: 'Nearby DOM elements are displaced toward the cursor, as if it has gravitational mass.',
     tech: ['DOM Physics', 'Spring Simulation'],
     params: [
-      { key: 'color',       label: 'Ring Color',        type: 'color',  default: '#5cf4fc' },
-      { key: 'strength',    label: 'G Constant',        type: 'range',  min: 5000, max: 50000, step: 1000, default: 25000 },
-      { key: 'radius',      label: 'Attract Radius (px)',type: 'range', min: 80,   max: 400,   step: 20,   default: 220 },
-      { key: 'damping',     label: 'Damping',           type: 'range',  min: 0.7,  max: 0.95,  step: 0.01, default: 0.84 },
+      { key: 'color', label: 'Ring Color', type: 'color', default: '#5cf4fc' },
+      { key: 'strength', label: 'G Constant', type: 'range', min: 5000, max: 50000, step: 1000, default: 25000 },
+      { key: 'radius', label: 'Attract Radius (px)', type: 'range', min: 80, max: 400, step: 20, default: 220 },
+      { key: 'damping', label: 'Damping', type: 'range', min: 0.7, max: 0.95, step: 0.01, default: 0.84 },
       { key: 'pointerAnim', label: 'Pointer Ring Pulse', type: 'toggle', default: true },
-      { key: 'clickAnim',   label: 'Click Ring Flash',  type: 'toggle', default: true },
+      { key: 'clickAnim', label: 'Click Ring Flash', type: 'toggle', default: true },
     ],
     code: `// Add data-gravity to elements you want affected
 const targets = document.querySelectorAll('[data-gravity]');
@@ -496,10 +496,10 @@ Provide React hook (useGravity) with options object.`,
     description: 'Particles scatter and draw glowing constellation lines between nearby stars.',
     tech: ['Canvas API', 'Graph Connections'],
     params: [
-      { key: 'starCount',  label: 'Star Count',     type: 'range', min: 30, max: 200, step: 10, default: 90 },
-      { key: 'maxDist',    label: 'Star Connect (px)', type: 'range', min: 50, max: 200, step: 5, default: 115 },
+      { key: 'starCount', label: 'Star Count', type: 'range', min: 30, max: 200, step: 10, default: 90 },
+      { key: 'maxDist', label: 'Star Connect (px)', type: 'range', min: 50, max: 200, step: 5, default: 115 },
       { key: 'cursorDist', label: 'Cursor Connect (px)', type: 'range', min: 80, max: 300, step: 10, default: 175 },
-      { key: 'starColor',  label: 'Star Color',     type: 'color', default: '#c8c8ff' },
+      { key: 'starColor', label: 'Star Color', type: 'color', default: '#c8c8ff' },
     ],
     code: `const canvas = document.createElement('canvas');
 canvas.style.cssText = 'position:fixed;inset:0;pointer-events:none;z-index:9997;';
@@ -560,9 +560,9 @@ Provide React component with configurable counts and distances.`,
     description: 'Hot fire particles stream from the cursor — each flame rises, cools, and fades into smoke.',
     tech: ['Canvas API', 'Particle HSL'],
     params: [
-      { key: 'count',    label: 'Flames / Frame', type: 'range', min: 1, max: 10, step: 1, default: 5 },
-      { key: 'rise',     label: 'Rise Speed',     type: 'range', min: 0.5, max: 4, step: 0.25, default: 2 },
-      { key: 'size',     label: 'Max Flame Size', type: 'range', min: 4, max: 18, step: 1, default: 9 },
+      { key: 'count', label: 'Flames / Frame', type: 'range', min: 1, max: 10, step: 1, default: 5 },
+      { key: 'rise', label: 'Rise Speed', type: 'range', min: 0.5, max: 4, step: 0.25, default: 2 },
+      { key: 'size', label: 'Max Flame Size', type: 'range', min: 4, max: 18, step: 1, default: 9 },
     ],
     code: `const canvas = document.createElement('canvas');
 canvas.style.cssText = 'position:fixed;inset:0;pointer-events:none;z-index:9998;';
@@ -618,10 +618,10 @@ Provide React hook with windDirection prop.`,
     description: 'An animated tactical crosshair follows the cursor with a scanning sweep and lock-on click.',
     tech: ['Canvas API', 'SVG Animation'],
     params: [
-      { key: 'color',       label: 'Default Color', type: 'color', default: '#5cf4fc' },
-      { key: 'lockedColor', label: 'Locked Color',  type: 'color', default: '#ff4455' },
-      { key: 'radius',      label: 'Radius (px)',   type: 'range', min: 20, max: 80, step: 2, default: 40 },
-      { key: 'scanSpeed',   label: 'Scan Speed',    type: 'range', min: 0.01, max: 0.12, step: 0.005, default: 0.045 },
+      { key: 'color', label: 'Default Color', type: 'color', default: '#5cf4fc' },
+      { key: 'lockedColor', label: 'Locked Color', type: 'color', default: '#ff4455' },
+      { key: 'radius', label: 'Radius (px)', type: 'range', min: 20, max: 80, step: 2, default: 40 },
+      { key: 'scanSpeed', label: 'Scan Speed', type: 'range', min: 0.01, max: 0.12, step: 0.005, default: 0.045 },
     ],
     code: `const canvas = document.createElement('canvas');
 canvas.style.cssText = 'position:fixed;inset:0;pointer-events:none;z-index:9999;';
@@ -670,8 +670,8 @@ Provide React component with color and scanSpeed props.`,
     tech: ['CSS Transform', 'Viewport Mirroring'],
     params: [
       { key: 'color', label: 'Ghost Color', type: 'color', default: '#c45cfc' },
-      { key: 'size',  label: 'Ring Size',   type: 'range', min: 10, max: 40, step: 2, default: 20 },
-      { key: 'lerp',  label: 'Follow Speed',type: 'range', min: 0.06, max: 0.4, step: 0.02, default: 0.14 },
+      { key: 'size', label: 'Ring Size', type: 'range', min: 10, max: 40, step: 2, default: 20 },
+      { key: 'lerp', label: 'Follow Speed', type: 'range', min: 0.06, max: 0.4, step: 0.02, default: 0.14 },
     ],
     code: `const cx=innerWidth/2, cy=innerHeight/2;
 
@@ -724,9 +724,9 @@ Provide React component with symmetryAxes prop.`,
     description: 'A hue-rotating rainbow comet tail follows the cursor through a full spectrum of color.',
     tech: ['Canvas API', 'HSL Color'],
     params: [
-      { key: 'trailLength', label: 'Trail Length',  type: 'range', min: 10, max: 80, step: 5, default: 45 },
-      { key: 'hueSpeed',    label: 'Hue Speed',     type: 'range', min: 0.5, max: 6,  step: 0.5, default: 2.5 },
-      { key: 'maxWidth',    label: 'Max Width (px)',type: 'range', min: 4,  max: 24,  step: 1, default: 13 },
+      { key: 'trailLength', label: 'Trail Length', type: 'range', min: 10, max: 80, step: 5, default: 45 },
+      { key: 'hueSpeed', label: 'Hue Speed', type: 'range', min: 0.5, max: 6, step: 0.5, default: 2.5 },
+      { key: 'maxWidth', label: 'Max Width (px)', type: 'range', min: 4, max: 24, step: 1, default: 13 },
     ],
     code: `const canvas=document.createElement('canvas');
 canvas.style.cssText='position:fixed;inset:0;pointer-events:none;z-index:9998;';
@@ -776,10 +776,10 @@ Provide React hook (useRainbowComet) with trailLength, hueSpeed, maxWidth props.
     description: 'Translucent soap bubbles emerge from the cursor and float upward, wobbling and fading.',
     tech: ['Canvas API', 'Radial Gradient'],
     params: [
-      { key: 'hue',       label: 'Bubble Hue',     type: 'range', min: 0,  max: 360, step: 5, default: 200 },
+      { key: 'hue', label: 'Bubble Hue', type: 'range', min: 0, max: 360, step: 5, default: 200 },
       { key: 'spawnRate', label: 'Spawn (1/N frames)', type: 'range', min: 1, max: 10, step: 1, default: 5 },
-      { key: 'maxSize',   label: 'Max Size (px)',   type: 'range', min: 8,  max: 40,  step: 2, default: 25 },
-      { key: 'riseSpeed', label: 'Rise Speed',      type: 'range', min: 0.3,max: 3,   step: 0.1, default: 1.6 },
+      { key: 'maxSize', label: 'Max Size (px)', type: 'range', min: 8, max: 40, step: 2, default: 25 },
+      { key: 'riseSpeed', label: 'Rise Speed', type: 'range', min: 0.3, max: 3, step: 0.1, default: 1.6 },
     ],
     code: `const canvas=document.createElement('canvas');
 canvas.style.cssText='position:fixed;inset:0;pointer-events:none;z-index:9998;';
@@ -835,9 +835,9 @@ Provide React component (BubbleCursor) with all params as props.`,
     description: 'Every click sends out expanding concentric ripples, like a stone dropped in still water.',
     tech: ['Canvas API', 'Expanding Circles'],
     params: [
-      { key: 'hue',      label: 'Ripple Hue',     type: 'range', min: 0,   max: 360, step: 5, default: 220 },
-      { key: 'speed',    label: 'Expand Speed',   type: 'range', min: 1,   max: 8,   step: 0.5, default: 3.2 },
-      { key: 'count',    label: 'Rings per Click',type: 'range', min: 1,   max: 5,   step: 1, default: 3 },
+      { key: 'hue', label: 'Ripple Hue', type: 'range', min: 0, max: 360, step: 5, default: 220 },
+      { key: 'speed', label: 'Expand Speed', type: 'range', min: 1, max: 8, step: 0.5, default: 3.2 },
+      { key: 'count', label: 'Rings per Click', type: 'range', min: 1, max: 5, step: 1, default: 3 },
     ],
     code: `const canvas=document.createElement('canvas');
 canvas.style.cssText='position:fixed;inset:0;pointer-events:none;z-index:9998;';
@@ -888,9 +888,9 @@ Provide React component with click and mousemove ripple variants.`,
     description: 'The cursor fractures into offset RGB channel ghosts with random glitch bursts.',
     tech: ['CSS mix-blend-mode', 'DOM Elements'],
     params: [
-      { key: 'split',           label: 'Channel Split (px)', type: 'range', min: 1, max: 16, step: 1, default: 4 },
-      { key: 'glitchInterval',  label: 'Glitch Every (ms)',  type: 'range', min: 500, max: 5000, step: 250, default: 2000 },
-      { key: 'burstDuration',   label: 'Burst Duration (ms)',type: 'range', min: 50, max: 500, step: 25, default: 220 },
+      { key: 'split', label: 'Channel Split (px)', type: 'range', min: 1, max: 16, step: 1, default: 4 },
+      { key: 'glitchInterval', label: 'Glitch Every (ms)', type: 'range', min: 500, max: 5000, step: 250, default: 2000 },
+      { key: 'burstDuration', label: 'Burst Duration (ms)', type: 'range', min: 50, max: 500, step: 25, default: 220 },
     ],
     code: `const mkEl=(bg,zIndex,blend='screen')=>{
   const el=document.createElement('div');
@@ -942,10 +942,10 @@ Provide React component (GlitchCursor) with all params as props.`,
     description: 'Bezier-curved wind streams flow from the cursor, bending and billowing like gusts of digital air.',
     tech: ['Canvas API', 'Quadratic Bezier'],
     params: [
-      { key: 'hue',      label: 'Stream Hue',     type: 'range', min: 0,    max: 360, step: 5, default: 200 },
-      { key: 'count',    label: 'Streams / Move', type: 'range', min: 1,    max: 5,   step: 1, default: 2 },
-      { key: 'decay',    label: 'Velocity Decay', type: 'range', min: 0.8,  max: 0.98,step: 0.01, default: 0.93 },
-      { key: 'minSpeed', label: 'Min Speed Trigger', type: 'range', min: 1, max: 10,  step: 0.5, default: 2.5 },
+      { key: 'hue', label: 'Stream Hue', type: 'range', min: 0, max: 360, step: 5, default: 200 },
+      { key: 'count', label: 'Streams / Move', type: 'range', min: 1, max: 5, step: 1, default: 2 },
+      { key: 'decay', label: 'Velocity Decay', type: 'range', min: 0.8, max: 0.98, step: 0.01, default: 0.93 },
+      { key: 'minSpeed', label: 'Min Speed Trigger', type: 'range', min: 1, max: 10, step: 0.5, default: 2.5 },
     ],
     code: `const canvas=document.createElement('canvas');
 canvas.style.cssText='position:fixed;inset:0;pointer-events:none;z-index:9998;';
@@ -1009,10 +1009,10 @@ Provide React hook with configurable params.`,
     description: 'Two sinusoidal trails spiral in a double-helix pattern behind the cursor as it moves.',
     tech: ['Canvas API', 'Sine Wave', 'Normal Vectors'],
     params: [
-      { key: 'color1',    label: 'Strand 1 Color', type: 'color', default: '#7c5cfc' },
-      { key: 'color2',    label: 'Strand 2 Color', type: 'color', default: '#5cf4fc' },
+      { key: 'color1', label: 'Strand 1 Color', type: 'color', default: '#7c5cfc' },
+      { key: 'color2', label: 'Strand 2 Color', type: 'color', default: '#5cf4fc' },
       { key: 'amplitude', label: 'Amplitude (px)', type: 'range', min: 4, max: 32, step: 2, default: 16 },
-      { key: 'speed',     label: 'Wave Speed',     type: 'range', min: 0.03, max: 0.2, step: 0.01, default: 0.09 },
+      { key: 'speed', label: 'Wave Speed', type: 'range', min: 0.03, max: 0.2, step: 0.01, default: 0.09 },
     ],
     code: `const canvas=document.createElement('canvas');
 canvas.style.cssText='position:fixed;inset:0;pointer-events:none;z-index:9998;';
@@ -1077,9 +1077,9 @@ Provide React component with all params configurable.`,
     description: 'The screen goes dark except for a warm torch-light circle around the cursor that flickers.',
     tech: ['CSS radial-gradient', 'Dark Overlay'],
     params: [
-      { key: 'radius',           label: 'Light Radius (px)',   type: 'range', min: 60,  max: 300, step: 10, default: 140 },
-      { key: 'darkness',         label: 'Darkness (0–1)',      type: 'range', min: 0.5, max: 0.98,step: 0.02, default: 0.91 },
-      { key: 'flickerIntensity', label: 'Flicker Intensity',  type: 'range', min: 0,   max: 20,  step: 1, default: 9 },
+      { key: 'radius', label: 'Light Radius (px)', type: 'range', min: 60, max: 300, step: 10, default: 140 },
+      { key: 'darkness', label: 'Darkness (0–1)', type: 'range', min: 0.5, max: 0.98, step: 0.02, default: 0.91 },
+      { key: 'flickerIntensity', label: 'Flicker Intensity', type: 'range', min: 0, max: 20, step: 1, default: 9 },
     ],
     code: `const overlay=document.createElement('div');
 overlay.style.cssText='position:fixed;inset:0;pointer-events:none;z-index:9996;';
