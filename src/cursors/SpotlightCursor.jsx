@@ -16,6 +16,17 @@ export default function SpotlightCursor({ containerRef, config }) {
   useEffect(() => {
     if (!container) return;
 
+    // Center dot (yellow/amber pinpoint)
+    const dot = document.createElement('div');
+    dot.style.cssText = `
+      position:absolute; pointer-events:none; z-index:40;
+      width:7px; height:7px; border-radius:50%;
+      background:#ffcc44;
+      box-shadow:0 0 10px 3px rgba(255,200,50,0.7);
+      transform:translate(-50%,-50%);
+    `;
+    container.appendChild(dot);
+
     const overlay = document.createElement('div');
     overlay.style.cssText = 'position:absolute;inset:0;pointer-events:none;z-index:35;transition:none;';
     container.appendChild(overlay);
@@ -89,6 +100,7 @@ export default function SpotlightCursor({ containerRef, config }) {
       container.removeEventListener('mousemove', onMove);
       container.removeEventListener('click', onClick);
       overlay.remove();
+      dot.remove();
     };
   }, [container]);
 
