@@ -144,5 +144,146 @@ function ConfigPanel({ params, config, onChange }) {
 }
 
 export default function CursorSlide({ cursor, index, total, isActive, onNavigate, onBack }) {
-  return null;
+  const [modal, setModal] = useState(null);
+  const [config, setConfig] = useState(() => initConfig(cursor.params));
+  const demoRef = useRef(null);
+
+  const CursorComponent = CURSOR_COMPONENTS[index - 1];
+  const isGravity = index === 9;
+  const isRepel = index === 10;
+  const physicsAttr = isGravity ? 'data-gravity' : isRepel ? 'data-repel' : null;
+  const hint = HINTS[index];
+
+  const handleConfigChange = useCallback((key, value, reset = false) => {
+    if (reset) { setConfig(initConfig(cursor.params)); return; }
+    setConfig(prev => ({ ...prev, [key]: value }));
+  }, [cursor.params]);
+
+  return (
+    <div className="slide cursor-slide" id={`slide-${index}`}>
+      {/* Slide header */}
+      <div className="cursor-slide-header">
+        <div className="cursor-slide-meta">
+          <span className="cursor-slide-number">{String(index).padStart(2, '0')} / {String(total).padStart(2, '0')}</span>
+          <h2 className="cursor-slide-name gradient-text">{cursor.name}</h2>
+          <p className="cursor-slide-desc">{cursor.description}</p>
+        </div>
+        <div className="cursor-slide-actions">
+          <button className="btn btn-code" id={`btn-code-${index}`} onClick={() => setModal('code')}>
+            &lt;/&gt; Code
+          </button>
+          <button className="btn btn-prompt" id={`btn-prompt-${index}`} onClick={() => setModal('prompt')}>
+            ✦ Prompt
+          </button>
+        </div>
+      </div>
+
+      {/* Main body: preview + config */}
+      <div className="demo-area">
+
+        {/* Live preview — cursor confined here */}
+        <div
+          className="demo-canvas-area"
+          ref={demoRef}
+          style={{ cursor: 'none', position: 'relative', overflow: 'hidden' }}
+        >
+          {/* Cursor effect — ONLY rendered here, inside the preview box */}
+          {isActive && (
+            <CursorComponent containerRef={demoRef} config={config} />
+          )}
+
+          <span className="demo-canvas-label">✦ Live Preview</span>
+
+          {hint && <div className="demo-hint">{hint}</div>}
+
+          <div className="demo-buttons">
+            <button className="btn btn-primary" id={`demo-primary-${index}`}
+              {...(physicsAttr ? { [physicsAttr]: 'true' } : { 'data-magnetic': 'true' })}>
+              ✦ Primary Action
+            </button>
+            <button className="btn btn-secondary" id={`demo-secondary-${index}`}
+              {...(physicsAttr ? { [physicsAttr]: 'true' } : { 'data-magnetic': 'true' })}>
+              Secondary
+            </button>
+            <button className="btn btn-ghost" id={`demo-ghost-${index}`}
+              {...(physicsAttr ? { [physicsAttr]: 'true' } : { 'data-magnetic': 'true' })}>
+              Ghost Style
+            </button>
+          </div>
+
+          <p className="hoverable-text">
+            <strong>Move inside this box</strong> to see the <em style={{ color: 'var(--accent)' }}>{cursor.name}</em> effect. Move fast, slow, zigzag — every motion matters.
+          </p>
+
+          <div className="demo-drag-zone" {...(physicsAttr ? { [physicsAttr]: 'true' } : {})}>
+            ⊞ Hover this zone
+          </div>
+
+          {/* Input interaction section */}
+          <div className="demo-input-section">
+            <span className="demo-input-label">✎ Type &amp; Interact</span>
+            <div className="demo-input-row">
+              <div className="demo-input-wrap">
+                <input
+                  type="text"
+                  className="demo-field"
+                  placeholder="Text field…"
+                  id={`field-text-${index}`}
+                  spellCheck={false}
+                />
+              </div>
+              <div className="demo-input-wrap">
+                <input
+                  type="search"
+                  className="demo-field"
+                  placeholder="Search…"
+                  id={`field-search-${index}`}
+                />
+              </div>
+              <div className="demo-input-wrap">
+                <CustomSelect id={`field-select-${index}`} />
+              </div>
+            </div>
+            <div className="demo-check-row">
+              {['Hover me', 'Click me', 'Try me'].map((label, i) => (
+                <label key={i} className="demo-check-label" htmlFor={`chk-${index}-${i}`}>
+                  <input type="checkbox" id={`chk-${index}-${i}`} className="demo-check" />
+                  <span className="demo-check-box" />
+                  <span>{label}</span>
+                </label>
+              ))}
+              <label className="demo-check-label" htmlFor={`radio-${index}`}>
+                <input type="radio" id={`radio-${index}`} name={`radio-${index}`} className="demo-check" />
+                <span className="demo-check-box demo-check-box--radio" />
+                <span>Radio</span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        {/* Config panel — replaces sidebar cards */}
+        <ConfigPanel
+          params={cursor.params}
+          config={config}
+          onChange={handleConfigChange}
+        />
+      </div>
+
+      {/* Footer */}
+      <div className="cursor-slide-footer">
+        <button className="back-to-index" id={`back-btn-${index}`} onClick={onBack}>← Index</button>
+        <div className="progress-bar">
+          <div className="progress-fill" style={{ width: `${(index / total) * 100}%` }} />
+        </div>
+        <div className="slide-nav-arrows">
+          <button className="slide-nav-btn" id={`prev-btn-${index}`}
+            onClick={() => onNavigate(index - 1)} disabled={index <= 1}>↑</button>
+          <button className="slide-nav-btn" id={`next-btn-${index}`}
+            onClick={() => onNavigate(index + 1)} disabled={index >= total}>↓</button>
+        </div>
+      </div>
+
+      {modal && <CodeModal cursor={cursor} config={config} defaultTab={modal} onClose={() => setModal(null)} />}
+    </div>
+  );
 }
