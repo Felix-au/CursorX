@@ -10,7 +10,6 @@ import ElasticRingCursor from '../cursors/ElasticRingCursor.jsx';
 import NeonGlowCursor from '../cursors/NeonGlowCursor.jsx';
 import TextOrbiterCursor from '../cursors/TextOrbiterCursor.jsx';
 import GravityPullCursor from '../cursors/GravityPullCursor.jsx';
-
 import ConstellationCursor from '../cursors/ConstellationCursor.jsx';
 import FireTrailCursor from '../cursors/FireTrailCursor.jsx';
 import CrosshairScopeCursor from '../cursors/CrosshairScopeCursor.jsx';
@@ -35,11 +34,10 @@ const HINTS = {
   1:  '🧲 Hover the demo buttons — feel the pull',
   7:  '🌈 Click inside preview to cycle through 5 neon colors',
   9:  '⚡ Move over the buttons — gravity attracts them',
-  
-  13: '🎯 Click inside preview to lock on target',
-  17: '💧 Click inside preview to create ripples',
-  18: '⚡ Glitch bursts fire automatically every ~2 seconds',
-  21: '🕯 The light flickers and lags — navigate the dark',
+  12: '🎯 Click inside preview to lock on target',
+  16: '💧 Click inside preview to create ripples',
+  17: '⚡ Glitch bursts fire automatically every ~2 seconds',
+  20: '🕯 The light flickers and lags — navigate the dark',
 };
 
 const initConfig = (params) =>
@@ -84,24 +82,47 @@ function CustomSelect({ id }) {
   );
 }
 
-function ConfigPanel({ params, config, onChange }) {
+function ConfigPanel({ params, config, onChange, cursorId }) {
   return (
     <div className="config-panel">
+      {/* Title + Reset in same row */}
       <div className="config-panel-header">
         <div className="config-panel-title">⚙ Configure</div>
         <button className="config-reset" onClick={() => onChange(null, null, true)}>↺ Reset</button>
       </div>
       {params.map(p => {
         const val = config[p.key] ?? p.default;
+        const uid = `tog-${cursorId}-${p.key}`;
+
+        /* Toggles: label + switch in one row */
+        if (p.type === 'toggle') {
+          return (
+            <div key={p.key} className="config-row config-row--toggle">
+              <span className="config-label">{p.label}</span>
+              <label className="config-toggle-label" htmlFor={uid}>
+                <input
+                  type="checkbox"
+                  id={uid}
+                  checked={val === true || val === 1}
+                  onChange={e => onChange(p.key, e.target.checked)}
+                  className="config-toggle-input"
+                />
+                <span className="config-toggle-track">
+                  <span className="config-toggle-thumb" />
+                </span>
+                <span className="config-toggle-text">{val ? 'On' : 'Off'}</span>
+              </label>
+            </div>
+          );
+        }
+
         return (
           <div key={p.key} className="config-row">
             <div className="config-row-top">
               <label className="config-label">{p.label}</label>
-              {p.type !== 'toggle' && (
-                <span className="config-value">
-                  {p.type === 'color' ? val : typeof val === 'number' ? val : val}
-                </span>
-              )}
+              <span className="config-value">
+                {p.type === 'color' ? val : typeof val === 'number' ? val : val}
+              </span>
             </div>
             {p.type === 'color' && (
               <div className="config-color-wrap">
@@ -123,25 +144,9 @@ function ConfigPanel({ params, config, onChange }) {
                 maxLength={40}
               />
             )}
-            {p.type === 'toggle' && (
-              <label className="config-toggle-label" htmlFor={`tog-${p.key}`}>
-                <input
-                  type="checkbox"
-                  id={`tog-${p.key}`}
-                  checked={val === true || val === 1}
-                  onChange={e => onChange(p.key, e.target.checked)}
-                  className="config-toggle-input"
-                />
-                <span className="config-toggle-track">
-                  <span className="config-toggle-thumb" />
-                </span>
-                <span className="config-toggle-text">{val ? 'On' : 'Off'}</span>
-              </label>
-            )}
           </div>
         );
       })}
-      
     </div>
   );
 }
@@ -152,9 +157,8 @@ export default function CursorSlide({ cursor, index, total, isActive, onNavigate
   const demoRef = useRef(null);
 
   const CursorComponent = CURSOR_COMPONENTS[index - 1];
-  const isGravity = index === 9;
-  const isRepel = index === 10;
-  const physicsAttr = isGravity ? 'data-gravity' : isRepel ? 'data-repel' : null;
+  const isGravity   = index === 9;          // GravityPull (was 9, RepelField removed)
+  const physicsAttr = isGravity ? 'data-gravity' : null;
   const hint = HINTS[index];
 
   const handleConfigChange = useCallback((key, value, reset = false) => {
@@ -269,6 +273,7 @@ export default function CursorSlide({ cursor, index, total, isActive, onNavigate
           params={cursor.params}
           config={config}
           onChange={handleConfigChange}
+          cursorId={cursor.id}
         />
       </div>
 
