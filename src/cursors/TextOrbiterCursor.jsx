@@ -1,5 +1,9 @@
 import { useEffect, useRef } from 'react';
 
+const checkPointer = (cx, cy) => true;
+
+import { useEffect, useRef } from 'react';
+
 const checkPointer = (cx, cy) =>
   document.elementsFromPoint(cx, cy).some(el =>
     ['BUTTON', 'INPUT', 'A', 'LABEL'].includes(el.tagName) ||
