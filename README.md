@@ -18,3 +18,7 @@ If you are developing a production application, we recommend using TypeScript wi
 
 ## Comparison Matrix
 - Standard performance optimizations across all 25 cursors using requestAnimationFrame and CSS transition layers.
+
+
+## Comparison Matrix
+- Standard performance optimizations across all 25 cursors using requestAnimationFrame and CSS transition layers.
