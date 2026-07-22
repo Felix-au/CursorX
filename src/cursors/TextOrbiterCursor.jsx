@@ -102,6 +102,15 @@ export default function TextOrbiterCursor({ containerRef, config }) {
         ctx.restore();
       }
 
+      // Center dot
+      ctx.save();
+      ctx.beginPath();
+      ctx.arc(mx, my, 3, 0, Math.PI * 2);
+      ctx.fillStyle = color;
+      ctx.shadowColor = color; ctx.shadowBlur = 8;
+      ctx.fill();
+      ctx.restore();
+
       rafId = requestAnimationFrame(loop);
     };
     loop();
