@@ -740,7 +740,6 @@ body {
   align-items: center;
   flex-wrap: wrap;
   justify-content: center;
-  justify-content: center;
 }
 
 .demo-buttons .btn {
@@ -896,7 +895,8 @@ body {
 }
 
 .config-row:last-child,
-.config-row--toggle:last-child { border-bottom: none; }
+.config-row--toggle:last-child,
+.config-row--color:last-child { border-bottom: none; }
 
 .config-row-top {
   display: flex;
@@ -1176,6 +1176,7 @@ body {
   gap: 14px;
   align-items: center;
   flex-wrap: wrap;
+  justify-content: center;
 }
 
 .demo-check-label {
