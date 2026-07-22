@@ -49,11 +49,11 @@ export default function TorchLightCursor({ containerRef, config }) {
   return (
     <>
       <div ref={overlayRef} style={{
-        position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 6,
+        position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 35,
         borderRadius: 'inherit', background: 'rgba(0,0,0,0.85)',
       }} />
       <div ref={flameRef} style={{
-        position: 'absolute', pointerEvents: 'none', zIndex: 10, opacity: 0,
+        position: 'absolute', pointerEvents: 'none', zIndex: 40, opacity: 0,
         width: 9, height: 9, borderRadius: '50%', background: '#ffb347',
         boxShadow: '0 0 14px 5px rgba(255,140,20,0.65)',
         transform: 'translate(-50%,-50%)',
