@@ -1,4 +1,4 @@
-import CURSORS from '../data/cursors.js';
+import { CURSORS } from '../data/cursors.js';
 
 const ACCENT_COLORS = [
   '#7c5cfc', '#5cf4fc', '#fc5cb8', '#5cfca8', '#fca85c',
