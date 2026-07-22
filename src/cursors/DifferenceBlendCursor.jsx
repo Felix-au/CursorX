@@ -76,20 +76,6 @@ export default function DifferenceBlendCursor({ containerRef, config }) {
       const pScale = cfg.pointerScale ?? 3.0;
 
       // Update SVGs attributes based on configured sizes
-      bigSvg.setAttribute('width', String(bigSize));
-      bigSvg.setAttribute('height', String(bigSize));
-      bigCircle.setAttribute('cx', String(bigSize / 2));
-      bigCircle.setAttribute('cy', String(bigSize / 2));
-      bigCircle.setAttribute('r', String(bigSize / 2 - 1));
-      bigCircle.setAttribute('fill', color);
-
-      smallSvg.setAttribute('width', String(smallSize));
-      smallSvg.setAttribute('height', String(smallSize));
-      smallCircle.setAttribute('cx', String(smallSize / 2));
-      smallCircle.setAttribute('cy', String(smallSize / 2));
-      smallCircle.setAttribute('r', String(smallSize / 2 - 1));
-      smallCircle.setAttribute('fill', color);
-
       // Check pointer status
       const rect = container.getBoundingClientRect();
       const isPointer = cfg.pointerAnim && checkPointer(rect.left + mx, rect.top + my);
@@ -117,6 +103,25 @@ export default function DifferenceBlendCursor({ containerRef, config }) {
       bigScale += (targetBigScale - bigScale) * 0.15;
       smallScale += (targetSmallScale - smallScale) * 0.15;
 
+      // Calculate vector sizes based on interpolated scales
+      const currentBigSize = Math.max(1, bigSize * bigScale);
+      const currentSmallSize = Math.max(1, smallSize * smallScale);
+
+      // Update SVGs attributes with precise vector dimensions
+      bigSvg.setAttribute('width', String(currentBigSize));
+      bigSvg.setAttribute('height', String(currentBigSize));
+      bigCircle.setAttribute('cx', String(currentBigSize / 2));
+      bigCircle.setAttribute('cy', String(currentBigSize / 2));
+      bigCircle.setAttribute('r', String(Math.max(0.5, currentBigSize / 2 - 0.5)));
+      bigCircle.setAttribute('fill', color);
+
+      smallSvg.setAttribute('width', String(currentSmallSize));
+      smallSvg.setAttribute('height', String(currentSmallSize));
+      smallCircle.setAttribute('cx', String(currentSmallSize / 2));
+      smallCircle.setAttribute('cy', String(currentSmallSize / 2));
+      smallCircle.setAttribute('r', String(Math.max(0.5, currentSmallSize / 2 - 0.5)));
+      smallCircle.setAttribute('fill', color);
+
       // Smooth interpolation for positions
       bx += (mx - bx) * bigSpeed;
       by += (my - by) * bigSpeed;
@@ -127,11 +132,12 @@ export default function DifferenceBlendCursor({ containerRef, config }) {
       // Apply styles
       bigBall.style.left = `${bx}px`;
       bigBall.style.top = `${by}px`;
-      bigBall.style.transform = `translate(-50%,-50%) scale(${bigScale})`;
+      bigBall.style.transform = 'translate(-50%,-50%)';
 
       smallBall.style.left = `${sx}px`;
       smallBall.style.top = `${sy}px`;
-      smallBall.style.transform = `translate(-50%,-50%) scale(${smallScale})`;
+      smallBall.style.transform = 'translate(-50%,-50%)';
+
 
       rafId = requestAnimationFrame(loop);
     };
