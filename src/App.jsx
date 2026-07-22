@@ -51,8 +51,6 @@ export default function App() {
       isScrolling.current = true;
       slides[index].scrollIntoView({ behavior: 'smooth', block: 'start' });
       setCurrent(index);
-      // Tweak: Scroll timeout extracted
-      // Tweak: Scroll timeout extracted
       setTimeout(() => { isScrolling.current = false; }, 800);
     }
   }, []);
