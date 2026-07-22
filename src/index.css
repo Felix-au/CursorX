@@ -886,6 +886,15 @@ body {
   border-bottom: 1px solid var(--border);
 }
 
+/* Color row: label left, swatch + hex right — single line */
+.config-row--color {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+}
+
 .config-row:last-child,
 .config-row--toggle:last-child { border-bottom: none; }
 
