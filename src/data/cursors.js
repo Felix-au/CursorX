@@ -491,53 +491,6 @@ Provide React hook (useGravity) with options object.`,
   },
   {
     id: 10,
-    name: 'Repel Field',
-    tagline: 'Push elements away with force',
-    description: 'Like gravity, but inverted — elements flee from the cursor as if electrostatically repelled.',
-    tech: ['DOM Physics', 'Spring Simulation'],
-    params: [
-      { key: 'color',       label: 'Ring Color',         type: 'color',  default: '#fc5cb8' },
-      { key: 'strength',    label: 'Repel Force',        type: 'range',  min: 2000, max: 40000, step: 1000, default: 20000 },
-      { key: 'radius',      label: 'Repel Radius (px)',  type: 'range',  min: 80,   max: 400,   step: 20,   default: 190 },
-      { key: 'damping',     label: 'Damping',            type: 'range',  min: 0.6,  max: 0.95,  step: 0.01, default: 0.80 },
-      { key: 'pointerAnim', label: 'Pointer Ring Pulse', type: 'toggle', default: true },
-      { key: 'clickAnim',   label: 'Click Ring Flash',   type: 'toggle', default: true },
-    ],
-    code: `const targets = document.querySelectorAll('[data-repel]');
-const states = new Map();
-targets.forEach(el => states.set(el, {x:0,y:0,vx:0,vy:0}));
-
-let mx=-1000, my=-1000;
-document.addEventListener('mousemove', e => { mx=e.clientX; my=e.clientY; });
-
-const loop = () => {
-  targets.forEach(el => {
-    const rect = el.getBoundingClientRect();
-    const s = states.get(el);
-    const cx = rect.left+rect.width/2+s.x, cy = rect.top+rect.height/2+s.y;
-    const dx = cx-mx, dy = cy-my;
-    const dist = Math.max(Math.sqrt(dx*dx+dy*dy),1);
-    if (dist < CONFIG.radius) {
-      const f = CONFIG.strength/(dist*dist);
-      s.vx += (dx/dist)*f*0.016; s.vy += (dy/dist)*f*0.016;
-    }
-    s.vx -= s.x*0.1; s.vy -= s.y*0.1;
-    s.vx *= CONFIG.damping; s.vy *= CONFIG.damping;
-    s.x += s.vx; s.y += s.vy;
-    el.style.transform = \`translate(\${s.x}px,\${s.y}px)\`;
-  });
-  requestAnimationFrame(loop);
-};
-loop();`,
-    prompt: `Implement a "Repel Field" cursor — elements flee cursor with inverse-square force. Spec:
-1. Elements with [data-repel] within CONFIG.radius (${190}px) pushed away: F = CONFIG.strength (${5800}) / dist²
-2. Force direction: (element → cursor) normalized, inverted
-3. Spring return: vx -= x * 0.1; Damping: vx *= CONFIG.damping (${0.80})
-4. Dual ring cursor: CONFIG.color (${'"#fc5cb8"'})
-Provide React hook (useRepelField) with configurable radius and strength.`,
-  },
-  {
-    id: 11,
     name: 'Constellation',
     tagline: 'Connect the stars under your cursor',
     description: 'Particles scatter and draw glowing constellation lines between nearby stars.',
@@ -601,7 +554,7 @@ draw();`,
 Provide React component with configurable counts and distances.`,
   },
   {
-    id: 12,
+    id: 11,
     name: 'Fire Trail',
     tagline: 'Leave flames in your wake',
     description: 'Hot fire particles stream from the cursor — each flame rises, cools, and fades into smoke.',
@@ -710,7 +663,7 @@ draw();`,
 Provide React component with color and scanSpeed props.`,
   },
   {
-    id: 12,
+    id: 13,
     name: 'Mirror Ghost',
     tagline: 'Symmetrical shadow cursors',
     description: 'Four ghost cursor shadows are reflected across both axes, creating a hypnotic symmetrical dance.',
@@ -765,7 +718,7 @@ loop();`,
 Provide React component with symmetryAxes prop.`,
   },
   {
-    id: 12,
+    id: 14,
     name: 'Rainbow Comet',
     tagline: 'Trail the full spectrum',
     description: 'A hue-rotating rainbow comet tail follows the cursor through a full spectrum of color.',
@@ -817,7 +770,7 @@ loop();`,
 Provide React hook (useRainbowComet) with trailLength, hueSpeed, maxWidth props.`,
   },
   {
-    id: 12,
+    id: 15,
     name: 'Bubble Float',
     tagline: 'Bubbles rise from your touch',
     description: 'Translucent soap bubbles emerge from the cursor and float upward, wobbling and fading.',
@@ -876,7 +829,7 @@ loop();`,
 Provide React component (BubbleCursor) with all params as props.`,
   },
   {
-    id: 12,
+    id: 16,
     name: 'Ripple Wave',
     tagline: 'Make waves wherever you click',
     description: 'Every click sends out expanding concentric ripples, like a stone dropped in still water.',
@@ -929,7 +882,7 @@ document.addEventListener('mousemove',e=>{dot.style.left=e.clientX+'px';dot.styl
 Provide React component with click and mousemove ripple variants.`,
   },
   {
-    id: 12,
+    id: 17,
     name: 'Glitch Shift',
     tagline: 'Break reality with RGB splits',
     description: 'The cursor fractures into offset RGB channel ghosts with random glitch bursts.',
@@ -983,7 +936,7 @@ loop();`,
 Provide React component (GlitchCursor) with all params as props.`,
   },
   {
-    id: 12,
+    id: 18,
     name: 'Wind Stream',
     tagline: 'Sculpt air with your movement',
     description: 'Bezier-curved wind streams flow from the cursor, bending and billowing like gusts of digital air.',
@@ -1050,7 +1003,7 @@ loop();`,
 Provide React hook with configurable params.`,
   },
   {
-    id: 12,
+    id: 19,
     name: 'DNA Helix',
     tagline: 'Double helix spirals behind you',
     description: 'Two sinusoidal trails spiral in a double-helix pattern behind the cursor as it moves.',
@@ -1118,7 +1071,7 @@ loop();`,
 Provide React component with all params configurable.`,
   },
   {
-    id: 12,
+    id: 20,
     name: 'Torch Light',
     tagline: 'Navigate the dark with your cursor',
     description: 'The screen goes dark except for a warm torch-light circle around the cursor that flickers.',
