@@ -94,19 +94,6 @@ function ConfigPanel({ params, config, onChange, cursorId }) {
         const val = config[p.key] ?? p.default;
         const uid = `tog-${cursorId}-${p.key}`;
 
-        /* Color: single row — label left, swatch + hex right */
-        if (p.type === 'color') {
-          return (
-            <div key={p.key} className="config-row config-row--color">
-              <label className="config-label">{p.label}</label>
-              <div className="config-color-wrap">
-                <input type="color" value={val} onChange={e => onChange(p.key, e.target.value)} className="config-color" />
-                <span className="config-color-hex">{val}</span>
-              </div>
-            </div>
-          );
-        }
-
         /* Toggles: label + switch in one row */
         if (p.type === 'toggle') {
           return (
@@ -129,20 +116,27 @@ function ConfigPanel({ params, config, onChange, cursorId }) {
           );
         }
 
+        /* Color: single row — label left, swatch + hex right */
+        if (p.type === 'color') {
+          return (
+            <div key={p.key} className="config-row config-row--color">
+              <label className="config-label">{p.label}</label>
+              <div className="config-color-wrap">
+                <input type="color" value={val} onChange={e => onChange(p.key, e.target.value)} className="config-color" />
+                <span className="config-color-hex">{val}</span>
+              </div>
+            </div>
+          );
+        }
+
         return (
           <div key={p.key} className="config-row">
             <div className="config-row-top">
               <label className="config-label">{p.label}</label>
               <span className="config-value">
-                {p.type === 'color' ? val : typeof val === 'number' ? val : val}
+                {typeof val === 'number' ? val : val}
               </span>
             </div>
-            {p.type === 'color' && (
-              <div className="config-color-wrap">
-                <input type="color" value={val} onChange={e => onChange(p.key, e.target.value)} className="config-color" />
-                <span className="config-color-hex">{val}</span>
-              </div>
-            )}
             {p.type === 'range' && (
               <input type="range" min={p.min} max={p.max} step={p.step}
                 value={val}
@@ -212,7 +206,6 @@ export default function CursorSlide({ cursor, index, total, isActive, onNavigate
             <CursorComponent containerRef={demoRef} config={config} />
           )}
 
-          <span className="demo-canvas-label">✦ Live Preview</span>
 
           {hint && <div className="demo-hint">{hint}</div>}
 
