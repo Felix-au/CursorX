@@ -1,4 +1,4 @@
-// CursorX - 23 cursor effect definitions (removed: MatrixRain, Clock, EyeTracker, InkSplatter, RepelField)
+// CursorX - 24 cursor effect definitions (removed: MatrixRain, Clock, EyeTracker, InkSplatter, RepelField)
 // Each entry: { id, name, tagline, description, tech, params, code, prompt }
 
 export const CURSORS = [
@@ -1361,6 +1361,91 @@ window.addEventListener('click', e => {
 4. On click: spawn a ripple div that animates from 10px to \${CONFIG.rippleMaxSize}px over 600ms (quadratic ease-out), fading from opacity 1→0. Border transitions from dotColor to glowColor at t=0.5.
 
 Provide a React component scoped to a containerRef preview element. All state via refs + requestAnimationFrame. Returns null.`,
+  },
+  {
+    id: 24,
+    name: 'Fluid Glass',
+    tagline: 'Refractive lens that magnifies content beneath',
+    description: 'A circular glass lens that genuinely magnifies the HTML content beneath it — convex glass shading, configurable zoom, and a click-expand spring animation.',
+    tech: ['DOM clone', 'CSS transform', 'Radial gradient'],
+    params: [
+      { key: 'lensSize',         label: 'Lens Diameter (px)',    type: 'range',  min: 30,  max: 120, step: 5,    default: 50 },
+      { key: 'zoomLevel',        label: 'Magnification',         type: 'range',  min: 1.0, max: 3.0, step: 0.1,  default: 1.2 },
+      { key: 'lerpSpeed',        label: 'Follow Speed',          type: 'range',  min: 0.05,max: 0.4, step: 0.01, default: 0.1 },
+      { key: 'glassOpacity',     label: 'Highlight Opacity',     type: 'range',  min: 0.05,max: 0.6, step: 0.05, default: 0.3 },
+      { key: 'rimStrength',      label: 'Rim Brightness',        type: 'range',  min: 0.0, max: 0.8, step: 0.05, default: 0.0 },
+      { key: 'pointerAnim',      label: 'Pointer Animation',     type: 'toggle', default: true },
+      { key: 'pointerSizeBoost', label: 'Hover Size Multiplier', type: 'range',  min: 1.0, max: 2.0, step: 0.05, default: 1.25 },
+      { key: 'clickAnim',        label: 'Click Expand',          type: 'toggle', default: true },
+      { key: 'clickExpand',      label: 'Click Expand Scale',    type: 'range',  min: 1.0, max: 2.0, step: 0.1,  default: 1.5 },
+    ],
+    code: `// 1. Add a container div: <div id="my-container"> ... your content ... </div>
+const container = document.getElementById('my-container');
+container.style.position = 'relative';
+
+const lens = document.createElement('div');
+lens.setAttribute('data-fluid-glass','1');
+lens.style.cssText = 'position:absolute;pointer-events:none;z-index:99;border-radius:50%;overflow:hidden;transform:translate(-50%,-50%);';
+container.appendChild(lens);
+
+const glassOverlay = document.createElement('div');
+glassOverlay.style.cssText = 'position:absolute;inset:0;z-index:2;pointer-events:none;border-radius:50%;';
+lens.appendChild(glassOverlay);
+
+let cloneView = null;
+const buildClone = () => {
+  if (!lens.isConnected) return;
+  const prev = cloneView;
+  const clone = container.cloneNode(true);
+  clone.querySelectorAll('canvas,[data-fluid-glass]').forEach(e => e.remove());
+  clone.style.cssText = \`position:absolute;overflow:visible;pointer-events:none;
+    width:\${container.clientWidth}px;height:\${container.clientHeight}px;
+    transform-origin:0 0;z-index:1;\`;
+  lens.insertBefore(clone, glassOverlay);
+  cloneView = clone;
+  if (prev && prev.parentNode === lens) lens.removeChild(prev);
+};
+buildClone();
+setInterval(buildClone, 1000);
+
+let mx = container.clientWidth/2, my = container.clientHeight/2, lx = mx, ly = my;
+
+container.addEventListener('mousemove', e => {
+  const r = container.getBoundingClientRect();
+  mx = e.clientX - r.left; my = e.clientY - r.top;
+});
+
+(function loop() {
+  requestAnimationFrame(loop);
+  lx += (mx - lx) * CONFIG.lerpSpeed;
+  ly += (my - ly) * CONFIG.lerpSpeed;
+  const size = CONFIG.lensSize;
+  const r = size / 2;
+  const zoom = CONFIG.zoomLevel;
+  lens.style.left = lx + 'px'; lens.style.top = ly + 'px';
+  lens.style.width = lens.style.height = size + 'px';
+  lens.style.boxShadow = '0 8px 28px rgba(0,0,0,.45),0 2px 6px rgba(0,0,0,.3)';
+  if (cloneView) {
+    cloneView.style.left = (r - lx * zoom) + 'px';
+    cloneView.style.top  = (r - ly * zoom) + 'px';
+    cloneView.style.transform = \`scale(\${zoom})\`;
+  }
+  const g = CONFIG.glassOpacity, rim = CONFIG.rimStrength;
+  glassOverlay.style.background = \`radial-gradient(circle at 35% 32%,rgba(255,255,255,\${g}) 0%,rgba(255,255,255,\${g*.28}) 36%,transparent 72%)\`;
+  glassOverlay.style.boxShadow = \`inset 0 0 0 1.5px rgba(255,255,255,\${rim}),inset 0 2px 8px rgba(255,255,255,\${rim*.65}),inset 0 -2px 6px rgba(0,0,0,.15)\`;
+})();`,
+    prompt: `Implement a "Fluid Glass" cursor. Spec:
+1. Circular lens (diameter \${CONFIG.lensSize}px) that follows the mouse with lerp factor \${CONFIG.lerpSpeed}.
+2. Genuine magnification of underlying HTML content at \${CONFIG.zoomLevel}× zoom using DOM clone + CSS transform technique:
+   - Clone the target container with cloneNode(true), strip canvas/cursor elements.
+   - Position clone inside the lens using: left = radius - lx*zoom; top = radius - ly*zoom; transform: scale(zoom); transform-origin: 0 0.
+   - Refresh the clone every 1000ms to pick up live DOM changes (setInterval).
+3. Convex glass shading overlay: radial-gradient highlight at 35% 32%, rim via inset box-shadow (strength \${CONFIG.rimStrength}), bottom shadow rim.
+4. Drop shadow beneath the lens: 0 8px 28px rgba(0,0,0,0.45).
+5. Hover state: zoom multiplied by \${CONFIG.pointerZoomBoost}, glow ring appears around lens.
+6. Click state: lens diameter scales to \${CONFIG.clickExpand}× over 400ms then springs back (sin-based bounce). Divide zoom by sizeScale to prevent content jump.
+
+Provide a React component with containerRef + config props. All logic in useEffect + RAF. Returns null.`,
   },
 ];
 

@@ -8,7 +8,7 @@ import QuickLinksSection from './components/QuickLinksSection.jsx';
 import Navbar from './components/Navbar.jsx';
 import NavDots from './components/NavDots.jsx';
 
-const TOTAL = CURSORS.length + 2; // 23 cursors + 1 tutorial + 1 contact = 25
+const TOTAL = CURSORS.length + 2; // 24 cursors + 1 tutorial + 1 contact = 26
 
 export default function App() {
   const [current, setCurrent] = useState(0);
@@ -341,7 +341,7 @@ export default function App() {
             key={cursor.id}
             cursor={cursor}
             index={cursor.id}
-            total={TOTAL}
+            total={CURSORS.length}
             isActive={current === cursor.id}
             onNavigate={navigateTo}
             onBack={() => navigateTo(0)}

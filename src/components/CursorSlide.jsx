@@ -24,6 +24,7 @@ import TorchLightCursor from '../cursors/TorchLightCursor.jsx';
 import DifferenceBlendCursor from '../cursors/DifferenceBlendCursor.jsx';
 import GhostTrailCursor from '../cursors/GhostTrailCursor.jsx';
 import AudioPulseCursor from '../cursors/AudioPulseCursor.jsx';
+import FluidGlassCursor from '../cursors/FluidGlassCursor.jsx';
 
 const CURSOR_COMPONENTS = [
   MagneticCursor, ParticleTrailCursor, SpotlightCursor, MorphingBlobCursor,
@@ -31,7 +32,7 @@ const CURSOR_COMPONENTS = [
   GravityPullCursor, ConstellationCursor, FireTrailCursor,
   CrosshairScopeCursor, MirrorGhostCursor, RainbowCometCursor, BubbleFloatCursor,
   RippleWaveCursor, GlitchShiftCursor, WindStreamCursor, DNAHelixCursor, TorchLightCursor,
-  DifferenceBlendCursor, GhostTrailCursor, AudioPulseCursor,
+  DifferenceBlendCursor, GhostTrailCursor, AudioPulseCursor, FluidGlassCursor,
 ];
 
 const HINTS = {
@@ -45,6 +46,7 @@ const HINTS = {
   21: '🌓 Hover elements and watch them invert colors',
   22: '👻 Move your mouse to wiggle the floating vector ghost',
   23: '🔊 Click inside preview to send ripple waves outward',
+  24: '🔍 Move over content — the glass genuinely magnifies everything beneath it',
 };
 
 
