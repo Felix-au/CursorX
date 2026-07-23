@@ -612,11 +612,11 @@ body {
 
   0%,
   100% {
-    filter: drop-shadow(0 0 6px rgba(92, 244, 252, 0.25));
+    filter: drop-shadow(0 0 6px rgba(92, 244, 252, 0.20));
   }
 
   50% {
-    filter: drop-shadow(0 0 15px rgba(92, 244, 252, 0.55));
+    filter: drop-shadow(0 0 15px rgba(92, 244, 252, 0.40));
   }
 }
 
