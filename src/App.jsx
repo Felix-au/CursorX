@@ -7,6 +7,7 @@ import TutorialSection from './components/TutorialSection.jsx';
 import QuickLinksSection from './components/QuickLinksSection.jsx';
 import Navbar from './components/Navbar.jsx';
 import NavDots from './components/NavDots.jsx';
+import Cubes from './components/Cubes.jsx';
 
 const TOTAL = CURSORS.length + 2; // 24 cursors + 1 tutorial + 1 contact = 26
 
@@ -330,6 +331,21 @@ export default function App() {
 
   return (
     <>
+      <Cubes
+        rows={7}
+        cols={14}
+        cubeSize={70}
+        cellGap={18}
+        maxAngle={90}
+        radius={3}
+        borderStyle="1px dashed #5cf4fc"
+        faceColor="#000000"
+        rippleColor="#5cf4fc"
+        rippleSpeed={2}
+        autoAnimate={true}
+        rippleOnClick={true}
+        isHero={current === 0}
+      />
       <Navbar onNavigate={navigateTo} current={current} tutorialIndex={TOTAL - 1} contactIndex={TOTAL} />
       <NavDots total={TOTAL} current={current} onNavigate={navigateTo} />
 
