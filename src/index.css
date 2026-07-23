@@ -638,8 +638,8 @@ body {
 
 .hero-gallery-section {
   width: 100%;
-  height: 97%;
-  max-height: calc(97vh - 128px);
+  height: 95%;
+  max-height: calc(95vh - 128px);
   overflow: hidden;
   background: linear-gradient(145deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0.005) 60%, rgba(0, 0, 0, 0.25) 100%);
   border: 1px solid rgba(255, 255, 255, 0.07);
