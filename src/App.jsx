@@ -214,6 +214,83 @@ export default function App() {
     }
   }, [current]);
 
+  // Dynamic SEO & Metadata (Title, Description, Canonical, and JSON-LD Schema)
+  useEffect(() => {
+    let title = 'CursorX - Custom Cursor Showcase for Developers';
+    let desc = 'CursorX is a developer showcase of 20+ interactive custom cursor effects, CSS/JS code snippets, and AI prompts. Enhance your website\'s UI/UX instantly.';
+    let canonical = 'https://cursorx.felixau.in/';
+    let jsonLd = null;
+
+    if (current > 0 && current <= CURSORS.length) {
+      const cursor = CURSORS[current - 1];
+      title = `${cursor.name} Cursor Effect - CursorX`;
+      desc = `Try the interactive ${cursor.name} custom cursor effect on CursorX. Get the CSS/JavaScript code snippet and AI prompt to implement it.`;
+      canonical = `https://cursorx.felixau.in/#slide-${current}`;
+      
+      jsonLd = {
+        '@context': 'https://schema.org',
+        '@type': 'SoftwareSourceCode',
+        'name': `${cursor.name} Cursor Effect`,
+        'description': cursor.description,
+        'programmingLanguage': 'JavaScript',
+        'codeRepository': 'https://github.com/Felix-au/CursorX',
+        'runtimePlatform': 'Web Browser'
+      };
+    } else if (current === TOTAL - 1) {
+      title = 'Integration Tutorial - CursorX';
+      desc = 'Learn how to integrate custom cursor effects in React, HTML/CSS, or vanilla JavaScript using CursorX guidelines.';
+      canonical = `https://cursorx.felixau.in/#slide-${current}`;
+    } else if (current === TOTAL) {
+      title = 'Contact Developers - CursorX';
+      desc = 'Submit a request to developers, report issues, or get in touch regarding custom cursor integrations on CursorX.';
+      canonical = `https://cursorx.felixau.in/#slide-${current}`;
+    }
+
+    // Update DOM title
+    document.title = title;
+
+    // Update Meta Description
+    const metaDesc = document.querySelector('meta[name="description"]');
+    if (metaDesc) metaDesc.setAttribute('content', desc);
+
+    // Update Canonical URL
+    let linkCanonical = document.querySelector('link[rel="canonical"]');
+    if (!linkCanonical) {
+      linkCanonical = document.createElement('link');
+      linkCanonical.setAttribute('rel', 'canonical');
+      document.head.appendChild(linkCanonical);
+    }
+    linkCanonical.setAttribute('href', canonical);
+
+    // Update Open Graph tags for better social snippet previews
+    const ogTitle = document.querySelector('meta[property="og:title"]');
+    if (ogTitle) ogTitle.setAttribute('content', title);
+    const ogDesc = document.querySelector('meta[property="og:description"]');
+    if (ogDesc) ogDesc.setAttribute('content', desc);
+    const ogUrl = document.querySelector('meta[property="og:url"]');
+    if (ogUrl) ogUrl.setAttribute('content', canonical);
+
+    // Update Twitter tags
+    const twTitle = document.querySelector('meta[name="twitter:title"]');
+    if (twTitle) twTitle.setAttribute('content', title);
+    const twDesc = document.querySelector('meta[name="twitter:description"]');
+    if (twDesc) twDesc.setAttribute('content', desc);
+
+    // Update Dynamic JSON-LD script block
+    let scriptJsonLd = document.getElementById('dynamic-jsonld');
+    if (jsonLd) {
+      if (!scriptJsonLd) {
+        scriptJsonLd = document.createElement('script');
+        scriptJsonLd.id = 'dynamic-jsonld';
+        scriptJsonLd.type = 'application/ld+json';
+        document.head.appendChild(scriptJsonLd);
+      }
+      scriptJsonLd.textContent = JSON.stringify(jsonLd, null, 2);
+    } else if (scriptJsonLd) {
+      scriptJsonLd.remove();
+    }
+  }, [current]);
+
   // Read URL hash on load/hashchange and scroll to it
   useEffect(() => {
     const handleHash = () => {
