@@ -1,6 +1,6 @@
 :root {
-  --col-gap: 28px;
-  --row-gap: 28px;
+  --col-gap: 31px;
+  --row-gap: 31px;
   --cube-perspective: 1000px;
   --cube-face-border: 1px dashed #5cf4fc;
   --cube-face-bg: #000000;
@@ -70,7 +70,7 @@
 }
 
 .default-animation .cube-face--front {
-  transform: translateZ(30px);
+  transform: translateZ(28.5px);
   opacity: 1;
 }
 
@@ -96,5 +96,5 @@
 }
 
 .default-animation .cube-face--back {
-  transform: translateZ(-30px) rotateY(180deg);
+  transform: translateZ(-28.5px) rotateY(180deg);
 }
