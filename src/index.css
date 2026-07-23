@@ -547,7 +547,7 @@ body {
   flex-direction: column;
   align-items: center;
   gap: 16px;
-  margin-bottom: 24px;
+  margin-bottom: 8px;
 }
 
 .hero-badge {
@@ -592,7 +592,29 @@ body {
   font-weight: 900;
   line-height: 1.05;
   letter-spacing: -0.03em;
-  margin-bottom: 16px;
+  margin-bottom: 8px;
+}
+
+.hero-logo-img {
+  max-width: 300px;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+  animation: logoGlowPulse 4s infinite ease-in-out;
+  transition: transform 0.3s ease;
+}
+
+.hero-logo-img:hover {
+  transform: scale(1.03);
+}
+
+@keyframes logoGlowPulse {
+  0%, 100% {
+    filter: drop-shadow(0 0 3px rgba(92, 244, 252, 0.15));
+  }
+  50% {
+    filter: drop-shadow(0 0 10px rgba(92, 244, 252, 0.35));
+  }
 }
 
 .hero-sub {

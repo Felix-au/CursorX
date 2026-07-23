@@ -10,17 +10,7 @@ const ACCENT_COLORS = [
 export default function HeroSlide({ onNavigate }) {
   return (
     <div className="slide hero-slide" id="slide-0">
-      {/* Animated background grid */}
-      <div style={{
-        position: 'absolute', inset: 0, zIndex: 0,
-        backgroundImage: `
-          linear-gradient(rgba(124,92,252,0.03) 1px, transparent 1px),
-          linear-gradient(90deg, rgba(124,92,252,0.03) 1px, transparent 1px)
-        `,
-        backgroundSize: '48px 48px',
-        maskImage: 'radial-gradient(ellipse 85% 85% at 50% 50%, black 50%, transparent 100%)',
-        pointerEvents: 'none',
-      }} />
+
 
       <div className="hero-left">
         <div className="hero-brand">
@@ -31,8 +21,7 @@ export default function HeroSlide({ onNavigate }) {
         </div>
 
         <h1 className="hero-title">
-          <span className="gradient-text">Cursor</span>
-          <span style={{ color: 'var(--text)' }}>X</span>
+          <img src="/logo.png" alt="CursorX Logo" className="hero-logo-img" />
         </h1>
         <p className="hero-sub">
           Browse 20+ distinct cursor effects, preview them live, grab the code, get the AI prompt. Ship stunning cursors in minutes.
