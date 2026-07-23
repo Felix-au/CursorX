@@ -24,9 +24,8 @@ export default async function handler(req, res) {
   }
 
   // Use production environment variable (which is secure and not prefixed with VITE_)
-  // Vercel dashboard lets you specify RESEND_API_KEY directly.
-  // Fall back to VITE_RESEND_API_KEY just in case the host configuration has it that way.
-  const apiKey = process.env.RESEND_API_KEY || process.env.VITE_RESEND_API_KEY;
+  // Vercel/Netlify dashboard lets you specify RESEND_API_KEY directly.
+  const apiKey = process.env.RESEND_API_KEY;
 
   if (!apiKey) {
     return res.status(500).json({ error: 'API key not configured on server.' });
