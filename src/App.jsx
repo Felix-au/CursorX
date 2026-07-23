@@ -13,31 +13,35 @@ export default function App() {
 
   // Global website cursor: Difference Blend (cursor number 21)
   useEffect(() => {
-    let container = document.getElementById('global-cursor-container');
-    if (!container) {
-      container = document.createElement('div');
-      container.id = 'global-cursor-container';
-      container.style.cssText = 'position:fixed; inset:0; pointer-events:none; z-index:9990;';
-      document.body.appendChild(container);
-    }
-
+    // Create big ball element as direct child of document.body (avoids stacking context isolation)
     const bigBall = document.createElement('div');
+    bigBall.id = 'global-cursor-big';
     bigBall.style.cssText = `
-      position:absolute; pointer-events:none; z-index:9990;
+      position:fixed; pointer-events:none; z-index:9999;
       mix-blend-mode:difference; transform:translate(-50%,-50%);
-      width:30px; height:30px; border-radius:50%; background:#f7f8fa;
       will-change:left,top,transform; transition: opacity 0.15s;
+      display:flex; align-items:center; justify-content:center;
     `;
-    container.appendChild(bigBall);
+    const bigSvg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    const bigCircle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    bigSvg.appendChild(bigCircle);
+    bigBall.appendChild(bigSvg);
+    document.body.appendChild(bigBall);
 
+    // Create small ball element as direct child of document.body
     const smallBall = document.createElement('div');
+    smallBall.id = 'global-cursor-small';
     smallBall.style.cssText = `
-      position:absolute; pointer-events:none; z-index:9991;
+      position:fixed; pointer-events:none; z-index:10000;
       mix-blend-mode:difference; transform:translate(-50%,-50%);
-      width:10px; height:10px; border-radius:50%; background:#f7f8fa;
       will-change:left,top,transform; transition: opacity 0.15s;
+      display:flex; align-items:center; justify-content:center;
     `;
-    container.appendChild(smallBall);
+    const smallSvg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    const smallCircle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    smallSvg.appendChild(smallCircle);
+    smallBall.appendChild(smallSvg);
+    document.body.appendChild(smallBall);
 
     let mx = -200, my = -200;
     let bx = -200, by = -200;
@@ -100,6 +104,29 @@ export default function App() {
       bigScale += (targetBigScale - bigScale) * 0.15;
       smallScale += (targetSmallScale - smallScale) * 0.15;
 
+      // Base sizes
+      const baseBigSize = 30;
+      const baseSmallSize = 10;
+
+      // Calculate vector sizes based on interpolated scales
+      const currentBigSize = Math.max(1, baseBigSize * bigScale);
+      const currentSmallSize = Math.max(1, baseSmallSize * smallScale);
+
+      // Update SVGs attributes with precise vector dimensions to prevent graininess
+      bigSvg.setAttribute('width', String(currentBigSize));
+      bigSvg.setAttribute('height', String(currentBigSize));
+      bigCircle.setAttribute('cx', String(currentBigSize / 2));
+      bigCircle.setAttribute('cy', String(currentBigSize / 2));
+      bigCircle.setAttribute('r', String(Math.max(0.5, currentBigSize / 2 - 0.5)));
+      bigCircle.setAttribute('fill', '#f7f8fa');
+
+      smallSvg.setAttribute('width', String(currentSmallSize));
+      smallSvg.setAttribute('height', String(currentSmallSize));
+      smallCircle.setAttribute('cx', String(currentSmallSize / 2));
+      smallCircle.setAttribute('cy', String(currentSmallSize / 2));
+      smallCircle.setAttribute('r', String(Math.max(0.5, currentSmallSize / 2 - 0.5)));
+      smallCircle.setAttribute('fill', '#f7f8fa');
+
       bx += (mx - bx) * 0.1;
       by += (my - by) * 0.1;
 
@@ -108,11 +135,11 @@ export default function App() {
 
       bigBall.style.left = `${bx}px`;
       bigBall.style.top = `${by}px`;
-      bigBall.style.transform = `translate(-50%,-50%) scale(${bigScale})`;
+      bigBall.style.transform = 'translate(-50%,-50%)';
 
       smallBall.style.left = `${sx}px`;
       smallBall.style.top = `${sy}px`;
-      smallBall.style.transform = `translate(-50%,-50%) scale(${smallScale})`;
+      smallBall.style.transform = 'translate(-50%,-50%)';
 
       rafId = requestAnimationFrame(loop);
     };
@@ -123,7 +150,8 @@ export default function App() {
       document.removeEventListener('mouseover', onOver);
       window.removeEventListener('click', onClick);
       cancelAnimationFrame(rafId);
-      container.remove();
+      bigBall.remove();
+      smallBall.remove();
     };
   }, []);
 
