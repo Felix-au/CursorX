@@ -553,9 +553,9 @@ draw();`,
     prompt: `Implement a "Constellation" cursor — floating stars with line connections. Spec:
 1. CONFIG.starCount (${90}) drifting star particles wrapping screen edges
 2. Star-to-star lines within CONFIG.maxDist (${115}px), opacity ∝ distance
-3. Star-to-cursor lines within CONFIG.cursorDist (${175}px), cyan color
-4. Star color: CONFIG.starColor (${'"#c8c8ff"'})
-Provide React component with configurable counts and distances.`,
+3. Star-to-cursor lines within CONFIG.cursorDist (${175}px) * (isHover ? CONFIG.pointerDistMult (${1.25}) : 1.0)
+4. Hover state: connection lines pulse rhythmically; click state: connected stars glow with CONFIG.clickGlowIntensity (${1.5})
+Provide React component with configurable counts, distances, and interactive state triggers.`,
   },
   {
     id: 11,
@@ -617,8 +617,9 @@ loop();`,
 1. Spawn CONFIG.count (${5}) Flame particles per frame at cursor position
 2. Particles rise (vy: -1.2 to -CONFIG.rise-1.2 (${-3.2})), horizontal flicker
 3. Color lifecycle: yellow → orange → red → smoke as life decreases
-4. Glow via shadowBlur:14, size CONFIG.size (${9})px max
-Provide React hook with windDirection prop.`,
+4. Hover state: size grows by CONFIG.pointerSizeMult (${1.5}) and becomes transparent by CONFIG.pointerAlpha (${0.35})
+5. Click state: releases CONFIG.clickEmberCount (${25}) radial shooting ember sparks
+Provide React component with configurable sizes, pointer properties, and click bursts.`,
   },
   {
     id: 12,
@@ -670,17 +671,17 @@ const draw=()=>{
 draw();`,
     prompt: `Implement a "Crosshair Scope" cursor with tactical reticle. Spec:
 1. Outer ring CONFIG.radius (${40})px with 4 crosshair ticks and corner brackets
-2. Sweep arc: 38° arc rotating at CONFIG.scanSpeed (${0.045}) rad/frame
-3. Default color CONFIG.color (${'"#5cf4fc"'}), locked: CONFIG.lockedColor (${'"#ff4455"'})
-4. Click toggles lock: scale compress to 0.75 then spring back
-Provide React component with color and scanSpeed props.`,
+2. Sweep arc rotating at CONFIG.scanSpeed (${0.045}) rad/frame
+3. Hover state: reticle color swaps to CONFIG.lockedColor (${'"#ff4455"'}) and rotation speed increases by CONFIG.pointerSpeedMult (${2.0})x
+4. Click state: reticle compresses down to CONFIG.clickSqueeze (${0.75}) scale and springs back
+Provide React component with configurable radius, speeds, pointer settings, and click squeeze scales.`,
   },
   {
     id: 13,
     name: 'Mirror Ghost',
     tagline: 'Symmetrical shadow cursors',
     description: 'Four ghost cursor shadows are reflected across both axes, creating a hypnotic symmetrical dance.',
-    tech: ['CSS Transform', 'Viewport Mirroring'],
+    tech: ['Canvas API', 'Symmetry Reflections'],
     params: [
       { key: 'color', label: 'Ghost Color', type: 'color', default: '#c45cfc' },
       { key: 'size', label: 'Ring Size', type: 'range', min: 10, max: 40, step: 2, default: 20 },
@@ -690,49 +691,71 @@ Provide React component with color and scanSpeed props.`,
       { key: 'clickAnim', label: 'Click Pulse', type: 'toggle', default: true },
       { key: 'clickScale', label: 'Click Scale Mult', type: 'range', min: 0.2, max: 2.0, step: 0.1, default: 0.8 },
     ],
-    code: `const cx=innerWidth/2, cy=innerHeight/2;
-
-const makeGhost = (opacity,size) => {
-  const el=document.createElement('div');
-  el.style.cssText=\`position:fixed;pointer-events:none;z-index:9997;
-    width:\${size}px;height:\${size}px;border-radius:50%;
-    border:2px solid \${CONFIG.color}\${Math.round(opacity*255).toString(16).padStart(2,'0')};
-    transform:translate(-50%,-50%);
-    box-shadow:0 0 12px \${CONFIG.color}\${Math.round(opacity*128).toString(16).padStart(2,'0')};\`;
-  document.body.appendChild(el); return el;
-};
+    code: `const canvas=document.createElement('canvas');
+canvas.style.cssText='position:fixed;inset:0;pointer-events:none;z-index:9997;';
+document.body.appendChild(canvas);
+const ctx=canvas.getContext('2d');
+let mx=innerWidth/2, my=innerHeight/2, clickT=-1;
+const resize=()=>{canvas.width=innerWidth;canvas.height=innerHeight;};
+resize(); window.addEventListener('resize',resize);
 
 const ghosts=[
-  {el:makeGhost(.9,CONFIG.size),sx:1,sy:1,lerp:1},
-  {el:makeGhost(.5,CONFIG.size-2),sx:-1,sy:1,lerp:CONFIG.lerp},
-  {el:makeGhost(.5,CONFIG.size-2),sx:1,sy:-1,lerp:CONFIG.lerp},
-  {el:makeGhost(.28,CONFIG.size-4),sx:-1,sy:-1,lerp:CONFIG.lerp*.7},
+  {x:mx, y:my, sx:1, sy:1, l:1.0},
+  {x:mx, y:my, sx:-1, sy:1, l:CONFIG.lerp},
+  {x:mx, y:my, sx:1, sy:-1, l:CONFIG.lerp},
+  {x:mx, y:my, sx:-1, sy:-1, l:CONFIG.lerp*.7},
 ];
-const dot=document.createElement('div');
-dot.style.cssText='position:fixed;pointer-events:none;z-index:9999;width:6px;height:6px;border-radius:50%;background:white;transform:translate(-50%,-50%);';
-document.body.append(dot);
 
-const pos=ghosts.map(()=>({x:cx,y:cy}));
-let target={x:cx,y:cy};
-document.addEventListener('mousemove',e=>{target.x=e.clientX;target.y=e.clientY;});
+document.addEventListener('mousemove', e => { mx=e.clientX; my=e.clientY; });
+document.addEventListener('click', () => { if (CONFIG.clickAnim !== false) clickT=0; });
 
 const loop=()=>{
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  const cx=canvas.width/2, cy=canvas.height/2;
+  const isPointer = CONFIG.pointerAnim && checkPointer(mx, my);
+  
+  let ghostScale = 1.0;
+  let dotScale = 1.0;
+  if (isPointer) {
+    ghostScale = CONFIG.pointerScale;
+    dotScale = 0.5;
+  }
+  if (CONFIG.clickAnim && clickT >= 0) {
+    const bounce = Math.sin(clickT * Math.PI);
+    ghostScale *= (1 - bounce * CONFIG.clickScale * 0.5);
+    dotScale *= (1 + bounce * CONFIG.clickScale * 1.2);
+    clickT += 0.08;
+    if (clickT >= 1) clickT = -1;
+  }
+
   ghosts.forEach((g,i)=>{
-    const tx=cx+(target.x-cx)*g.sx, ty=cy+(target.y-cy)*g.sy;
-    pos[i].x+=(tx-pos[i].x)*g.lerp; pos[i].y+=(ty-pos[i].y)*g.lerp;
-    g.el.style.left=pos[i].x+'px'; g.el.style.top=pos[i].y+'px';
+    const tx = cx + (mx - cx) * g.sx;
+    const ty = cy + (my - cy) * g.sy;
+    g.x += (tx - g.x) * g.l;
+    g.y += (ty - g.y) * g.l;
+
+    const opacity = i===0 ? 0.9 : i===3 ? 0.28 : 0.5;
+    const sizeOffset = i===0 ? 0 : i===3 ? -4 : -2;
+    const currentSize = (CONFIG.size + sizeOffset) * ghostScale;
+
+    ctx.save(); ctx.beginPath();
+    ctx.arc(g.x, g.y, currentSize/2, 0, Math.PI*2);
+    ctx.strokeStyle=CONFIG.color; ctx.globalAlpha=opacity; ctx.lineWidth=2;
+    ctx.shadowColor=CONFIG.color; ctx.shadowBlur=12*opacity;
+    ctx.stroke(); ctx.restore();
   });
-  dot.style.left=target.x+'px'; dot.style.top=target.y+'px';
+  
+  ctx.beginPath(); ctx.arc(mx, my, 3 * dotScale, 0, Math.PI*2);
+  ctx.fillStyle='white'; ctx.fill();
   requestAnimationFrame(loop);
 };
 loop();`,
-    prompt: `Implement a "Mirror Ghost" cursor with 4-way symmetrical reflections. Spec:
+    prompt: `Implement a Canvas-based "Mirror Ghost" cursor with 4-way symmetrical reflections, resolving border pixelation. Spec:
 1. Ghost 1 (real): instant follow
 2. Ghost 2 (mirror X): pos.x = 2*cx - x, opacity 0.5, lerp CONFIG.lerp (${0.14})
 3. Ghost 3 (mirror Y): pos.y = 2*cy - y, opacity 0.5
 4. Ghost 4 (mirror XY): both, opacity 0.28, slower lerp
-5. Ring size CONFIG.size (${20})px, color CONFIG.color (${'"#c45cfc"'})
-Provide React component with symmetryAxes prop.`,
+5. Hover state: ghosts scale up by CONFIG.pointerScale (${2.2}), center dot shrinks; Click state: ghosts contract, center dot expands by CONFIG.clickScale (${0.8})`,
   },
   {
     id: 14,
@@ -786,9 +809,9 @@ loop();`,
     prompt: `Implement a "Rainbow Comet" cursor with full-spectrum hue trail. Spec:
 1. Trail: last CONFIG.trailLength (${45}) positions, each with its hue value
 2. Hue advances CONFIG.hueSpeed (${2.5})°/frame (wrapping at 360)
-3. Segment width: 0 → CONFIG.maxWidth (${13})px from tail to head
-4. Glowing circle at head (22px shadowBlur)
-Provide React hook (useRainbowComet) with trailLength, hueSpeed, maxWidth props.`,
+3. Hover state: neon comet width/glow grows by CONFIG.pointerGlowMult (${1.8})x
+4. Click state: releases CONFIG.clickSparkCount (${22}) radial rainbow sparkles
+Provide React component with configurable lengths, speeds, widths, and hover/click effects.`,
   },
   {
     id: 15,
@@ -846,11 +869,10 @@ const loop=()=>{
 };
 loop();`,
     prompt: `Implement a "Bubble Float" cursor with soap-bubble radial gradients. Spec:
-1. Spawn bubble every CONFIG.spawnRate (${5}) frames at cursor
-2. Each: radius 7 to CONFIG.maxSize (${25})px, rise vy: -0.6 to -CONFIG.riseSpeed-0.6 (${-2.2}), wobble via sin
-3. Radial gradient: bright highlight → translucent center → colored rim
-4. Hue: CONFIG.hue (${200}) ± 20°, fade alpha -= 0.004
-Provide React component (BubbleCursor) with all params as props.`,
+1. Spawn bubble every CONFIG.spawnRate (${5}) frames at cursor (spawn rate doubles on hover)
+2. Hover state: bubble sizes grow by CONFIG.pointerSizeMult (${1.55})x, wobbling faster
+3. Click state: pops all current bubbles into gravity-bound droplet splash particles
+Provide React component with customizable rates, sizes, speeds, and hover/click pops.`,
   },
   {
     id: 16,
@@ -870,19 +892,38 @@ Provide React component (BubbleCursor) with all params as props.`,
 canvas.style.cssText='position:fixed;inset:0;pointer-events:none;z-index:9998;';
 document.body.appendChild(canvas);
 const ctx=canvas.getContext('2d');
-let ripples=[];
+let ripples=[], mx=-100, my=-100, showDot=false, time=0;
 const resize=()=>{canvas.width=innerWidth;canvas.height=innerHeight;};
 resize();window.addEventListener('resize',resize);
 
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;showDot=true;});
+document.addEventListener('mouseleave',()=>{showDot=false;});
 document.addEventListener('click',e=>{
-  for(let i=0;i<CONFIG.count;i++){
-    ripples.push({x:e.clientX,y:e.clientY,r:0,alpha:.82-i*.2,delay:i*5,age:0,
-      hue:CONFIG.hue+Math.random()*30-15});
+  if (CONFIG.clickAnim !== false) {
+    for(let i=0;i<CONFIG.count;i++){
+      ripples.push({x:e.clientX,y:e.clientY,r:0,alpha:.82-i*.2,delay:i*5,age:0,
+        hue:CONFIG.hue+Math.random()*30-15});
+    }
   }
 });
 
 const loop=()=>{
   ctx.clearRect(0,0,canvas.width,canvas.height);
+  time += 0.05;
+  const isPointer = CONFIG.pointerAnim && checkPointer(mx, my);
+
+  if (showDot && mx >= 0) {
+    ctx.save(); ctx.beginPath();
+    let currentDotRadius = 4.5;
+    if (isPointer) {
+      const breath = 1.0 + (0.3 + Math.sin(time * 5.2) * 0.3) * (CONFIG.pointerBreathMult - 1.0) / 0.6;
+      currentDotRadius *= breath;
+    }
+    ctx.arc(mx, my, currentDotRadius, 0, Math.PI * 2);
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.9)';
+    ctx.lineWidth = 1.5; ctx.stroke(); ctx.restore();
+  }
+
   ripples=ripples.filter(r=>r.alpha>0);
   ripples.forEach(r=>{
     r.age++;if(r.age<r.delay)return;
@@ -894,19 +935,13 @@ const loop=()=>{
   });
   requestAnimationFrame(loop);
 };
-loop();
-
-// Cursor ring
-const dot=document.createElement('div');
-dot.style.cssText='position:fixed;pointer-events:none;z-index:9999;width:9px;height:9px;border-radius:50%;border:1.5px solid white;transform:translate(-50%,-50%);';
-document.body.appendChild(dot);
-document.addEventListener('mousemove',e=>{dot.style.left=e.clientX+'px';dot.style.top=e.clientY+'px';});`,
+loop();`,
     prompt: `Implement a "Ripple Wave" cursor — clicking creates expanding concentric rings. Spec:
 1. On click: spawn CONFIG.count (${3}) rings with staggered delays (N*5 frames)
 2. Each ring expands at CONFIG.speed (${3.2})px/frame, alpha fades from 0.82 down
-3. Color: HSL hue CONFIG.hue (${220}) ± 15°, glow shadowBlur: 8
-4. Cursor: small hollow ring (9px, white border)
-Provide React component with click and mousemove ripple variants.`,
+3. Hover state: central ring expands and contracts rhythmically (breathing animation) scaled by CONFIG.pointerBreathMult (${1.6})
+4. All rings and breathing dot are drawn directly on canvas to prevent CSS scaling pixelation.
+Provide React component drawing all concentric rings and breathing ring on canvas.`,
   },
   {
     id: 17,
@@ -960,10 +995,10 @@ const loop=()=>{
 };
 loop();`,
     prompt: `Implement a "Glitch Shift" cursor with RGB channel splitting. Spec:
-1. Three elements (R,G,B) offset CONFIG.split (${4})px from main cursor, mix-blend-mode: screen
-2. Every CONFIG.glitchInterval (${2000})ms: trigger CONFIG.burstDuration (${220})ms glitch burst
-3. During burst: channels scramble with sine-wave offsets (amplitude ~CONFIG.split*3)
-4. Main cursor: white dot, mix-blend-mode: normal, z-index above channels
+1. Three elements (R,G,B) offset CONFIG.split (${5})px from main cursor, mix-blend-mode: screen
+2. Every CONFIG.glitchInterval (${500})ms: trigger CONFIG.burstDuration (${300})ms glitch burst
+3. Hover state: size of all elements expands by CONFIG.pointerSizeMult (${1.7})x
+4. Click state: triggers high-frequency glitch split burst multiplied by CONFIG.clickSplitMult (${4.4})x for 250ms
 Provide React component (GlitchCursor) with all params as props.`,
   },
   {
@@ -1030,11 +1065,10 @@ const loop=()=>{
 loop();`,
     prompt: `Implement a "Wind Stream" cursor — Bezier-smoothed flow lines emitting from cursor movement. Spec:
 1. Trigger when speed > CONFIG.minSpeed (${2.5})px/frame
-2. Spawn CONFIG.count (${2}) stream particles per event
-3. Each stream: velocity inherits movement (28%) + random spread, decay CONFIG.decay (${0.93})/frame
-4. Drawn with quadraticCurveTo for smooth curves, alpha fades (* 0.952/frame)
-5. Color: HSL hue CONFIG.hue (${200}) ± 22°
-Provide React hook with configurable params.`,
+2. Hover state: constant breeze streams spawn when stationary, and stream thickness grows to CONFIG.pointerThickness (${6.5})px
+3. Click state: releases a 360-degree radial blast of mixed-hue streams across the full color spectrum
+4. Curves drawn with quadraticCurveTo, velocity decays at CONFIG.decay (${0.93})
+Provide React component with configurable thickness, constant hover breezes, and mixed-hue click blasts.`,
   },
   {
     id: 19,
@@ -1100,13 +1134,11 @@ const loop=()=>{
 };
 loop();`,
     prompt: `Implement a "DNA Helix" cursor — two sinusoidal strands forming a double helix trail. Spec:
-1. Store last 80 cursor positions as path history
-2. At each point, compute perpendicular normal vector (rotated 90°)
-3. Displace along normal by sin(phase + i * 0.2) * CONFIG.amplitude (${16}), growing from 0 at tail
-4. Two strands 180° out of phase (strand 2 offset = π)
-5. Colors: CONFIG.color1 (${'"#7c5cfc"'}) and CONFIG.color2 (${'"#5cf4fc"'})
-6. Cross-links (rungs) every 10 points; wave speed CONFIG.speed (${0.09})
-Provide React component with all params configurable.`,
+1. Two strands 180° out of phase (strand 2 offset = π) displaced by CONFIG.amplitude (${16})px
+2. Hover state: white tip circle scales up by CONFIG.pointerScale (${3.2})x and becomes translucent
+3. Click state: replication pulse boosts amplitude by CONFIG.clickAmpBoost (${45})px and glows
+4. Tip circle and double helix are drawn directly on canvas to prevent CSS scaling pixelation
+Provide React component with configurable colors, speeds, tip scaling, and click replication boosts.`,
   },
   {
     id: 20,
@@ -1148,10 +1180,10 @@ const loop=()=>{
 loop();`,
     prompt: `Implement a "Torch Light" cursor — dark overlay with warm flickering light hole. Spec:
 1. Fixed overlay using radial-gradient: transparent center → rgba(0,0,0,CONFIG.darkness (${0.91})) edges
-2. Circle radius = CONFIG.radius (${140}) + flicker (sin waves ± CONFIG.flickerIntensity (${9}))
-3. Cursor has 0.11 lerp lag for the light hole (flame dot follows instantly)
-4. Warm amber flame dot (9px, #ffb347) with amber glow
-Provide React component with configurable radius, darkness, flickerIntensity.`,
+2. Circle radius = CONFIG.radius (${140}) + flicker
+3. Hover state: flicker speed triples, intensity is boosted by CONFIG.pointerFlickerIntensity (${2.5}), flame dot grows 1.6x
+4. Click state: triggers a large light flash wave with radius CONFIG.clickFlashRadius (${200})px
+Provide React component with configurable darkness, flicker properties, and click flash waves.`,
   },
   {
     id: 21,
