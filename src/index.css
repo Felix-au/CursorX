@@ -53,18 +53,8 @@ body {
   cursor: none;
 }
 
-/* Global cursor dot — shows outside preview area */
-#global-cursor {
-  position: fixed;
-  pointer-events: none;
-  z-index: 9990;
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: rgba(255,255,255,0.55);
-  transform: translate(-50%, -50%);
-  transition: opacity 0.15s;
-}
+/* Global cursor dot — handled dynamically via Difference Blend style */
+
 
 /* ============================================================
    Scroll Container

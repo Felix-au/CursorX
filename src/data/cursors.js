@@ -1160,7 +1160,67 @@ loop();`,
 4. Click pulse: Clicking causes a spring-like pulse animation.
 Provide React component wrapping the mouse event handlers.`,
   },
+  {
+    id: 22,
+    name: 'Ghost Trail',
+    tagline: 'Springy wiggling vector ghost',
+    description: 'A cute vector ghost that floats, tilts, waves its arms, and leaves a trail of glowing particle stardust.',
+    tech: ['Canvas API', 'Spring Physics', 'Euler Integration'],
+    params: [
+      { key: 'color',        label: 'Ghost Color',      type: 'color',  default: '#ffffff' },
+      { key: 'glowColor',    label: 'Glow Color',       type: 'color',  default: '#7c5cfc' },
+      { key: 'size',         label: 'Ghost Size (px)',  type: 'range',  min: 15,  max: 45,   step: 1,    default: 22 },
+      { key: 'stiffness',    label: 'Stiffness (Lag)',  type: 'range',  min: 0.04,max: 0.4,  step: 0.02, default: 0.12 },
+      { key: 'damping',      label: 'Damping (Bounce)', type: 'range',  min: 0.5, max: 0.95, step: 0.02, default: 0.78 },
+      { key: 'glowRadius',   label: 'Glow Blur (px)',   type: 'range',  min: 0,   max: 40,   step: 1,    default: 15 },
+      { key: 'particleCount',label: 'Dust Sparkles',    type: 'range',  min: 0,   max: 10,   step: 1,    default: 3 },
+      { key: 'pointerAnim',  label: 'Pointer State',    type: 'toggle', default: true },
+      { key: 'pointerScale', label: 'Hover Scale Mult', type: 'range',  min: 1.1, max: 2.5,  step: 0.05, default: 1.35 },
+      { key: 'clickAnim',    label: 'Click Animation',  type: 'toggle', default: true },
+      { key: 'clickScale',   label: 'Click Scale Mult', type: 'range',  min: 0.2, max: 1.2,  step: 0.05, default: 0.50 },
+    ],
+    code: `const canvas = document.createElement('canvas');
+document.body.appendChild(canvas);
+const ctx = canvas.getContext('2d');
+
+let mx = 0, my = 0, gx = 0, gy = 0, vx = 0, vy = 0, time = 0;
+document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+
+const loop = () => {
+  time += 0.05;
+  const ax = (mx - gx) * CONFIG.stiffness;
+  const ay = (my - gy) * CONFIG.stiffness;
+  vx = (vx + ax) * CONFIG.damping;
+  vy = (vy + ay) * CONFIG.damping;
+  gx += vx; gy += vy;
+  
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  
+  ctx.save();
+  ctx.translate(gx, gy);
+  ctx.rotate(vx * 0.012);
+  
+  // Draw body & face
+  ctx.fillStyle = CONFIG.color;
+  ctx.beginPath();
+  ctx.arc(0, 0, CONFIG.size, Math.PI, 0, false);
+  ctx.lineTo(CONFIG.size, CONFIG.size*1.8);
+  ctx.lineTo(-CONFIG.size, CONFIG.size*1.8);
+  ctx.fill();
+  
+  ctx.restore();
+  requestAnimationFrame(loop);
+};
+loop();`,
+    prompt: `Implement a "Ghost Trail" cursor. Spec:
+1. Floating ghost body rendered on full-screen Canvas with custom spring follow physics (stiffness: ${0.12}, damping: ${0.78}).
+2. Body tilts based on horizontal speed vx, waving arms swing, and bottom trail wiggles using sine wave calculations.
+3. Faces have looking-direction aware eyes and open mouth.
+4. Generates trailing fading stardust particles in color CONFIG.glowColor (${'"#7c5cfc"'}) from the ghost base.
+Provide React component.`,
+  },
 ];
 
 export default CURSORS;
+
 
