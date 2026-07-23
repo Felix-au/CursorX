@@ -599,7 +599,7 @@ body {
   max-width: 315px;
   height: auto;
   display: block;
-  margin: 0 auto;
+  margin: 36px auto 0 auto;
   animation: logoGlowPulse 4s infinite ease-in-out;
   transition: transform 0.3s ease;
 }
@@ -612,11 +612,11 @@ body {
 
   0%,
   100% {
-    filter: drop-shadow(0 0 3px rgba(92, 244, 252, 0.15));
+    filter: drop-shadow(0 0 6px rgba(92, 244, 252, 0.25));
   }
 
   50% {
-    filter: drop-shadow(0 0 10px rgba(92, 244, 252, 0.35));
+    filter: drop-shadow(0 0 15px rgba(92, 244, 252, 0.55));
   }
 }
 
