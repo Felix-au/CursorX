@@ -537,7 +537,7 @@ body {
   justify-content: center;
   align-items: center;
   text-align: center;
-  padding: 80px 64px 48px 64px;
+  padding: 72px 64px 56px 64px;
   z-index: 2;
   box-sizing: border-box;
 }
@@ -630,7 +630,7 @@ body {
   flex: 1;
   display: flex;
   align-items: center;
-  padding: 80px 64px 48px 64px;
+  padding: 72px 64px 56px 64px;
   z-index: 2;
   box-sizing: border-box;
   overflow: hidden;
