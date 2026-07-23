@@ -1,5 +1,5 @@
 /* ============================================================
-   CursorX — Global Design System
+   CursorX - Global Design System
    ============================================================ */
 
 :root {
@@ -55,7 +55,7 @@ body {
   cursor: none;
 }
 
-/* Global cursor dot — handled dynamically via Difference Blend style */
+/* Global cursor dot - handled dynamically via Difference Blend style */
 
 
 /* ============================================================
@@ -277,7 +277,7 @@ body {
   min-height: 0;
 }
 
-/* ── body — fills remaining height, no scroll itself ─ */
+/* ── body - fills remaining height, no scroll itself ─ */
 .cm-body {
   flex: 1;
   min-height: 0;
@@ -378,7 +378,7 @@ body {
   border-color: var(--green);
 }
 
-/* ── tabs, close — shared with old modal classes ─── */
+/* ── tabs, close - shared with old modal classes ─── */
 .modal-tabs {
   display: flex;
   gap: 4px;
@@ -609,9 +609,12 @@ body {
 }
 
 @keyframes logoGlowPulse {
-  0%, 100% {
+
+  0%,
+  100% {
     filter: drop-shadow(0 0 3px rgba(92, 244, 252, 0.15));
   }
+
   50% {
     filter: drop-shadow(0 0 10px rgba(92, 244, 252, 0.35));
   }
@@ -1050,7 +1053,7 @@ body {
   border-bottom: 1px solid var(--border);
 }
 
-/* Toggle row: label left, switch right — all inline */
+/* Toggle row: label left, switch right - all inline */
 .config-row--toggle {
   display: flex;
   align-items: center;
@@ -1059,7 +1062,7 @@ body {
   border-bottom: 1px solid var(--border);
 }
 
-/* Color row: label left, swatch + hex right — single line */
+/* Color row: label left, swatch + hex right - single line */
 .config-row--color {
   display: flex;
   align-items: center;
@@ -1287,7 +1290,7 @@ body {
 }
 
 /* ============================================================
-   Demo Input Section — "Type & Interact"
+   Demo Input Section - "Type & Interact"
    ============================================================ */
 .demo-input-section {
   width: calc(100% - 40px);
@@ -1455,7 +1458,7 @@ body {
 }
 
 /* ============================================================
-   Custom Select — cursor-safe, no native OS dropdown
+   Custom Select - cursor-safe, no native OS dropdown
    ============================================================ */
 .demo-custom-select {
   position: relative;
@@ -1502,7 +1505,7 @@ body {
   transform: rotate(90deg);
 }
 
-/* dropdown list — rendered inside demoRef, never leaves the preview */
+/* dropdown list - rendered inside demoRef, never leaves the preview */
 .demo-custom-select-menu {
   position: absolute;
   top: calc(100% + 4px);
@@ -2499,7 +2502,8 @@ body {
 .site-navbar.mode-sidebar.sidebar-expanded .nav-logo {
   justify-content: flex-start;
   padding-left: 8px;
-  margin-left: -8px; /* Offset to the left to optimize spacing bias */
+  margin-left: -8px;
+  /* Offset to the left to optimize spacing bias */
 }
 
 .site-navbar.mode-sidebar.sidebar-expanded .nav-logo .logo-x {
@@ -2535,7 +2539,8 @@ body {
   margin: 16px 0;
   display: flex;
   flex-direction: column;
-  min-height: 0; /* Critical for inner scrolling */
+  min-height: 0;
+  /* Critical for inner scrolling */
 }
 
 .sidebar-cursor-list {
@@ -2636,7 +2641,8 @@ body {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  white-space: nowrap; /* Prevent nav link text from splitting into two rows */
+  white-space: nowrap;
+  /* Prevent nav link text from splitting into two rows */
 }
 
 .nav-link:hover,
@@ -2667,11 +2673,11 @@ body {
     flex-direction: row;
     padding: 0 16px;
   }
-  
+
   .site-navbar.mode-sidebar .nav-container {
     flex-direction: row;
   }
-  
+
   .site-navbar.mode-sidebar.sidebar-expanded {
     height: 100vh;
     width: 100%;
@@ -2682,7 +2688,7 @@ body {
     gap: 16px;
     overflow-y: auto;
   }
-  
+
   .site-navbar.mode-sidebar.sidebar-expanded .nav-container {
     flex-direction: column;
     height: auto;

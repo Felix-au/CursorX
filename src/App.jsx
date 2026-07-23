@@ -12,7 +12,7 @@ const TOTAL = CURSORS.length + 2; // 23 cursors + 1 tutorial + 1 contact = 25
 
 export default function App() {
   const [current, setCurrent] = useState(0);
-  const scrollRef  = useRef(null);
+  const scrollRef = useRef(null);
   const isScrolling = useRef(false);
 
   // Global website cursor: Difference Blend (cursor number 21)
@@ -61,7 +61,7 @@ export default function App() {
     };
 
     const onOver = (e) => {
-      // Hide global dot when inside preview area — each cursor renders its own
+      // Hide global dot when inside preview area - each cursor renders its own
       const insidePreview = e.target.closest('.demo-canvas-area');
       const opacity = insidePreview ? '0' : '1';
       bigBall.style.opacity = opacity;
@@ -191,7 +191,7 @@ export default function App() {
       (entries) => {
         entries.forEach(entry => {
           if (entry.isIntersecting && entry.intersectionRatio >= 0.5) {
-            const id  = entry.target.id;
+            const id = entry.target.id;
             const idx = id === 'slide-0' ? 0 : parseInt(id.split('-')[1], 10);
             if (!isNaN(idx)) setCurrent(idx);
           }

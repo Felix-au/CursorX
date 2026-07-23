@@ -35,13 +35,13 @@ const CURSOR_COMPONENTS = [
 ];
 
 const HINTS = {
-  1:  '🧲 Hover the demo buttons — feel the pull',
-  7:  '🌈 Click inside preview to cycle through 5 neon colors',
-  9:  '⚡ Move over the buttons — gravity attracts them',
+  1: '🧲 Hover the demo buttons - feel the pull',
+  7: '🌈 Click inside preview to cycle through 5 neon colors',
+  9: '⚡ Move over the buttons - gravity attracts them',
   12: '🎯 Click inside preview to lock on target',
   16: '💧 Click inside preview to create ripples',
   17: '⚡ Glitch bursts fire automatically every ~2 seconds',
-  20: '🕯 The light flickers and lags — navigate the dark',
+  20: '🕯 The light flickers and lags - navigate the dark',
   21: '🌓 Hover elements and watch them invert colors',
   22: '👻 Move your mouse to wiggle the floating vector ghost',
   23: '🔊 Click inside preview to send ripple waves outward',
@@ -52,7 +52,7 @@ const HINTS = {
 const initConfig = (params) =>
   Object.fromEntries(params.map(p => [p.key, p.default]));
 
-/* ── Custom select — no native OS dropdown ─────────────── */
+/* ── Custom select - no native OS dropdown ─────────────── */
 const SELECT_OPTIONS = ['Select option', 'Option Alpha', 'Option Beta', 'Option Gamma'];
 
 function CustomSelect({ id }) {
@@ -126,7 +126,7 @@ function ConfigPanel({ params, config, onChange, cursorId }) {
             );
           }
 
-          /* Color: single row — label left, swatch + hex right */
+          /* Color: single row - label left, swatch + hex right */
           if (p.type === 'color') {
             return (
               <div key={p.key} className="config-row config-row--color">
@@ -175,7 +175,7 @@ export default function CursorSlide({ cursor, index, total, isActive, onNavigate
   const demoRef = useRef(null);
 
   const CursorComponent = CURSOR_COMPONENTS[index - 1];
-  const isGravity   = index === 9;          // GravityPull (was 9, RepelField removed)
+  const isGravity = index === 9;          // GravityPull (was 9, RepelField removed)
   const physicsAttr = isGravity ? 'data-gravity' : null;
   const hint = HINTS[index];
 
@@ -206,13 +206,13 @@ export default function CursorSlide({ cursor, index, total, isActive, onNavigate
       {/* Main body: preview + config */}
       <div className="demo-area">
 
-        {/* Live preview — cursor confined here */}
+        {/* Live preview - cursor confined here */}
         <div
           className="demo-canvas-area"
           ref={demoRef}
           style={{ cursor: 'none', position: 'relative', overflow: 'hidden' }}
         >
-          {/* Cursor effect — ONLY rendered here, inside the preview box */}
+          {/* Cursor effect - ONLY rendered here, inside the preview box */}
           {isActive && (
             <CursorComponent containerRef={demoRef} config={config} />
           )}
@@ -236,7 +236,7 @@ export default function CursorSlide({ cursor, index, total, isActive, onNavigate
           </div>
 
           <p className="hoverable-text">
-            <strong>Move inside this box</strong> to see the <em style={{ color: 'var(--accent)' }}>{cursor.name}</em> effect. Move fast, slow, zigzag — every motion matters.
+            <strong>Move inside this box</strong> to see the <em style={{ color: 'var(--accent)' }}>{cursor.name}</em> effect. Move fast, slow, zigzag - every motion matters.
           </p>
 
           <div className="demo-drag-zone" {...(physicsAttr ? { [physicsAttr]: 'true' } : {})}>
@@ -285,7 +285,7 @@ export default function CursorSlide({ cursor, index, total, isActive, onNavigate
           </div>
         </div>
 
-        {/* Config panel — replaces sidebar cards */}
+        {/* Config panel - replaces sidebar cards */}
         <ConfigPanel
           params={cursor.params}
           config={config}

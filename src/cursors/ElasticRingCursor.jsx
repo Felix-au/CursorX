@@ -34,7 +34,7 @@ export default function ElasticRingCursor({ containerRef, config }) {
     container.appendChild(dot);
 
     let mouse = { x: -1000, y: -1000 };
-    let pos   = { x: -1000, y: -1000, vx: 0, vy: 0 };
+    let pos = { x: -1000, y: -1000, vx: 0, vy: 0 };
     let clickT = -1;     // -1=inactive, 0→1=animating
     let rafId;
 
@@ -43,7 +43,7 @@ export default function ElasticRingCursor({ containerRef, config }) {
       mouse.x = e.clientX - r.left;
       mouse.y = e.clientY - r.top;
       dot.style.left = `${mouse.x}px`;
-      dot.style.top  = `${mouse.y}px`;
+      dot.style.top = `${mouse.y}px`;
     };
 
     const onClick = () => {
@@ -57,8 +57,8 @@ export default function ElasticRingCursor({ containerRef, config }) {
       const cfg = configRef.current || {};
       const baseSize = cfg.size ?? 38;
       const stiffness = cfg.stiffness ?? 0.13;
-      const damping   = cfg.damping   ?? 0.76;
-      const color     = cfg.color ?? '#7c5cfc';
+      const damping = cfg.damping ?? 0.76;
+      const color = cfg.color ?? '#7c5cfc';
 
       pos.vx = (pos.vx + (mouse.x - pos.x) * stiffness) * damping;
       pos.vy = (pos.vy + (mouse.y - pos.y) * stiffness) * damping;
@@ -66,7 +66,7 @@ export default function ElasticRingCursor({ containerRef, config }) {
 
       const spd = Math.sqrt(pos.vx ** 2 + pos.vy ** 2);
       const stretch = Math.min(spd * 0.07, 0.55);
-      const angle   = Math.atan2(pos.vy, pos.vx);
+      const angle = Math.atan2(pos.vy, pos.vx);
 
       // Click scale pulse
       let sizeScale = 1;
@@ -76,16 +76,16 @@ export default function ElasticRingCursor({ containerRef, config }) {
         if (clickT >= 1) clickT = -1;
       }
 
-      // Pointer surround — expand ring to clearly surround element
+      // Pointer surround - expand ring to clearly surround element
       const isPointer = cfg.pointerAnim && checkPointer(
         container.getBoundingClientRect().left + mouse.x,
-        container.getBoundingClientRect().top  + mouse.y
+        container.getBoundingClientRect().top + mouse.y
       );
       const targetSz = isPointer ? baseSize * 1.7 : baseSize * sizeScale;
 
-      ring.style.left  = `${pos.x}px`;
-      ring.style.top   = `${pos.y}px`;
-      ring.style.width  = `${targetSz}px`;
+      ring.style.left = `${pos.x}px`;
+      ring.style.top = `${pos.y}px`;
+      ring.style.width = `${targetSz}px`;
       ring.style.height = `${targetSz}px`;
       ring.style.borderColor = color;
       ring.style.boxShadow = `0 0 14px ${color}66`;

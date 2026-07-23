@@ -11,7 +11,7 @@ const checkPointer = (cx, cy) =>
 class Particle {
   constructor(x, y, hue, maxSize, burst = false) {
     const angle = burst ? Math.random() * Math.PI * 2 : 0;
-    const spd   = burst ? Math.random() * 5 + 1.5 : 0;
+    const spd = burst ? Math.random() * 5 + 1.5 : 0;
     this.x = x; this.y = y;
     this.vx = burst ? Math.cos(angle) * spd : (Math.random() - 0.5) * 2.5;
     this.vy = burst ? Math.sin(angle) * spd : (Math.random() - 0.5) * 2.5 - 0.8;
@@ -56,7 +56,7 @@ export default function ParticleTrailCursor({ containerRef, config }) {
     const ctx = canvas.getContext('2d');
 
     const resize = () => {
-      canvas.width  = container.clientWidth;
+      canvas.width = container.clientWidth;
       canvas.height = container.clientHeight;
     };
     resize();
@@ -101,11 +101,11 @@ export default function ParticleTrailCursor({ containerRef, config }) {
 
       const cfg = configRef.current || {};
 
-      // Pointer state idle emission — keep particles alive at cursor
+      // Pointer state idle emission - keep particles alive at cursor
       if (cfg.pointerAnim && !moving) {
         const isPtr = checkPointer(
           container.getBoundingClientRect().left + mx,
-          container.getBoundingClientRect().top  + my
+          container.getBoundingClientRect().top + my
         );
         if (isPtr && mx > 0) {
           idleFrame++;

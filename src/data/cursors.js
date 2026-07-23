@@ -1,4 +1,4 @@
-// CursorX — 23 cursor effect definitions (removed: MatrixRain, Clock, EyeTracker, InkSplatter, RepelField)
+// CursorX - 23 cursor effect definitions (removed: MatrixRain, Clock, EyeTracker, InkSplatter, RepelField)
 // Each entry: { id, name, tagline, description, tech, params, code, prompt }
 
 export const CURSORS = [
@@ -147,7 +147,7 @@ document.addEventListener('mousemove', e => {
     rgba(0,0,0,\${CONFIG.darkness}) 100%
   )\`;
 });`,
-    prompt: `Implement a "Spotlight" cursor — dark vignette overlay with a circular light hole. Spec:
+    prompt: `Implement a "Spotlight" cursor - dark vignette overlay with a circular light hole. Spec:
 1. Fixed overlay div, pointer-events: none
 2. radial-gradient: transparent center → rgba(0,0,0,CONFIG.darkness (${0.90})) at edges
 3. Circle radius = CONFIG.radius (${160}px), updates on every mousemove
@@ -336,7 +336,7 @@ Provide React hook with useSprings abstraction.`,
     id: 7,
     name: 'Neon Glow',
     tagline: 'Electric neon light cursor',
-    description: 'A vibrant neon cursor pulses with electric light — click to cycle through colors.',
+    description: 'A vibrant neon cursor pulses with electric light - click to cycle through colors.',
     tech: ['CSS box-shadow', 'CSS Animation'],
     params: [
       { key: 'color', label: 'Neon Color', type: 'color', default: '#7c5cfc' },
@@ -433,7 +433,7 @@ const draw = () => {
   requestAnimationFrame(draw);
 };
 draw();`,
-    prompt: `Implement a "Text Orbiter" cursor — characters arranged in a circle that rotate. Spec:
+    prompt: `Implement a "Text Orbiter" cursor - characters arranged in a circle that rotate. Spec:
 1. Canvas overlay, full screen, pointer-events none
 2. Text: CONFIG.text (${'"✦ CURSORX ✦ DEV ✦ FELIXAU"'}), each char placed at CONFIG.radius (${42}px) orbit
 3. Rotate each char individually (charAngle + π/2) to face outward
@@ -482,7 +482,7 @@ const loop = () => {
   requestAnimationFrame(loop);
 };
 loop();`,
-    prompt: `Implement a "Gravity Pull" cursor — DOM elements attract toward cursor. Spec:
+    prompt: `Implement a "Gravity Pull" cursor - DOM elements attract toward cursor. Spec:
 1. Elements with [data-gravity] within CONFIG.radius (${220}px attract with F = CONFIG.strength (${7500}) / dist²
 2. Spring return: vx -= x * 0.09
 3. Damping: vx *= CONFIG.damping (${0.84})
@@ -550,7 +550,7 @@ const draw = () => {
   requestAnimationFrame(draw);
 };
 draw();`,
-    prompt: `Implement a "Constellation" cursor — floating stars with line connections. Spec:
+    prompt: `Implement a "Constellation" cursor - floating stars with line connections. Spec:
 1. CONFIG.starCount (${90}) drifting star particles wrapping screen edges
 2. Star-to-star lines within CONFIG.maxDist (${115}px), opacity ∝ distance
 3. Star-to-cursor lines within CONFIG.cursorDist (${175}px) * (isHover ? CONFIG.pointerDistMult (${1.25}) : 1.0)
@@ -561,7 +561,7 @@ Provide React component with configurable counts, distances, and interactive sta
     id: 11,
     name: 'Fire Trail',
     tagline: 'Leave flames in your wake',
-    description: 'Hot fire particles stream from the cursor — each flame rises, cools, and fades into smoke.',
+    description: 'Hot fire particles stream from the cursor - each flame rises, cools, and fades into smoke.',
     tech: ['Canvas API', 'Particle HSL'],
     params: [
       { key: 'count', label: 'Flames / Frame', type: 'range', min: 1, max: 10, step: 1, default: 5 },
@@ -936,7 +936,7 @@ const loop=()=>{
   requestAnimationFrame(loop);
 };
 loop();`,
-    prompt: `Implement a "Ripple Wave" cursor — clicking creates expanding concentric rings. Spec:
+    prompt: `Implement a "Ripple Wave" cursor - clicking creates expanding concentric rings. Spec:
 1. On click: spawn CONFIG.count (${3}) rings with staggered delays (N*5 frames)
 2. Each ring expands at CONFIG.speed (${3.2})px/frame, alpha fades from 0.82 down
 3. Hover state: central ring expands and contracts rhythmically (breathing animation) scaled by CONFIG.pointerBreathMult (${1.6})
@@ -1063,7 +1063,7 @@ const loop=()=>{
   requestAnimationFrame(loop);
 };
 loop();`,
-    prompt: `Implement a "Wind Stream" cursor — Bezier-smoothed flow lines emitting from cursor movement. Spec:
+    prompt: `Implement a "Wind Stream" cursor - Bezier-smoothed flow lines emitting from cursor movement. Spec:
 1. Trigger when speed > CONFIG.minSpeed (${2.5})px/frame
 2. Hover state: constant breeze streams spawn when stationary, and stream thickness grows to CONFIG.pointerThickness (${6.5})px
 3. Click state: releases a 360-degree radial blast of mixed-hue streams across the full color spectrum
@@ -1133,7 +1133,7 @@ const loop=()=>{
   requestAnimationFrame(loop);
 };
 loop();`,
-    prompt: `Implement a "DNA Helix" cursor — two sinusoidal strands forming a double helix trail. Spec:
+    prompt: `Implement a "DNA Helix" cursor - two sinusoidal strands forming a double helix trail. Spec:
 1. Two strands 180° out of phase (strand 2 offset = π) displaced by CONFIG.amplitude (${16})px
 2. Hover state: white tip circle scales up by CONFIG.pointerScale (${3.2})x and becomes translucent
 3. Click state: replication pulse boosts amplitude by CONFIG.clickAmpBoost (${45})px and glows
@@ -1178,7 +1178,7 @@ const loop=()=>{
   requestAnimationFrame(loop);
 };
 loop();`,
-    prompt: `Implement a "Torch Light" cursor — dark overlay with warm flickering light hole. Spec:
+    prompt: `Implement a "Torch Light" cursor - dark overlay with warm flickering light hole. Spec:
 1. Fixed overlay using radial-gradient: transparent center → rgba(0,0,0,CONFIG.darkness (${0.91})) edges
 2. Circle radius = CONFIG.radius (${140}) + flicker
 3. Hover state: flicker speed triples, intensity is boosted by CONFIG.pointerFlickerIntensity (${2.5}), flame dot grows 1.6x
@@ -1192,15 +1192,15 @@ Provide React component with configurable darkness, flicker properties, and clic
     description: 'A dual-ball custom cursor that dynamically inverts colors of everything beneath it using mix-blend-mode.',
     tech: ['CSS mix-blend-mode', 'Trigonometry', 'React Hooks'],
     params: [
-      { key: 'color',        label: 'Ball Color',       type: 'color',  default: '#f7f8fa' },
-      { key: 'bigSize',      label: 'Outer Ball Size',  type: 'range',  min: 10,  max: 50,   step: 1,    default: 25 },
-      { key: 'smallSize',    label: 'Inner Ball Size',  type: 'range',  min: 2,   max: 16,   step: 1,    default: 6 },
-      { key: 'bigSpeed',     label: 'Outer Lag / Lerp', type: 'range',  min: 0.02,max: 0.4,  step: 0.01, default: 0.10 },
-      { key: 'smallSpeed',   label: 'Inner Lag / Lerp', type: 'range',  min: 0.05,max: 0.8,  step: 0.01, default: 0.25 },
-      { key: 'pointerAnim',  label: 'Pointer Scale Up', type: 'toggle', default: true },
-      { key: 'pointerScale', label: 'Hover Scale Mult', type: 'range',  min: 1.2, max: 4.5,  step: 0.1,  default: 2.5 },
-      { key: 'clickAnim',    label: 'Click Pulse',      type: 'toggle', default: true },
-      { key: 'clickScale',   label: 'Click Scale Mult', type: 'range',  min: 0.2, max: 2.0,  step: 0.1,  default: 1.00 },
+      { key: 'color', label: 'Ball Color', type: 'color', default: '#f7f8fa' },
+      { key: 'bigSize', label: 'Outer Ball Size', type: 'range', min: 10, max: 50, step: 1, default: 25 },
+      { key: 'smallSize', label: 'Inner Ball Size', type: 'range', min: 2, max: 16, step: 1, default: 6 },
+      { key: 'bigSpeed', label: 'Outer Lag / Lerp', type: 'range', min: 0.02, max: 0.4, step: 0.01, default: 0.10 },
+      { key: 'smallSpeed', label: 'Inner Lag / Lerp', type: 'range', min: 0.05, max: 0.8, step: 0.01, default: 0.25 },
+      { key: 'pointerAnim', label: 'Pointer Scale Up', type: 'toggle', default: true },
+      { key: 'pointerScale', label: 'Hover Scale Mult', type: 'range', min: 1.2, max: 4.5, step: 0.1, default: 2.5 },
+      { key: 'clickAnim', label: 'Click Pulse', type: 'toggle', default: true },
+      { key: 'clickScale', label: 'Click Scale Mult', type: 'range', min: 0.2, max: 2.0, step: 0.1, default: 1.00 },
     ],
     code: `const container = document.body;
 const bigBall = document.createElement('div');
@@ -1241,17 +1241,17 @@ Provide React component wrapping the mouse event handlers.`,
     description: 'A cute vector ghost that floats, tilts, waves its arms, and leaves a trail of glowing particle stardust.',
     tech: ['Canvas API', 'Spring Physics', 'Euler Integration'],
     params: [
-      { key: 'color',        label: 'Ghost Color',      type: 'color',  default: '#ffffff' },
-      { key: 'glowColor',    label: 'Glow Color',       type: 'color',  default: '#7c5cfc' },
-      { key: 'size',         label: 'Ghost Size (px)',  type: 'range',  min: 15,  max: 45,   step: 1,    default: 22 },
-      { key: 'stiffness',    label: 'Stiffness (Lag)',  type: 'range',  min: 0.04,max: 0.4,  step: 0.02, default: 0.12 },
-      { key: 'damping',      label: 'Damping (Bounce)', type: 'range',  min: 0.5, max: 0.95, step: 0.02, default: 0.78 },
-      { key: 'glowRadius',   label: 'Glow Blur (px)',   type: 'range',  min: 0,   max: 40,   step: 1,    default: 15 },
-      { key: 'particleCount',label: 'Dust Sparkles',    type: 'range',  min: 0,   max: 10,   step: 1,    default: 3 },
-      { key: 'pointerAnim',  label: 'Pointer State',    type: 'toggle', default: true },
-      { key: 'pointerScale', label: 'Hover Scale Mult', type: 'range',  min: 1.1, max: 2.5,  step: 0.05, default: 1.35 },
-      { key: 'clickAnim',    label: 'Click Animation',  type: 'toggle', default: true },
-      { key: 'clickScale',   label: 'Click Scale Mult', type: 'range',  min: 0.2, max: 1.2,  step: 0.05, default: 0.50 },
+      { key: 'color', label: 'Ghost Color', type: 'color', default: '#ffffff' },
+      { key: 'glowColor', label: 'Glow Color', type: 'color', default: '#7c5cfc' },
+      { key: 'size', label: 'Ghost Size (px)', type: 'range', min: 15, max: 45, step: 1, default: 22 },
+      { key: 'stiffness', label: 'Stiffness (Lag)', type: 'range', min: 0.04, max: 0.4, step: 0.02, default: 0.12 },
+      { key: 'damping', label: 'Damping (Bounce)', type: 'range', min: 0.5, max: 0.95, step: 0.02, default: 0.78 },
+      { key: 'glowRadius', label: 'Glow Blur (px)', type: 'range', min: 0, max: 40, step: 1, default: 15 },
+      { key: 'particleCount', label: 'Dust Sparkles', type: 'range', min: 0, max: 10, step: 1, default: 3 },
+      { key: 'pointerAnim', label: 'Pointer State', type: 'toggle', default: true },
+      { key: 'pointerScale', label: 'Hover Scale Mult', type: 'range', min: 1.1, max: 2.5, step: 0.05, default: 1.35 },
+      { key: 'clickAnim', label: 'Click Animation', type: 'toggle', default: true },
+      { key: 'clickScale', label: 'Click Scale Mult', type: 'range', min: 0.2, max: 1.2, step: 0.05, default: 0.50 },
     ],
     code: `const canvas = document.createElement('canvas');
 document.body.appendChild(canvas);
@@ -1297,22 +1297,22 @@ Provide React component.`,
     id: 23,
     name: 'Audio Pulse',
     tagline: 'Magnetic ring with click ripple waves',
-    description: 'A crisp dot that snaps directly to the cursor and a trailing magnetic ring that expands on hover — with glowing ripple waves radiating outward on every click.',
+    description: 'A crisp dot that snaps directly to the cursor and a trailing magnetic ring that expands on hover - with glowing ripple waves radiating outward on every click.',
     tech: ['DOM + RAF', 'lerp interpolation', 'CSS box-shadow'],
     params: [
-      { key: 'dotColor',        label: 'Dot Color',              type: 'color',  default: '#00e5ff' },
-      { key: 'ringColor',       label: 'Ring Color',             type: 'color',  default: '#00e5ff' },
-      { key: 'glowColor',       label: 'Glow / Accent Color',    type: 'color',  default: '#6366f1' },
-      { key: 'dotSize',         label: 'Dot Size (px)',          type: 'range',  min: 4,   max: 16,  step: 1,    default: 8 },
-      { key: 'ringSize',        label: 'Ring Size (px)',         type: 'range',  min: 20,  max: 60,  step: 2,    default: 36 },
-      { key: 'ringLerp',        label: 'Ring Lag (lerp factor)', type: 'range',  min: 0.03, max: 0.3, step: 0.01, default: 0.09 },
-      { key: 'glowBlur',        label: 'Glow Blur (px)',         type: 'range',  min: 4,   max: 30,  step: 1,    default: 12 },
-      { key: 'ringBorderWidth', label: 'Ring Border Width (px)', type: 'range',  min: 1,   max: 4,   step: 0.5,  default: 1.5 },
-      { key: 'pointerAnim',     label: 'Pointer Hover State',    type: 'toggle', default: true },
-      { key: 'pointerRingScale', label: 'Hover Ring Scale',      type: 'range',  min: 1.2, max: 3.0, step: 0.1,  default: 1.8 },
-      { key: 'pointerDotScale', label: 'Hover Dot Scale',        type: 'range',  min: 1.0, max: 3.0, step: 0.1,  default: 1.8 },
-      { key: 'clickAnim',       label: 'Click Ripple',           type: 'toggle', default: true },
-      { key: 'rippleMaxSize',   label: 'Ripple Max Size (px)',   type: 'range',  min: 40,  max: 150, step: 5,    default: 90 },
+      { key: 'dotColor', label: 'Dot Color', type: 'color', default: '#00e5ff' },
+      { key: 'ringColor', label: 'Ring Color', type: 'color', default: '#00e5ff' },
+      { key: 'glowColor', label: 'Glow / Accent Color', type: 'color', default: '#6366f1' },
+      { key: 'dotSize', label: 'Dot Size (px)', type: 'range', min: 4, max: 16, step: 1, default: 8 },
+      { key: 'ringSize', label: 'Ring Size (px)', type: 'range', min: 20, max: 60, step: 2, default: 36 },
+      { key: 'ringLerp', label: 'Ring Lag (lerp factor)', type: 'range', min: 0.03, max: 0.3, step: 0.01, default: 0.09 },
+      { key: 'glowBlur', label: 'Glow Blur (px)', type: 'range', min: 4, max: 30, step: 1, default: 12 },
+      { key: 'ringBorderWidth', label: 'Ring Border Width (px)', type: 'range', min: 1, max: 4, step: 0.5, default: 1.5 },
+      { key: 'pointerAnim', label: 'Pointer Hover State', type: 'toggle', default: true },
+      { key: 'pointerRingScale', label: 'Hover Ring Scale', type: 'range', min: 1.2, max: 3.0, step: 0.1, default: 1.8 },
+      { key: 'pointerDotScale', label: 'Hover Dot Scale', type: 'range', min: 1.0, max: 3.0, step: 0.1, default: 1.8 },
+      { key: 'clickAnim', label: 'Click Ripple', type: 'toggle', default: true },
+      { key: 'rippleMaxSize', label: 'Ripple Max Size (px)', type: 'range', min: 40, max: 150, step: 5, default: 90 },
     ],
     code: `// Add to your HTML: <div id="cursor-dot"></div> <div id="cursor-ring"></div>
 const dot  = document.getElementById('cursor-dot');
@@ -1355,7 +1355,7 @@ window.addEventListener('click', e => {
   })(start);
 });`,
     prompt: `Implement an "Audio Pulse" cursor effect. Spec:
-1. Crisp dot (\${CONFIG.dotSize}px, color \${CONFIG.dotColor}) snaps directly to mouse — zero lag. Glow: box-shadow using \${CONFIG.glowColor}.
+1. Crisp dot (\${CONFIG.dotSize}px, color \${CONFIG.dotColor}) snaps directly to mouse - zero lag. Glow: box-shadow using \${CONFIG.glowColor}.
 2. Outer ring (\${CONFIG.ringSize}px, \${CONFIG.ringBorderWidth}px border, color \${CONFIG.ringColor}) trails mouse with lerp factor \${CONFIG.ringLerp}.
 3. Hover state over buttons/links: ring expands to \${CONFIG.pointerRingScale}× and fills with \${CONFIG.glowColor} at 12% opacity; dot scales to \${CONFIG.pointerDotScale}×.
 4. On click: spawn a ripple div that animates from 10px to \${CONFIG.rippleMaxSize}px over 600ms (quadratic ease-out), fading from opacity 1→0. Border transitions from dotColor to glowColor at t=0.5.

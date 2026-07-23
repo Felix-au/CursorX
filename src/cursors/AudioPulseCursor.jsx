@@ -18,7 +18,7 @@ export default function AudioPulseCursor({ containerRef, config }) {
 
     /* ── DOM elements ───────────────────────────────────── */
 
-    // Dot — snaps directly to mouse, visible from first frame
+    // Dot - snaps directly to mouse, visible from first frame
     const dot = document.createElement('div');
     dot.style.cssText = `
       position:absolute; pointer-events:none; z-index:50;
@@ -30,7 +30,7 @@ export default function AudioPulseCursor({ containerRef, config }) {
     `;
     container.appendChild(dot);
 
-    // Ring — lerp-trails mouse, visible from first frame
+    // Ring - lerp-trails mouse, visible from first frame
     const ring = document.createElement('div');
     ring.style.cssText = `
       position:absolute; pointer-events:none; z-index:49;
@@ -42,11 +42,11 @@ export default function AudioPulseCursor({ containerRef, config }) {
     `;
     container.appendChild(ring);
 
-    /* ── State — start at container centre ──────────────── */
-    let mx = container.clientWidth  / 2;
+    /* ── State - start at container centre ──────────────── */
+    let mx = container.clientWidth / 2;
     let my = container.clientHeight / 2;
     let rx = mx, ry = my;
-    let dotScale  = 1.0;
+    let dotScale = 1.0;
     let ringScale = 1.0;
     const ripples = [];   // { id, x, y, startTime }
     let rafId;
@@ -78,51 +78,51 @@ export default function AudioPulseCursor({ containerRef, config }) {
       rafId = requestAnimationFrame(loop);
       const cfg = configRef.current || {};
 
-      const dotColor        = cfg.dotColor        ?? '#00e5ff';
-      const ringColor       = cfg.ringColor        ?? '#00e5ff';
-      const glowColor       = cfg.glowColor        ?? '#6366f1';
-      const dotSize         = cfg.dotSize          ?? 8;
-      const ringSize        = cfg.ringSize         ?? 36;
-      const lerpFactor      = cfg.ringLerp         ?? 0.09;
-      const glowBlur        = cfg.glowBlur         ?? 12;
-      const borderWidth     = cfg.ringBorderWidth  ?? 1.5;
-      const pointerAnim     = cfg.pointerAnim      !== false;
+      const dotColor = cfg.dotColor ?? '#00e5ff';
+      const ringColor = cfg.ringColor ?? '#00e5ff';
+      const glowColor = cfg.glowColor ?? '#6366f1';
+      const dotSize = cfg.dotSize ?? 8;
+      const ringSize = cfg.ringSize ?? 36;
+      const lerpFactor = cfg.ringLerp ?? 0.09;
+      const glowBlur = cfg.glowBlur ?? 12;
+      const borderWidth = cfg.ringBorderWidth ?? 1.5;
+      const pointerAnim = cfg.pointerAnim !== false;
       const pointerRingMult = cfg.pointerRingScale ?? 1.8;
-      const pointerDotMult  = cfg.pointerDotScale  ?? 1.8;
-      const rippleMax       = cfg.rippleMaxSize    ?? 90;
+      const pointerDotMult = cfg.pointerDotScale ?? 1.8;
+      const rippleMax = cfg.rippleMaxSize ?? 90;
 
-      /* — Pointer check — */
+      /* - Pointer check - */
       const rect = container.getBoundingClientRect();
       const isPointer = pointerAnim && checkPointer(rect.left + mx, rect.top + my);
 
-      /* — Scale lerp — */
-      dotScale  += ((isPointer ? pointerDotMult  : 1) - dotScale)  * 0.12;
+      /* - Scale lerp - */
+      dotScale += ((isPointer ? pointerDotMult : 1) - dotScale) * 0.12;
       ringScale += ((isPointer ? pointerRingMult : 1) - ringScale) * 0.12;
 
-      /* — Ring position lerp — */
+      /* - Ring position lerp - */
       rx += (mx - rx) * lerpFactor;
       ry += (my - ry) * lerpFactor;
 
       /* ── Dot ──────────────────────────────────────────── */
       const ds = dotSize * dotScale;
-      dot.style.left       = `${mx}px`;
-      dot.style.top        = `${my}px`;
-      dot.style.width      = `${ds}px`;
-      dot.style.height     = `${ds}px`;
+      dot.style.left = `${mx}px`;
+      dot.style.top = `${my}px`;
+      dot.style.width = `${ds}px`;
+      dot.style.height = `${ds}px`;
       dot.style.background = dotColor;
-      dot.style.boxShadow  = `0 0 ${glowBlur * 0.6}px ${dotColor},0 0 ${glowBlur * 1.5}px ${glowColor}`;
+      dot.style.boxShadow = `0 0 ${glowBlur * 0.6}px ${dotColor},0 0 ${glowBlur * 1.5}px ${glowColor}`;
 
       /* ── Ring ─────────────────────────────────────────── */
       const rs = ringSize * ringScale;
-      ring.style.left            = `${rx}px`;
-      ring.style.top             = `${ry}px`;
-      ring.style.width           = `${rs}px`;
-      ring.style.height          = `${rs}px`;
-      ring.style.borderWidth     = `${borderWidth}px`;
-      ring.style.borderStyle     = 'solid';
-      ring.style.borderColor     = isPointer ? dotColor : `${ringColor}99`;
+      ring.style.left = `${rx}px`;
+      ring.style.top = `${ry}px`;
+      ring.style.width = `${rs}px`;
+      ring.style.height = `${rs}px`;
+      ring.style.borderWidth = `${borderWidth}px`;
+      ring.style.borderStyle = 'solid';
+      ring.style.borderColor = isPointer ? dotColor : `${ringColor}99`;
       ring.style.backgroundColor = isPointer ? `${glowColor}1f` : 'transparent';
-      ring.style.boxShadow       = isPointer
+      ring.style.boxShadow = isPointer
         ? `0 0 ${glowBlur}px ${dotColor}66,inset 0 0 ${glowBlur * 0.8}px ${glowColor}4d`
         : `inset 0 0 ${glowBlur * 0.6}px ${glowColor}26,0 0 ${glowBlur}px ${glowColor}33`;
 
@@ -151,12 +151,12 @@ export default function AudioPulseCursor({ containerRef, config }) {
         }
 
         const eased = 1 - Math.pow(1 - t, 2); // quadratic ease-out
-        const size  = 10 + (rippleMax - 10) * eased;
-        el.style.left        = `${rp.x}px`;
-        el.style.top         = `${rp.y}px`;
-        el.style.width       = `${size}px`;
-        el.style.height      = `${size}px`;
-        el.style.opacity     = String(1 - t);
+        const size = 10 + (rippleMax - 10) * eased;
+        el.style.left = `${rp.x}px`;
+        el.style.top = `${rp.y}px`;
+        el.style.width = `${size}px`;
+        el.style.height = `${size}px`;
+        el.style.opacity = String(1 - t);
         el.style.borderColor = t < 0.5 ? dotColor : glowColor;
       }
     };

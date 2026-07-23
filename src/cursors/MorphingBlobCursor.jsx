@@ -33,7 +33,7 @@ export default function MorphingBlobCursor({ containerRef, config }) {
       document.body.appendChild(svg);
     }
 
-    // Gooey wrapper — opacity applied here for uniform translucency
+    // Gooey wrapper - opacity applied here for uniform translucency
     const wrapper = document.createElement('div');
     wrapper.style.cssText = `
       position:absolute;inset:0;pointer-events:none;z-index:35;
@@ -41,7 +41,7 @@ export default function MorphingBlobCursor({ containerRef, config }) {
     `;
     container.appendChild(wrapper);
 
-    // Morph overlay — snaps instantly to element, only opacity fades
+    // Morph overlay - snaps instantly to element, only opacity fades
     const morphOverlay = document.createElement('div');
     morphOverlay.style.cssText = `
       position:absolute;pointer-events:none;z-index:36;
@@ -65,7 +65,7 @@ export default function MorphingBlobCursor({ containerRef, config }) {
       const baseSize = cfg.size ?? 38;
       const color = getColor();
       const trailCount = cfg.trail ?? 6;
-      // All blobs same size as lead — uniform shape
+      // All blobs same size as lead - uniform shape
       const trailSize = baseSize * 0.72;
       const sizes = [baseSize, ...Array.from({ length: trailCount }, () => trailSize)];
       sizes.forEach(sz => {
@@ -116,7 +116,7 @@ export default function MorphingBlobCursor({ containerRef, config }) {
         prevColor = cfg.color; prevSize = cfg.size; prevTrail = cfg.trail;
       }
 
-      const lerp   = cfg.lerp ?? 0.2;
+      const lerp = cfg.lerp ?? 0.2;
       const baseOpacity = cfg.opacity ?? 0.65; // default translucent
 
       // Check what element is under cursor
@@ -132,25 +132,25 @@ export default function MorphingBlobCursor({ containerRef, config }) {
       wrapper.style.opacity = String(wrapperOpacity);
 
       if (isPointer && pointerEl) {
-        // Morph overlay: snap immediately to element's shape — no CSS transition on position/size
-        const er    = pointerEl.getBoundingClientRect();
-        const pad   = 6;
-        const elW   = er.width  + pad * 2;
-        const elH   = er.height + pad * 2;
-        const elX   = er.left - rect.left;
-        const elY   = er.top  - rect.top;
-        const elBr  = getComputedStyle(pointerEl).borderRadius || '6px';
-        const col   = getColor();
+        // Morph overlay: snap immediately to element's shape - no CSS transition on position/size
+        const er = pointerEl.getBoundingClientRect();
+        const pad = 6;
+        const elW = er.width + pad * 2;
+        const elH = er.height + pad * 2;
+        const elX = er.left - rect.left;
+        const elY = er.top - rect.top;
+        const elBr = getComputedStyle(pointerEl).borderRadius || '6px';
+        const col = getColor();
 
         // Snap position/size without transition
-        morphOverlay.style.transition  = 'opacity 0.15s';
-        morphOverlay.style.left        = `${elX - pad}px`;
-        morphOverlay.style.top         = `${elY - pad}px`;
-        morphOverlay.style.width       = `${elW}px`;
-        morphOverlay.style.height      = `${elH}px`;
+        morphOverlay.style.transition = 'opacity 0.15s';
+        morphOverlay.style.left = `${elX - pad}px`;
+        morphOverlay.style.top = `${elY - pad}px`;
+        morphOverlay.style.width = `${elW}px`;
+        morphOverlay.style.height = `${elH}px`;
         morphOverlay.style.borderRadius = elBr;
-        morphOverlay.style.background  = col;
-        morphOverlay.style.opacity     = String(baseOpacity * 0.55);
+        morphOverlay.style.background = col;
+        morphOverlay.style.opacity = String(baseOpacity * 0.55);
 
         // Hide gooey wrapper while morphed
         wrapper.style.opacity = '0';
@@ -171,7 +171,7 @@ export default function MorphingBlobCursor({ containerRef, config }) {
         blobEls[0].x = mx;
         blobEls[0].y = my;
         blobEls[0].el.style.left = `${mx}px`;
-        blobEls[0].el.style.top  = `${my}px`;
+        blobEls[0].el.style.top = `${my}px`;
       }
 
       // Trail lerp
@@ -180,7 +180,7 @@ export default function MorphingBlobCursor({ containerRef, config }) {
         blobEls[i].x += (prev.x - blobEls[i].x) * lerp;
         blobEls[i].y += (prev.y - blobEls[i].y) * lerp;
         blobEls[i].el.style.left = `${blobEls[i].x}px`;
-        blobEls[i].el.style.top  = `${blobEls[i].y}px`;
+        blobEls[i].el.style.top = `${blobEls[i].y}px`;
       }
 
       rafId = requestAnimationFrame(loop);

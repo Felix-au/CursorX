@@ -30,7 +30,7 @@ export default function GravityPullCursor({ containerRef, config }) {
 
     // Physics targets
     const targets = [...container.querySelectorAll('[data-gravity]')];
-    const states  = new Map(targets.map(el => [el, { x:0, y:0, vx:0, vy:0 }]));
+    const states = new Map(targets.map(el => [el, { x: 0, y: 0, vx: 0, vy: 0 }]));
 
     let mx = -5000, my = -5000;
     let ringW = 36, targetRingW = 36;
@@ -50,20 +50,20 @@ export default function GravityPullCursor({ containerRef, config }) {
     const loop = () => {
       const cfg = configRef.current || {};
       const strength = cfg.strength ?? 25000;
-      const radius   = cfg.radius   ?? 220;
-      const damping  = cfg.damping  ?? 0.84;
-      const color    = cfg.color    ?? '#5cf4fc';
+      const radius = cfg.radius ?? 220;
+      const damping = cfg.damping ?? 0.84;
+      const color = cfg.color ?? '#5cf4fc';
 
       // Update ring position
-      ring.style.left  = `${mx}px`;
-      ring.style.top   = `${my}px`;
+      ring.style.left = `${mx}px`;
+      ring.style.top = `${my}px`;
       ring.style.borderColor = color;
-      ring.style.boxShadow   = `0 0 12px ${color}55`;
+      ring.style.boxShadow = `0 0 12px ${color}55`;
 
       // Pointer ring pulse
       const isPointer = cfg.pointerAnim && checkPointer(
         container.getBoundingClientRect().left + mx,
-        container.getBoundingClientRect().top  + my
+        container.getBoundingClientRect().top + my
       );
       if (isPointer) {
         pulseT += 0.05;
@@ -77,32 +77,32 @@ export default function GravityPullCursor({ containerRef, config }) {
       if (clickFlash && cfg.clickAnim) {
         clickFlashT += 0.07;
         const flashScale = 1 + Math.sin(clickFlashT * Math.PI * 0.7) * 0.9;
-        ring.style.width   = `${ringW * flashScale}px`;
-        ring.style.height  = `${ringW * flashScale}px`;
+        ring.style.width = `${ringW * flashScale}px`;
+        ring.style.height = `${ringW * flashScale}px`;
         ring.style.opacity = String(Math.max(0, 1 - clickFlashT));
         if (clickFlashT >= 1) { clickFlash = false; ring.style.opacity = '1'; }
       } else {
-        ring.style.width  = `${ringW}px`;
+        ring.style.width = `${ringW}px`;
         ring.style.height = `${ringW}px`;
       }
 
-      // DOM physics — gravity
+      // DOM physics - gravity
       targets.forEach(el => {
         const s = states.get(el);
         const rect = el.getBoundingClientRect();
-        const cr   = container.getBoundingClientRect();
-        const ex   = rect.left - cr.left + rect.width  / 2 + s.x;
-        const ey   = rect.top  - cr.top  + rect.height / 2 + s.y;
-        const dx   = mx - ex, dy = my - ey;
-        const dist = Math.max(Math.sqrt(dx*dx + dy*dy), 1);
+        const cr = container.getBoundingClientRect();
+        const ex = rect.left - cr.left + rect.width / 2 + s.x;
+        const ey = rect.top - cr.top + rect.height / 2 + s.y;
+        const dx = mx - ex, dy = my - ey;
+        const dist = Math.max(Math.sqrt(dx * dx + dy * dy), 1);
         if (dist < radius) {
           const f = Math.min(strength / (dist * dist), 200);  // raised cap: buttons now visibly attracted
           s.vx += (dx / dist) * f * 0.016;
           s.vy += (dy / dist) * f * 0.016;
         }
         s.vx -= s.x * 0.09; s.vy -= s.y * 0.09;
-        s.vx *= damping;     s.vy *= damping;
-        s.x  += s.vx;        s.y  += s.vy;
+        s.vx *= damping; s.vy *= damping;
+        s.x += s.vx; s.y += s.vy;
         el.style.transform = `translate(${s.x}px,${s.y}px)`;
       });
 

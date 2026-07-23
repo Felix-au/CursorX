@@ -53,7 +53,7 @@ export default function InkSplatterCursor({ containerRef, config }) {
     container.addEventListener('mouseleave', onLeave);
     container.addEventListener('dblclick', onDblClick);
 
-    // Dissipation loop — fades existing ink
+    // Dissipation loop - fades existing ink
     const loop = () => {
       const { dissipation = 0.01 } = configRef.current || {};
       ctx.fillStyle = `rgba(0,0,0,${dissipation})`;
