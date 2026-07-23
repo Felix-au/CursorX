@@ -34,8 +34,10 @@ export default function RainbowCometCursor({ containerRef, config }) {
     };
 
     const onClick = () => {
+      const { clickAnim = true, clickSparkCount = 22 } = configRef.current || {};
+      if (!clickAnim) return;
       // Release a burst of mini rainbow sparkles
-      for (let i = 0; i < 22; i++) {
+      for (let i = 0; i < clickSparkCount; i++) {
         const angle = Math.random() * Math.PI * 2;
         const speed = Math.random() * 3.5 + 1.5;
         clickParticles.push({
@@ -54,12 +56,12 @@ export default function RainbowCometCursor({ containerRef, config }) {
     container.addEventListener('click', onClick);
 
     const loop = () => {
-      const { trailLength = 45, hueSpeed = 2.5, maxWidth = 13 } = configRef.current || {};
+      const { trailLength = 45, hueSpeed = 2.5, maxWidth = 13, pointerAnim = true, pointerGlowMult = 1.8, clickAnim = true } = configRef.current || {};
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       time += 0.05;
 
       const rect = container.getBoundingClientRect();
-      const isPointer = checkPointer(rect.left + mx, rect.top + my);
+      const isPointer = pointerAnim && checkPointer(rect.left + mx, rect.top + my);
 
       // Pulse multiplier for neon pointer state
       const pulse = isPointer ? (1.3 + Math.sin(time * 5) * 0.2) : 1.0;
@@ -75,7 +77,7 @@ export default function RainbowCometCursor({ containerRef, config }) {
         ctx.save();
         ctx.strokeStyle = `hsla(${b.hue},100%,62%,${alpha * (isPointer ? 0.95 : 0.88)})`;
         ctx.shadowColor = `hsl(${b.hue},100%,60%)`; 
-        ctx.shadowBlur = w * (isPointer ? 1.8 : 1.0);
+        ctx.shadowBlur = w * (isPointer ? pointerGlowMult : 1.0);
         ctx.lineWidth = w; ctx.lineCap = 'round';
         ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke(); ctx.restore();
       }
@@ -85,7 +87,7 @@ export default function RainbowCometCursor({ containerRef, config }) {
         const baseHeadR = isPointer ? 11 : 7;
         ctx.save(); ctx.beginPath(); ctx.arc(h.x, h.y, baseHeadR, 0, Math.PI * 2);
         ctx.fillStyle = `hsl(${h.hue},100%,82%)`;
-        ctx.shadowColor = `hsl(${h.hue},100%,60%)`; ctx.shadowBlur = isPointer ? 35 : 22; ctx.fill(); ctx.restore();
+        ctx.shadowColor = `hsl(${h.hue},100%,60%)`; ctx.shadowBlur = isPointer ? (22 * pointerGlowMult) : 22; ctx.fill(); ctx.restore();
       }
 
       // Draw click burst sparkles

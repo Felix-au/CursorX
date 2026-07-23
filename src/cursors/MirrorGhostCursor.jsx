@@ -9,55 +9,50 @@ const checkPointer = (cx, cy) =>
   );
 
 export default function MirrorGhostCursor({ containerRef, config }) {
+  const canvasRef = useRef(null);
   const configRef = useRef(config);
   useEffect(() => { configRef.current = config; }, [config]);
 
   useEffect(() => {
     const container = containerRef?.current;
-    if (!container) return;
+    const canvas = canvasRef.current;
+    if (!container || !canvas) return;
 
-    const { color = '#c45cfc', size = 20, lerp = 0.14 } = configRef.current || {};
-    const cx = container.offsetWidth / 2, cy = container.offsetHeight / 2;
+    const ctx = canvas.getContext('2d');
+    const resize = () => { canvas.width = container.offsetWidth; canvas.height = container.offsetHeight; };
+    resize();
+    const ro = new ResizeObserver(resize);
+    ro.observe(container);
 
-    const makeGhost = (opacity, sz) => {
-      const el = document.createElement('div');
-      const alpha = Math.round(opacity * 255).toString(16).padStart(2, '0');
-      el.style.cssText = `position:absolute;pointer-events:none;z-index:38;
-        width:${sz}px;height:${sz}px;border-radius:50%;
-        border:2px solid ${color}${alpha};transform:translate(-50%,-50%);
-        box-shadow:0 0 12px ${color}${Math.round(opacity * 128).toString(16).padStart(2, '0')};
-        will-change:left,top,transform,width,height;`;
-      container.appendChild(el);
-      return el;
-    };
+    let cx = canvas.width / 2, cy = canvas.height / 2;
+    let mx = cx, my = cy; // mouse coords
+    let showDot = false;
 
+    // Follow physics state for 4 mirror ghosts
     const ghosts = [
-      { el: makeGhost(0.9, size), sx: 1, sy: 1, l: 1 },
-      { el: makeGhost(0.5, size - 2), sx: -1, sy: 1, l: lerp },
-      { el: makeGhost(0.5, size - 2), sx: 1, sy: -1, l: lerp },
-      { el: makeGhost(0.28, size - 4), sx: -1, sy: -1, l: lerp * 0.7 },
+      { x: cx, y: cy, sx: 1,  sy: 1,  l: 1.0 },
+      { x: cx, y: cy, sx: -1, sy: 1,  l: 0.14 },
+      { x: cx, y: cy, sx: 1,  sy: -1, l: 0.14 },
+      { x: cx, y: cy, sx: -1, sy: -1, l: 0.098 }, // lerp * 0.7
     ];
-    const dot = document.createElement('div');
-    dot.style.cssText = `position:absolute;pointer-events:none;z-index:40;width:6px;height:6px;border-radius:50%;background:white;transform:translate(-50%,-50%);opacity:0;will-change:left,top,transform;`;
-    container.appendChild(dot);
 
-    const positions = ghosts.map(() => ({ x: cx, y: cy }));
-    let target = { x: cx, y: cy }, raf;
     let clickT = -1;
-    let ghostScale = 1;
-    let dotScale = 1;
+    let ghostScale = 1.0;
+    let dotScale = 1.0;
+    let raf;
 
     const onMove = (e) => {
       const r = container.getBoundingClientRect();
-      target.x = e.clientX - r.left; target.y = e.clientY - r.top;
-      dot.style.left = target.x + 'px'; dot.style.top = target.y + 'px';
-      dot.style.opacity = '1';
+      mx = e.clientX - r.left; my = e.clientY - r.top;
+      showDot = true;
     };
-    const onLeave = () => { dot.style.opacity = '0'; };
-    const onEnter = () => { dot.style.opacity = '1'; };
+    const onLeave = () => { showDot = false; };
+    const onEnter = () => { showDot = true; };
     const onClick = () => {
-      const { clickAnim = true } = configRef.current || {};
-      if (clickAnim) clickT = 0;
+      const cfg = configRef.current || {};
+      if (cfg.clickAnim !== false) {
+        clickT = 0;
+      }
     };
 
     container.addEventListener('mousemove', onMove);
@@ -67,13 +62,27 @@ export default function MirrorGhostCursor({ containerRef, config }) {
 
     const loop = () => {
       const cfg = configRef.current || {};
-      const col = cfg.color ?? '#c45cfc';
+      const color = cfg.color ?? '#c45cfc';
+      const baseSize = cfg.size ?? 20;
+      const baseLerp = cfg.lerp ?? 0.14;
       const pointerAnim = cfg.pointerAnim ?? true;
       const pointerScale = cfg.pointerScale ?? 2.2;
+      const clickAnim = cfg.clickAnim ?? true;
       const clickScale = cfg.clickScale ?? 0.8;
 
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // Recalculate center dynamically in case canvas size changes
+      cx = canvas.width / 2;
+      cy = canvas.height / 2;
+
+      // Update follow speeds live
+      ghosts[1].l = baseLerp;
+      ghosts[2].l = baseLerp;
+      ghosts[3].l = baseLerp * 0.7;
+
       const rect = container.getBoundingClientRect();
-      const isPointer = pointerAnim && checkPointer(rect.left + target.x, rect.top + target.y);
+      const isPointer = pointerAnim && checkPointer(rect.left + mx, rect.top + my);
 
       let targetGhostScale = 1.0;
       let targetDotScale = 1.0;
@@ -83,7 +92,7 @@ export default function MirrorGhostCursor({ containerRef, config }) {
         targetDotScale = 0.5;
       }
 
-      if (clickT >= 0) {
+      if (clickAnim && clickT >= 0) {
         const bounce = Math.sin(clickT * Math.PI);
         targetGhostScale *= (1 - bounce * clickScale * 0.5);
         targetDotScale *= (1 + bounce * clickScale * 1.2);
@@ -94,26 +103,43 @@ export default function MirrorGhostCursor({ containerRef, config }) {
       ghostScale += (targetGhostScale - ghostScale) * 0.15;
       dotScale += (targetDotScale - dotScale) * 0.15;
 
+      // Update and draw ghosts on canvas (eliminates pixelation!)
       ghosts.forEach((g, i) => {
-        const tx = cx + (target.x - cx) * g.sx;
-        const ty = cy + (target.y - cy) * g.sy;
-        positions[i].x += (tx - positions[i].x) * g.l;
-        positions[i].y += (ty - positions[i].y) * g.l;
-        g.el.style.left = positions[i].x + 'px'; g.el.style.top = positions[i].y + 'px';
-        
-        // Apply scaling
-        const baseSz = size - (i === 0 ? 0 : i === 3 ? 4 : 2);
-        const curSz = Math.max(2, baseSz * ghostScale);
-        g.el.style.width = curSz + 'px';
-        g.el.style.height = curSz + 'px';
+        // Mirrored target coordinate
+        const tx = cx + (mx - cx) * g.sx;
+        const ty = cy + (my - cy) * g.sy;
 
-        // live color update
-        const opacities = [0.9, 0.5, 0.5, 0.28];
-        const a = Math.round(opacities[i] * 255).toString(16).padStart(2, '0');
-        g.el.style.borderColor = `${col}${a}`;
+        // Lerp position
+        g.x += (tx - g.x) * g.l;
+        g.y += (ty - g.y) * g.l;
+
+        // Draw ring
+        const opacity = i === 0 ? 0.9 : i === 3 ? 0.28 : 0.5;
+        const sizeOffset = i === 0 ? 0 : i === 3 ? -4 : -2;
+        const currentSize = Math.max(1, (baseSize + sizeOffset) * ghostScale);
+
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(g.x, g.y, currentSize / 2, 0, Math.PI * 2);
+        ctx.strokeStyle = color;
+        ctx.globalAlpha = opacity;
+        ctx.lineWidth = 2;
+        ctx.shadowColor = color;
+        ctx.shadowBlur = 12 * opacity;
+        ctx.stroke();
+        ctx.restore();
       });
 
-      dot.style.transform = `translate(-50%,-50%) scale(${dotScale})`;
+      // Draw center dot
+      if (showDot && mx >= 0) {
+        const currentDotRadius = Math.max(0.5, (3 * dotScale));
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(mx, my, currentDotRadius, 0, Math.PI * 2);
+        ctx.fillStyle = '#ffffff';
+        ctx.fill();
+        ctx.restore();
+      }
 
       raf = requestAnimationFrame(loop);
     };
@@ -124,11 +150,10 @@ export default function MirrorGhostCursor({ containerRef, config }) {
       container.removeEventListener('mouseleave', onLeave);
       container.removeEventListener('mouseenter', onEnter);
       container.removeEventListener('click', onClick);
+      ro.disconnect();
       cancelAnimationFrame(raf);
-      ghosts.forEach(g => g.el.remove());
-      dot.remove();
     };
   }, [containerRef]);
 
-  return null;
+  return <canvas ref={canvasRef} style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 35 }} />;
 }

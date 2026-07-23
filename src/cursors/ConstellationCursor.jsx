@@ -43,7 +43,10 @@ export default function ConstellationCursor({ containerRef, config }) {
     };
     const onLeave = () => { mx = -1000; my = -1000; };
     const onClick = () => {
-      clickT = 0;
+      const cfg = configRef.current || {};
+      if (cfg.clickAnim !== false) {
+        clickT = 0;
+      }
     };
 
     container.addEventListener('mousemove', onMove);
@@ -51,17 +54,17 @@ export default function ConstellationCursor({ containerRef, config }) {
     container.addEventListener('click', onClick);
 
     const draw = () => {
-      const { maxDist = 115, cursorDist = 175, starColor = '#c8c8ff' } = configRef.current || {};
+      const { maxDist = 115, cursorDist = 175, starColor = '#c8c8ff', pointerAnim = true, pointerDistMult = 1.25, clickAnim = true, clickGlowIntensity = 1.5 } = configRef.current || {};
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       time += 0.05;
 
       const rect = container.getBoundingClientRect();
-      const isPointer = checkPointer(rect.left + mx, rect.top + my);
+      const isPointer = pointerAnim && checkPointer(rect.left + mx, rect.top + my);
       const pulse = isPointer ? (1.0 + Math.sin(time * 6) * 0.25) : 1.0;
-      const currentCursorDist = cursorDist * (isPointer ? 1.25 : 1.0);
+      const currentCursorDist = cursorDist * (isPointer ? pointerDistMult : 1.0);
 
       let clickGlow = 0;
-      if (clickT >= 0) {
+      if (clickAnim && clickT >= 0) {
         clickGlow = Math.sin(clickT * Math.PI);
         clickT += 0.05;
         if (clickT >= 1) clickT = -1;
@@ -92,10 +95,10 @@ export default function ConstellationCursor({ containerRef, config }) {
           ctx.moveTo(a.x, a.y); ctx.lineTo(mx, my); ctx.stroke();
 
           // Connected stars glow once on click
-          if (clickT >= 0) {
+          if (clickAnim && clickT >= 0) {
             ctx.save();
             ctx.beginPath();
-            ctx.arc(a.x, a.y, a.r * (1 + clickGlow * 3.5), 0, Math.PI * 2);
+            ctx.arc(a.x, a.y, a.r * (1 + clickGlow * clickGlowIntensity * 2.5), 0, Math.PI * 2);
             ctx.fillStyle = starColor;
             ctx.globalAlpha = clickGlow * 0.8;
             ctx.shadowColor = '#5cf4fc';
@@ -104,6 +107,7 @@ export default function ConstellationCursor({ containerRef, config }) {
             ctx.restore();
           }
         }
+
 
         ctx.beginPath(); ctx.fillStyle = starColor;
         ctx.arc(a.x, a.y, a.r, 0, Math.PI * 2); ctx.fill();

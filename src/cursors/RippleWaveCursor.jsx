@@ -10,20 +10,19 @@ const checkPointer = (cx, cy) =>
 
 export default function RippleWaveCursor({ containerRef, config }) {
   const canvasRef = useRef(null);
-  const dotRef = useRef(null);
   const configRef = useRef(config);
   useEffect(() => { configRef.current = config; }, [config]);
 
   useEffect(() => {
     const container = containerRef?.current;
     const canvas = canvasRef.current;
-    const dot = dotRef.current;
-    if (!container || !canvas || !dot) return;
+    if (!container || !canvas) return;
 
     const ctx = canvas.getContext('2d');
     let ripples = [], raf;
     let mx = -100, my = -100;
     let time = 0;
+    let showDot = false;
 
     const resize = () => { canvas.width = container.offsetWidth; canvas.height = container.offsetHeight; };
     resize();
@@ -31,7 +30,8 @@ export default function RippleWaveCursor({ containerRef, config }) {
     ro.observe(container);
 
     const onClick = (e) => {
-      const { hue = 220, count = 3 } = configRef.current || {};
+      const { hue = 220, count = 3, clickAnim = true } = configRef.current || {};
+      if (!clickAnim) return;
       const r = container.getBoundingClientRect();
       const x = e.clientX - r.left, y = e.clientY - r.top;
       for (let i = 0; i < count; i++) {
@@ -41,29 +41,37 @@ export default function RippleWaveCursor({ containerRef, config }) {
     const onMove = (e) => {
       const r = container.getBoundingClientRect();
       mx = e.clientX - r.left; my = e.clientY - r.top;
-      dot.style.left = mx + 'px'; dot.style.top = my + 'px';
-      dot.style.opacity = '1';
+      showDot = true;
     };
-    const onLeave = () => { dot.style.opacity = '0'; };
+    const onLeave = () => { showDot = false; };
 
     container.addEventListener('click', onClick);
     container.addEventListener('mousemove', onMove);
     container.addEventListener('mouseleave', onLeave);
 
     const loop = () => {
-      const { speed = 3.2 } = configRef.current || {};
+      const { speed = 3.2, pointerAnim = true, pointerBreathMult = 1.6 } = configRef.current || {};
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       time += 0.05;
 
       const rect = container.getBoundingClientRect();
-      const isPointer = checkPointer(rect.left + mx, rect.top + my);
+      const isPointer = pointerAnim && checkPointer(rect.left + mx, rect.top + my);
 
-      if (isPointer) {
-        // breathing pulse: expands and retracts rhythmically
-        const breath = 1.0 + (0.3 + Math.sin(time * 5.2) * 0.3);
-        dot.style.transform = `translate(-50%,-50%) scale(${breath})`;
-      } else {
-        dot.style.transform = 'translate(-50%,-50%) scale(1)';
+      // Draw central ring (vector-sharp, no pixelation)
+      if (showDot && mx >= 0) {
+        ctx.save();
+        ctx.beginPath();
+        let currentDotRadius = 4.5;
+        if (isPointer) {
+          // breathe scale: goes between 1.0 and pointerBreathMult
+          const breath = 1.0 + (0.3 + Math.sin(time * 5.2) * 0.3) * (pointerBreathMult - 1.0) / 0.6;
+          currentDotRadius *= breath;
+        }
+        ctx.arc(mx, my, currentDotRadius, 0, Math.PI * 2);
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.9)';
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+        ctx.restore();
       }
 
       ripples = ripples.filter(r => r.alpha > 0);
@@ -87,15 +95,5 @@ export default function RippleWaveCursor({ containerRef, config }) {
     };
   }, [containerRef]);
 
-  return (
-    <>
-      <canvas ref={canvasRef} style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 35 }} />
-      <div ref={dotRef} style={{
-        position: 'absolute', pointerEvents: 'none', zIndex: 40, opacity: 0,
-        width: 9, height: 9, borderRadius: '50%',
-        border: '1.5px solid white', transform: 'translate(-50%,-50%)',
-        willChange: 'left,top,transform',
-      }} />
-    </>
-  );
+  return <canvas ref={canvasRef} style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 35 }} />;
 }

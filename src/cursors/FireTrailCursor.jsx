@@ -45,6 +45,7 @@ export default function FireTrailCursor({ containerRef, config }) {
         this.life -= this.decay; this.size *= 0.968;
       }
       draw(c, isPointer) {
+        const { pointerAnim = true, pointerAlpha = 0.35, pointerSizeMult = 1.5 } = configRef.current || {};
         const hue = this.life > 0.55 ? 42 + (1 - this.life) * 22 : this.life > 0.2 ? 12 : 0;
         const sat = this.life > 0.2 ? 100 : Math.max(0, (this.life / 0.2) * 40);
         const lit = this.life > 0.2 ? 52 + this.life * 18 : 35;
@@ -53,9 +54,9 @@ export default function FireTrailCursor({ containerRef, config }) {
         let alpha = Math.max(0, this.life * 0.92);
         let currentSize = Math.max(0.1, this.size);
 
-        if (isPointer && !this.isEmber) {
-          alpha *= 0.5; // more translucent
-          currentSize *= 1.35; // grows slightly
+        if (pointerAnim && isPointer && !this.isEmber) {
+          alpha *= pointerAlpha; 
+          currentSize *= pointerSizeMult;
         }
 
         c.globalAlpha = alpha;
@@ -71,9 +72,10 @@ export default function FireTrailCursor({ containerRef, config }) {
     };
 
     const onClick = () => {
-      const { rise = 2, size = 9 } = configRef.current || {};
+      const { rise = 2, size = 4, clickAnim = true, clickEmberCount = 25 } = configRef.current || {};
+      if (!clickAnim) return;
       // Instant flare up with shooting embers
-      for (let i = 0; i < 28; i++) {
+      for (let i = 0; i < clickEmberCount; i++) {
         const angle = Math.random() * Math.PI * 2;
         const speed = Math.random() * 4.5 + 2.0;
         const ember = new Flame(mx, my, { rise, size });
@@ -90,11 +92,11 @@ export default function FireTrailCursor({ containerRef, config }) {
     container.addEventListener('click', onClick);
 
     const loop = () => {
-      const { count = 5, rise = 2, size = 9 } = configRef.current || {};
+      const { count = 5, rise = 2, size = 4, pointerAnim = true } = configRef.current || {};
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
       const rect = container.getBoundingClientRect();
-      const isPointer = checkPointer(rect.left + mx, rect.top + my);
+      const isPointer = pointerAnim && checkPointer(rect.left + mx, rect.top + my);
 
       for (let i = 0; i < count; i++) {
         particles.push(new Flame(mx, my, { rise, size }));

@@ -10,15 +10,13 @@ const checkPointer = (cx, cy) =>
 
 export default function DNAHelixCursor({ containerRef, config }) {
   const canvasRef = useRef(null);
-  const dotRef = useRef(null);
   const configRef = useRef(config);
   useEffect(() => { configRef.current = config; }, [config]);
 
   useEffect(() => {
     const container = containerRef?.current;
     const canvas = canvasRef.current;
-    const dot = dotRef.current;
-    if (!container || !canvas || !dot) return;
+    if (!container || !canvas) return;
 
     const ctx = canvas.getContext('2d');
     const HIST = 80;
@@ -28,6 +26,7 @@ export default function DNAHelixCursor({ containerRef, config }) {
     let clickT = -1;
     let circleScale = 1;
     let circleOpacity = 1;
+    let showDot = false;
 
     const resize = () => { canvas.width = container.offsetWidth; canvas.height = container.offsetHeight; };
     resize();
@@ -37,11 +36,14 @@ export default function DNAHelixCursor({ containerRef, config }) {
     const onMove = (e) => {
       const r = container.getBoundingClientRect();
       mx = e.clientX - r.left; my = e.clientY - r.top;
-      dot.style.left = mx + 'px'; dot.style.top = my + 'px';
+      showDot = true;
     };
-    const onLeave = () => { mx = -1000; my = -1000; };
+    const onLeave = () => { showDot = false; };
     const onClick = () => {
-      clickT = 0;
+      const cfg = configRef.current || {};
+      if (cfg.clickAnim !== false) {
+        clickT = 0;
+      }
     };
 
     container.addEventListener('mousemove', onMove);
@@ -49,32 +51,36 @@ export default function DNAHelixCursor({ containerRef, config }) {
     container.addEventListener('click', onClick);
 
     const loop = () => {
-      const { color1 = '#7c5cfc', color2 = '#5cf4fc', amplitude = 16, speed = 0.09 } = configRef.current || {};
+      const { color1 = '#7c5cfc', color2 = '#5cf4fc', amplitude = 16, speed = 0.09, pointerAnim = true, pointerScale = 3.2, clickAnim = true, clickAmpBoost = 45 } = configRef.current || {};
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       phase += speed;
       path.push({ x: mx, y: my });
       if (path.length > HIST) path.shift();
 
       const rect = container.getBoundingClientRect();
-      const isPointer = checkPointer(rect.left + mx, rect.top + my);
+      const isPointer = pointerAnim && checkPointer(rect.left + mx, rect.top + my);
 
       // Lerp scale and opacity for the tip circle (pointer state: bigger, translucent)
-      const targetScale = isPointer ? 3.2 : 1.0;
+      const targetScale = isPointer ? pointerScale : 1.0;
       const targetOpacity = isPointer ? 0.45 : 1.0;
       circleScale += (targetScale - circleScale) * 0.15;
       circleOpacity += (targetOpacity - circleOpacity) * 0.15;
 
-      if (mx < 0) {
-        dot.style.opacity = '0';
-      } else {
-        dot.style.opacity = String(circleOpacity);
+      // Draw tip circle on canvas (vector-sharp, no pixelation)
+      if (showDot && mx >= 0) {
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(mx, my, Math.max(1, 4.0 * circleScale), 0, Math.PI * 2);
+        ctx.fillStyle = '#ffffff';
+        ctx.globalAlpha = circleOpacity;
+        ctx.fill();
+        ctx.restore();
       }
-      dot.style.transform = `translate(-50%,-50%) scale(${circleScale})`;
 
       // Click replication pulse boost
       let clickBoost = 0;
-      if (clickT >= 0) {
-        clickBoost = Math.sin(clickT * Math.PI) * 45;
+      if (clickAnim && clickT >= 0) {
+        clickBoost = Math.sin(clickT * Math.PI) * clickAmpBoost;
         clickT += 0.05;
         if (clickT >= 1) clickT = -1;
       }
@@ -98,7 +104,7 @@ export default function DNAHelixCursor({ containerRef, config }) {
         ctx.strokeStyle = strand === 0 ? color1 : color2;
         ctx.lineWidth = 2; ctx.lineCap = 'round';
         ctx.shadowColor = strand === 0 ? color1 : color2;
-        ctx.shadowBlur = clickT >= 0 ? 15 : 6;
+        ctx.shadowBlur = (clickAnim && clickT >= 0) ? 15 : 6;
         ctx.stroke();
       }
 
@@ -127,15 +133,5 @@ export default function DNAHelixCursor({ containerRef, config }) {
     };
   }, [containerRef]);
 
-  return (
-    <>
-      <canvas ref={canvasRef} style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 35 }} />
-      <div ref={dotRef} style={{
-        position: 'absolute', pointerEvents: 'none', zIndex: 40, opacity: 0,
-        width: 8, height: 8, borderRadius: '50%',
-        background: 'white', transform: 'translate(-50%,-50%)',
-        willChange: 'left,top,transform,opacity',
-      }} />
-    </>
-  );
+  return <canvas ref={canvasRef} style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 35 }} />;
 }

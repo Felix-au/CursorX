@@ -30,7 +30,7 @@ export default function BubbleFloatCursor({ containerRef, config }) {
     class Bubble {
       constructor(x, y, cfg) {
         this.x = x; this.y = y;
-        this.r = (Math.random() * (cfg.maxSize - 7) + 7) * (cfg.isPointer ? 1.55 : 1.0);
+        this.r = (Math.random() * (cfg.maxSize - 7) + 7) * (cfg.isPointer ? cfg.pointerSizeMult : 1.0);
         this.vy = -(Math.random() * cfg.riseSpeed + 0.6) * (cfg.isPointer ? 1.25 : 1.0);
         this.vx = (Math.random() - 0.5) * 0.9;
         this.wobble = Math.random() * Math.PI * 2;
@@ -61,6 +61,8 @@ export default function BubbleFloatCursor({ containerRef, config }) {
     };
 
     const onClick = () => {
+      const { clickAnim = true } = configRef.current || {};
+      if (!clickAnim) return;
       // Pop all current bubbles into tiny splash droplets
       bubbles.forEach(b => {
         for (let i = 0; i < 5; i++) {
@@ -84,18 +86,18 @@ export default function BubbleFloatCursor({ containerRef, config }) {
     container.addEventListener('click', onClick);
 
     const loop = () => {
-      const { hue = 200, spawnRate = 5, maxSize = 25, riseSpeed = 1.6 } = configRef.current || {};
+      const { hue = 200, spawnRate = 5, maxSize = 25, riseSpeed = 1.6, pointerAnim = true, pointerSizeMult = 1.55 } = configRef.current || {};
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       frame++;
 
       const rect = container.getBoundingClientRect();
-      const isPointer = checkPointer(rect.left + mx, rect.top + my);
+      const isPointer = pointerAnim && checkPointer(rect.left + mx, rect.top + my);
 
       // Double spawn frequency inside pointer state
       const currentSpawnRate = isPointer ? Math.max(1, Math.floor(spawnRate / 2)) : spawnRate;
 
       if (frame % Math.max(1, currentSpawnRate) === 0) {
-        bubbles.push(new Bubble(mx, my, { hue, maxSize, riseSpeed, isPointer }));
+        bubbles.push(new Bubble(mx, my, { hue, maxSize, riseSpeed, isPointer, pointerSizeMult }));
       }
 
       bubbles = bubbles.filter(b => b.alpha > 0);

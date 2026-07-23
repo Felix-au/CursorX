@@ -32,7 +32,10 @@ export default function TorchLightCursor({ containerRef, config }) {
     };
     const onLeave = () => { flame.style.opacity = '0'; };
     const onClick = () => {
-      clickT = 0;
+      const cfg = configRef.current || {};
+      if (cfg.clickAnim !== false) {
+        clickT = 0;
+      }
     };
 
     container.addEventListener('mousemove', onMove);
@@ -40,14 +43,14 @@ export default function TorchLightCursor({ containerRef, config }) {
     container.addEventListener('click', onClick);
 
     const loop = () => {
-      const { radius = 140, darkness = 0.91, flickerIntensity = 9 } = configRef.current || {};
+      const { radius = 140, darkness = 0.91, flickerIntensity = 9, pointerAnim = true, pointerFlickerIntensity = 2.5, clickAnim = true, clickFlashRadius = 200 } = configRef.current || {};
       cx += (tx - cx) * 0.11; cy += (ty - cy) * 0.11;
 
       const rect = container.getBoundingClientRect();
-      const isPointer = checkPointer(rect.left + tx, rect.top + ty);
+      const isPointer = pointerAnim && checkPointer(rect.left + tx, rect.top + ty);
 
       // Pointer: flicker radius increases and period decreases (phase increments faster)
-      const currentIntensity = flickerIntensity * (isPointer ? 2.5 : 1.0);
+      const currentIntensity = flickerIntensity * (isPointer ? pointerFlickerIntensity : 1.0);
       const phaseInc = isPointer ? 0.28 : 0.09;
       flickPhase += phaseInc;
 
@@ -55,8 +58,8 @@ export default function TorchLightCursor({ containerRef, config }) {
 
       // Click: one flicker with a big radius
       let clickFlash = 0;
-      if (clickT >= 0) {
-        clickFlash = Math.sin(clickT * Math.PI) * 200;
+      if (clickAnim && clickT >= 0) {
+        clickFlash = Math.sin(clickT * Math.PI) * clickFlashRadius;
         clickT += 0.06;
         if (clickT >= 1) clickT = -1;
       }

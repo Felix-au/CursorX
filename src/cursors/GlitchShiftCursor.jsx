@@ -44,6 +44,8 @@ export default function GlitchShiftCursor({ containerRef, config }) {
     const onLeave = () => { [main, r, g, b].forEach(el => { el.style.opacity = '0'; }); };
 
     const onClick = () => {
+      const cfg = configRef.current || {};
+      if (cfg.clickAnim === false) return;
       glitching = true;
       clickBurstActive = true;
       gt = 0;
@@ -70,19 +72,19 @@ export default function GlitchShiftCursor({ containerRef, config }) {
     startInterval();
 
     const loop = () => {
-      const { split = 5 } = configRef.current || {};
+      const { split = 5, pointerAnim = true, pointerSizeMult = 1.7, clickAnim = true, clickSplitMult = 4.4 } = configRef.current || {};
       
       const rect = container.getBoundingClientRect();
-      const isPointer = checkPointer(rect.left + mx, rect.top + my);
+      const isPointer = pointerAnim && checkPointer(rect.left + mx, rect.top + my);
 
-      const targetSize = isPointer ? 22 : 13;
+      const targetSize = isPointer ? (13 * pointerSizeMult) : 13;
       currentSize += (targetSize - currentSize) * 0.15;
       [main, r, g, b].forEach(el => {
         el.style.width = currentSize + 'px';
         el.style.height = currentSize + 'px';
       });
 
-      const currentSplit = clickBurstActive ? 22 : split;
+      const currentSplit = (clickAnim && clickBurstActive) ? (split * clickSplitMult) : split;
 
       main.style.left = mx + 'px'; main.style.top = my + 'px';
       if (glitching) {

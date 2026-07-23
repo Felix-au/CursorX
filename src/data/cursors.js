@@ -500,6 +500,10 @@ Provide React hook (useGravity) with options object.`,
       { key: 'maxDist', label: 'Star Connect (px)', type: 'range', min: 50, max: 200, step: 5, default: 115 },
       { key: 'cursorDist', label: 'Cursor Connect (px)', type: 'range', min: 80, max: 300, step: 10, default: 175 },
       { key: 'starColor', label: 'Star Color', type: 'color', default: '#c8c8ff' },
+      { key: 'pointerAnim', label: 'Pointer Pulse Connection', type: 'toggle', default: true },
+      { key: 'pointerDistMult', label: 'Hover Connection Multiplier', type: 'range', min: 1.0, max: 2.0, step: 0.05, default: 1.25 },
+      { key: 'clickAnim', label: 'Click Glow Blast', type: 'toggle', default: true },
+      { key: 'clickGlowIntensity', label: 'Click Glow Intensity', type: 'range', min: 0.5, max: 4.0, step: 0.1, default: 1.5 },
     ],
     code: `const canvas = document.createElement('canvas');
 canvas.style.cssText = 'position:fixed;inset:0;pointer-events:none;z-index:9997;';
@@ -562,7 +566,12 @@ Provide React component with configurable counts and distances.`,
     params: [
       { key: 'count', label: 'Flames / Frame', type: 'range', min: 1, max: 10, step: 1, default: 5 },
       { key: 'rise', label: 'Rise Speed', type: 'range', min: 0.5, max: 4, step: 0.25, default: 2 },
-      { key: 'size', label: 'Max Flame Size', type: 'range', min: 4, max: 18, step: 1, default: 9 },
+      { key: 'size', label: 'Max Flame Size', type: 'range', min: 2, max: 12, step: 1, default: 4 },
+      { key: 'pointerAnim', label: 'Pointer Size/Glow', type: 'toggle', default: true },
+      { key: 'pointerAlpha', label: 'Hover Transparency', type: 'range', min: 0.1, max: 0.8, step: 0.05, default: 0.35 },
+      { key: 'pointerSizeMult', label: 'Hover Size Mult', type: 'range', min: 1.0, max: 3.0, step: 0.1, default: 1.5 },
+      { key: 'clickAnim', label: 'Click Ember Burst', type: 'toggle', default: true },
+      { key: 'clickEmberCount', label: 'Click Ember Count', type: 'range', min: 5, max: 50, step: 5, default: 25 },
     ],
     code: `const canvas = document.createElement('canvas');
 canvas.style.cssText = 'position:fixed;inset:0;pointer-events:none;z-index:9998;';
@@ -623,7 +632,9 @@ Provide React hook with windDirection prop.`,
       { key: 'radius', label: 'Radius (px)', type: 'range', min: 20, max: 80, step: 2, default: 40 },
       { key: 'scanSpeed', label: 'Scan Speed', type: 'range', min: 0.01, max: 0.12, step: 0.005, default: 0.045 },
       { key: 'pointerAnim', label: 'Pointer State Color', type: 'toggle', default: true },
-      { key: 'pointerSpeedMult', label: 'Pointer Speed Boost', type: 'range', min: 1.0, max: 2.5, step: 0.05, default: 1.25 },
+      { key: 'pointerSpeedMult', label: 'Pointer Speed Boost', type: 'range', min: 1.0, max: 3.0, step: 0.1, default: 2.0 },
+      { key: 'clickAnim', label: 'Click Squeeze', type: 'toggle', default: true },
+      { key: 'clickSqueeze', label: 'Click Squeeze Mult', type: 'range', min: 0.4, max: 0.95, step: 0.05, default: 0.75 },
     ],
     code: `const canvas = document.createElement('canvas');
 canvas.style.cssText = 'position:fixed;inset:0;pointer-events:none;z-index:9999;';
@@ -733,6 +744,10 @@ Provide React component with symmetryAxes prop.`,
       { key: 'trailLength', label: 'Trail Length', type: 'range', min: 10, max: 80, step: 5, default: 45 },
       { key: 'hueSpeed', label: 'Hue Speed', type: 'range', min: 0.5, max: 6, step: 0.5, default: 2.5 },
       { key: 'maxWidth', label: 'Max Width (px)', type: 'range', min: 4, max: 24, step: 1, default: 13 },
+      { key: 'pointerAnim', label: 'Pointer Size/Glow Boost', type: 'toggle', default: true },
+      { key: 'pointerGlowMult', label: 'Hover Glow Multiplier', type: 'range', min: 1.0, max: 3.0, step: 0.1, default: 1.8 },
+      { key: 'clickAnim', label: 'Click Spark Burst', type: 'toggle', default: true },
+      { key: 'clickSparkCount', label: 'Click Spark Count', type: 'range', min: 5, max: 50, step: 1, default: 22 },
     ],
     code: `const canvas=document.createElement('canvas');
 canvas.style.cssText='position:fixed;inset:0;pointer-events:none;z-index:9998;';
@@ -786,6 +801,9 @@ Provide React hook (useRainbowComet) with trailLength, hueSpeed, maxWidth props.
       { key: 'spawnRate', label: 'Spawn (1/N frames)', type: 'range', min: 1, max: 10, step: 1, default: 5 },
       { key: 'maxSize', label: 'Max Size (px)', type: 'range', min: 8, max: 40, step: 2, default: 25 },
       { key: 'riseSpeed', label: 'Rise Speed', type: 'range', min: 0.3, max: 3, step: 0.1, default: 1.6 },
+      { key: 'pointerAnim', label: 'Pointer Size Boost', type: 'toggle', default: true },
+      { key: 'pointerSizeMult', label: 'Hover Size Mult', type: 'range', min: 1.0, max: 2.5, step: 0.05, default: 1.55 },
+      { key: 'clickAnim', label: 'Click Pops Bubbles', type: 'toggle', default: true },
     ],
     code: `const canvas=document.createElement('canvas');
 canvas.style.cssText='position:fixed;inset:0;pointer-events:none;z-index:9998;';
@@ -844,6 +862,9 @@ Provide React component (BubbleCursor) with all params as props.`,
       { key: 'hue', label: 'Ripple Hue', type: 'range', min: 0, max: 360, step: 5, default: 220 },
       { key: 'speed', label: 'Expand Speed', type: 'range', min: 1, max: 8, step: 0.5, default: 3.2 },
       { key: 'count', label: 'Rings per Click', type: 'range', min: 1, max: 5, step: 1, default: 3 },
+      { key: 'pointerAnim', label: 'Pointer Pulse Breath', type: 'toggle', default: true },
+      { key: 'pointerBreathMult', label: 'Hover Breath Mult', type: 'range', min: 1.1, max: 2.5, step: 0.1, default: 1.6 },
+      { key: 'clickAnim', label: 'Click Wave Ripple', type: 'toggle', default: true },
     ],
     code: `const canvas=document.createElement('canvas');
 canvas.style.cssText='position:fixed;inset:0;pointer-events:none;z-index:9998;';
@@ -897,6 +918,10 @@ Provide React component with click and mousemove ripple variants.`,
       { key: 'split', label: 'Channel Split (px)', type: 'range', min: 1, max: 20, step: 1, default: 5 },
       { key: 'glitchInterval', label: 'Glitch Every (ms)', type: 'range', min: 200, max: 2000, step: 50, default: 500 },
       { key: 'burstDuration', label: 'Burst Duration (ms)', type: 'range', min: 100, max: 1000, step: 50, default: 300 },
+      { key: 'pointerAnim', label: 'Pointer Size Expansion', type: 'toggle', default: true },
+      { key: 'pointerSizeMult', label: 'Hover Size Mult', type: 'range', min: 1.0, max: 3.0, step: 0.1, default: 1.7 },
+      { key: 'clickAnim', label: 'Click Glitch Burst', type: 'toggle', default: true },
+      { key: 'clickSplitMult', label: 'Click Split Mult', type: 'range', min: 1.5, max: 8.0, step: 0.2, default: 4.4 },
     ],
     code: `const mkEl=(bg,zIndex,blend='screen')=>{
   const el=document.createElement('div');
@@ -952,6 +977,9 @@ Provide React component (GlitchCursor) with all params as props.`,
       { key: 'count', label: 'Streams / Move', type: 'range', min: 1, max: 5, step: 1, default: 2 },
       { key: 'decay', label: 'Velocity Decay', type: 'range', min: 0.8, max: 0.98, step: 0.01, default: 0.93 },
       { key: 'minSpeed', label: 'Min Speed Trigger', type: 'range', min: 1, max: 10, step: 0.5, default: 2.5 },
+      { key: 'pointerAnim', label: 'Pointer Constant Breeze', type: 'toggle', default: true },
+      { key: 'pointerThickness', label: 'Hover Thickness', type: 'range', min: 3.0, max: 12.0, step: 0.5, default: 6.5 },
+      { key: 'clickAnim', label: 'Click Mixed-Hue Burst', type: 'toggle', default: true },
     ],
     code: `const canvas=document.createElement('canvas');
 canvas.style.cssText='position:fixed;inset:0;pointer-events:none;z-index:9998;';
@@ -1019,6 +1047,10 @@ Provide React hook with configurable params.`,
       { key: 'color2', label: 'Strand 2 Color', type: 'color', default: '#5cf4fc' },
       { key: 'amplitude', label: 'Amplitude (px)', type: 'range', min: 4, max: 32, step: 2, default: 16 },
       { key: 'speed', label: 'Wave Speed', type: 'range', min: 0.03, max: 0.2, step: 0.01, default: 0.09 },
+      { key: 'pointerAnim', label: 'Pointer Tip Expansion', type: 'toggle', default: true },
+      { key: 'pointerScale', label: 'Hover Scale Mult', type: 'range', min: 1.5, max: 5.0, step: 0.1, default: 3.2 },
+      { key: 'clickAnim', label: 'Click Amplitude Wave', type: 'toggle', default: true },
+      { key: 'clickAmpBoost', label: 'Click Amp Boost', type: 'range', min: 10, max: 100, step: 5, default: 45 },
     ],
     code: `const canvas=document.createElement('canvas');
 canvas.style.cssText='position:fixed;inset:0;pointer-events:none;z-index:9998;';
@@ -1086,6 +1118,10 @@ Provide React component with all params configurable.`,
       { key: 'radius', label: 'Light Radius (px)', type: 'range', min: 60, max: 300, step: 10, default: 140 },
       { key: 'darkness', label: 'Darkness (0–1)', type: 'range', min: 0.5, max: 0.98, step: 0.02, default: 0.91 },
       { key: 'flickerIntensity', label: 'Flicker Intensity', type: 'range', min: 0, max: 20, step: 1, default: 9 },
+      { key: 'pointerAnim', label: 'Pointer Faster Flicker', type: 'toggle', default: true },
+      { key: 'pointerFlickerIntensity', label: 'Hover Flicker Mult', type: 'range', min: 1.0, max: 5.0, step: 0.1, default: 2.5 },
+      { key: 'clickAnim', label: 'Click Light Wave Flash', type: 'toggle', default: true },
+      { key: 'clickFlashRadius', label: 'Click Flash Radius', type: 'range', min: 50, max: 400, step: 10, default: 200 },
     ],
     code: `const overlay=document.createElement('div');
 overlay.style.cssText='position:fixed;inset:0;pointer-events:none;z-index:9996;';

@@ -31,13 +31,19 @@ export default function CrosshairScopeCursor({ containerRef, config }) {
       const r = container.getBoundingClientRect();
       mx = e.clientX - r.left; my = e.clientY - r.top;
     };
-    const onClick = () => { scaleT = 0.75; setTimeout(() => { scaleT = 1; }, 200); };
+    const onClick = () => {
+      const cfg = configRef.current || {};
+      if (cfg.clickAnim !== false) {
+        scaleT = cfg.clickSqueeze ?? 0.75;
+        setTimeout(() => { scaleT = 1; }, 200);
+      }
+    };
 
     container.addEventListener('mousemove', onMove);
     container.addEventListener('click', onClick);
 
     const draw = () => {
-      const { color = '#5cf4fc', lockedColor = '#ff4455', radius = 40, scanSpeed = 0.045, pointerAnim = true, pointerSpeedMult = 1.25 } = configRef.current || {};
+      const { color = '#5cf4fc', lockedColor = '#ff4455', radius = 40, scanSpeed = 0.045, pointerAnim = true, pointerSpeedMult = 2.0 } = configRef.current || {};
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
       const rect = container.getBoundingClientRect();
