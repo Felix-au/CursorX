@@ -22,6 +22,7 @@ import WindStreamCursor from '../cursors/WindStreamCursor.jsx';
 import DNAHelixCursor from '../cursors/DNAHelixCursor.jsx';
 import TorchLightCursor from '../cursors/TorchLightCursor.jsx';
 import DifferenceBlendCursor from '../cursors/DifferenceBlendCursor.jsx';
+import GhostTrailCursor from '../cursors/GhostTrailCursor.jsx';
 
 const CURSOR_COMPONENTS = [
   MagneticCursor, ParticleTrailCursor, SpotlightCursor, MorphingBlobCursor,
@@ -29,7 +30,7 @@ const CURSOR_COMPONENTS = [
   GravityPullCursor, ConstellationCursor, FireTrailCursor,
   CrosshairScopeCursor, MirrorGhostCursor, RainbowCometCursor, BubbleFloatCursor,
   RippleWaveCursor, GlitchShiftCursor, WindStreamCursor, DNAHelixCursor, TorchLightCursor,
-  DifferenceBlendCursor,
+  DifferenceBlendCursor, GhostTrailCursor,
 ];
 
 const HINTS = {
@@ -41,7 +42,9 @@ const HINTS = {
   17: '⚡ Glitch bursts fire automatically every ~2 seconds',
   20: '🕯 The light flickers and lags — navigate the dark',
   21: '🌓 Hover elements and watch them invert colors',
+  22: '👻 Move your mouse to wiggle the floating vector ghost',
 };
+
 
 
 const initConfig = (params) =>
