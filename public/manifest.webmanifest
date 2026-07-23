@@ -1,0 +1,21 @@
+{
+  "name": "CursorX — Custom Cursor Showcase",
+  "short_name": "CursorX",
+  "description": "Browse 20+ interactive custom cursor effects, live previews, and implementation code snippets.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#7c5cfc",
+  "icons": [
+    {
+      "src": "/logo.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/logo.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
