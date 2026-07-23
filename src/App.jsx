@@ -205,6 +205,35 @@ export default function App() {
     return () => observer.disconnect();
   }, []);
 
+  // Synchronize URL hash with current active slide
+  useEffect(() => {
+    const currentHash = window.location.hash;
+    const targetHash = `#slide-${current}`;
+    if (currentHash !== targetHash) {
+      window.history.replaceState(null, '', targetHash);
+    }
+  }, [current]);
+
+  // Read URL hash on load/hashchange and scroll to it
+  useEffect(() => {
+    const handleHash = () => {
+      const hash = window.location.hash;
+      if (hash && hash.startsWith('#slide-')) {
+        const index = parseInt(hash.replace('#slide-', ''), 10);
+        if (!isNaN(index) && index >= 0 && index <= TOTAL) {
+          // Wait briefly for DOM and scroll snapping container to be ready
+          const timer = setTimeout(() => {
+            navigateTo(index);
+          }, 300);
+          return () => clearTimeout(timer);
+        }
+      }
+    };
+    handleHash();
+    window.addEventListener('hashchange', handleHash);
+    return () => window.removeEventListener('hashchange', handleHash);
+  }, [navigateTo]);
+
   // Keyboard navigation
   useEffect(() => {
     const onKey = (e) => {
