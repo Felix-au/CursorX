@@ -69,11 +69,11 @@ export default function DifferenceBlendCursor({ containerRef, config }) {
     const loop = () => {
       const cfg = configRef.current || {};
       const color = cfg.color ?? '#f7f8fa';
-      const bigSize = cfg.bigSize ?? 30;
-      const smallSize = cfg.smallSize ?? 10;
+      const bigSize = cfg.bigSize ?? 25;
+      const smallSize = cfg.smallSize ?? 6;
       const bigSpeed = cfg.bigSpeed ?? 0.1;
       const smallSpeed = cfg.smallSpeed ?? 0.25;
-      const pScale = cfg.pointerScale ?? 3.0;
+      const pScale = cfg.pointerScale ?? 2.5;
 
       // Update SVGs attributes based on configured sizes
       // Check pointer status
@@ -92,7 +92,7 @@ export default function DifferenceBlendCursor({ containerRef, config }) {
       // Handle click animation
       if (clickT >= 0) {
         const bounce = Math.sin(clickT * Math.PI);
-        const clickScaleFactor = cfg.clickScale ?? 0.6;
+        const clickScaleFactor = cfg.clickScale ?? 1.0;
         targetBigScale *= (1 - bounce * clickScaleFactor);
         targetSmallScale *= (1 + bounce * clickScaleFactor * 1.5);
         clickT += 0.08;

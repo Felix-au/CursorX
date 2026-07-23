@@ -1119,14 +1119,14 @@ Provide React component with configurable radius, darkness, flickerIntensity.`,
     tech: ['CSS mix-blend-mode', 'Trigonometry', 'React Hooks'],
     params: [
       { key: 'color',        label: 'Ball Color',       type: 'color',  default: '#f7f8fa' },
-      { key: 'bigSize',      label: 'Outer Ball Size',  type: 'range',  min: 15,  max: 60,   step: 1,    default: 30 },
-      { key: 'smallSize',    label: 'Inner Ball Size',  type: 'range',  min: 4,   max: 20,   step: 1,    default: 10 },
+      { key: 'bigSize',      label: 'Outer Ball Size',  type: 'range',  min: 10,  max: 50,   step: 1,    default: 25 },
+      { key: 'smallSize',    label: 'Inner Ball Size',  type: 'range',  min: 2,   max: 16,   step: 1,    default: 6 },
       { key: 'bigSpeed',     label: 'Outer Lag / Lerp', type: 'range',  min: 0.02,max: 0.4,  step: 0.01, default: 0.10 },
       { key: 'smallSpeed',   label: 'Inner Lag / Lerp', type: 'range',  min: 0.05,max: 0.8,  step: 0.01, default: 0.25 },
       { key: 'pointerAnim',  label: 'Pointer Scale Up', type: 'toggle', default: true },
-      { key: 'pointerScale', label: 'Hover Scale Mult', type: 'range',  min: 1.5, max: 5.0,  step: 0.1,  default: 3.0 },
+      { key: 'pointerScale', label: 'Hover Scale Mult', type: 'range',  min: 1.2, max: 4.5,  step: 0.1,  default: 2.5 },
       { key: 'clickAnim',    label: 'Click Pulse',      type: 'toggle', default: true },
-      { key: 'clickScale',   label: 'Click Scale Mult', type: 'range',  min: 0.2, max: 1.5,  step: 0.05, default: 0.60 },
+      { key: 'clickScale',   label: 'Click Scale Mult', type: 'range',  min: 0.2, max: 2.0,  step: 0.1,  default: 1.00 },
     ],
     code: `const container = document.body;
 const bigBall = document.createElement('div');

@@ -89,14 +89,14 @@ export default function App() {
       let targetSmallScale = 1;
 
       if (isPointer) {
-        targetBigScale = 3.0; // scale up outer
+        targetBigScale = 2.5; // scale up outer
         targetSmallScale = 0.5; // shrink inner
       }
 
       if (clickT >= 0) {
         const bounce = Math.sin(clickT * Math.PI);
-        targetBigScale *= (1 - bounce * 0.6);
-        targetSmallScale *= (1 + bounce * 0.9);
+        targetBigScale *= (1 - bounce * 1.0);
+        targetSmallScale *= (1 + bounce * 1.5);
         clickT += 0.08;
         if (clickT >= 1) clickT = -1;
       }
@@ -105,8 +105,8 @@ export default function App() {
       smallScale += (targetSmallScale - smallScale) * 0.15;
 
       // Base sizes
-      const baseBigSize = 30;
-      const baseSmallSize = 10;
+      const baseBigSize = 25;
+      const baseSmallSize = 6;
 
       // Calculate vector sizes based on interpolated scales
       const currentBigSize = Math.max(1, baseBigSize * bigScale);
