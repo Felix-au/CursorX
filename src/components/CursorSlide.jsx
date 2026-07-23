@@ -97,70 +97,72 @@ function ConfigPanel({ params, config, onChange, cursorId }) {
         <div className="config-panel-title">⚙ Configure</div>
         <button className="config-reset" onClick={() => onChange(null, null, true)}>↺ Reset</button>
       </div>
-      {params.map(p => {
-        const val = config[p.key] ?? p.default;
-        const uid = `tog-${cursorId}-${p.key}`;
+      <div className="config-panel-body">
+        {params.map(p => {
+          const val = config[p.key] ?? p.default;
+          const uid = `tog-${cursorId}-${p.key}`;
 
-        /* Toggles: label + switch in one row */
-        if (p.type === 'toggle') {
-          return (
-            <div key={p.key} className="config-row config-row--toggle">
-              <span className="config-label">{p.label}</span>
-              <label className="config-toggle-label" htmlFor={uid}>
-                <input
-                  type="checkbox"
-                  id={uid}
-                  checked={val === true || val === 1}
-                  onChange={e => onChange(p.key, e.target.checked)}
-                  className="config-toggle-input"
-                />
-                <span className="config-toggle-track">
-                  <span className="config-toggle-thumb" />
-                </span>
-                <span className="config-toggle-text">{val ? 'On' : 'Off'}</span>
-              </label>
-            </div>
-          );
-        }
-
-        /* Color: single row — label left, swatch + hex right */
-        if (p.type === 'color') {
-          return (
-            <div key={p.key} className="config-row config-row--color">
-              <label className="config-label">{p.label}</label>
-              <div className="config-color-wrap">
-                <input type="color" value={val} onChange={e => onChange(p.key, e.target.value)} className="config-color" />
-                <span className="config-color-hex">{val}</span>
+          /* Toggles: label + switch in one row */
+          if (p.type === 'toggle') {
+            return (
+              <div key={p.key} className="config-row config-row--toggle">
+                <span className="config-label">{p.label}</span>
+                <label className="config-toggle-label" htmlFor={uid}>
+                  <input
+                    type="checkbox"
+                    id={uid}
+                    checked={val === true || val === 1}
+                    onChange={e => onChange(p.key, e.target.checked)}
+                    className="config-toggle-input"
+                  />
+                  <span className="config-toggle-track">
+                    <span className="config-toggle-thumb" />
+                  </span>
+                  <span className="config-toggle-text">{val ? 'On' : 'Off'}</span>
+                </label>
               </div>
+            );
+          }
+
+          /* Color: single row — label left, swatch + hex right */
+          if (p.type === 'color') {
+            return (
+              <div key={p.key} className="config-row config-row--color">
+                <label className="config-label">{p.label}</label>
+                <div className="config-color-wrap">
+                  <input type="color" value={val} onChange={e => onChange(p.key, e.target.value)} className="config-color" />
+                  <span className="config-color-hex">{val}</span>
+                </div>
+              </div>
+            );
+          }
+
+          return (
+            <div key={p.key} className="config-row">
+              <div className="config-row-top">
+                <label className="config-label">{p.label}</label>
+                <span className="config-value">
+                  {typeof val === 'number' ? val : val}
+                </span>
+              </div>
+              {p.type === 'range' && (
+                <input type="range" min={p.min} max={p.max} step={p.step}
+                  value={val}
+                  onChange={e => onChange(p.key, parseFloat(e.target.value))}
+                  className="config-slider"
+                />
+              )}
+              {p.type === 'text' && (
+                <input type="text" value={val}
+                  onChange={e => onChange(p.key, e.target.value)}
+                  className="config-text-input"
+                  maxLength={40}
+                />
+              )}
             </div>
           );
-        }
-
-        return (
-          <div key={p.key} className="config-row">
-            <div className="config-row-top">
-              <label className="config-label">{p.label}</label>
-              <span className="config-value">
-                {typeof val === 'number' ? val : val}
-              </span>
-            </div>
-            {p.type === 'range' && (
-              <input type="range" min={p.min} max={p.max} step={p.step}
-                value={val}
-                onChange={e => onChange(p.key, parseFloat(e.target.value))}
-                className="config-slider"
-              />
-            )}
-            {p.type === 'text' && (
-              <input type="text" value={val}
-                onChange={e => onChange(p.key, e.target.value)}
-                className="config-text-input"
-                maxLength={40}
-              />
-            )}
-          </div>
-        );
-      })}
+        })}
+      </div>
     </div>
   );
 }
@@ -289,21 +291,6 @@ export default function CursorSlide({ cursor, index, total, isActive, onNavigate
           cursorId={cursor.id}
         />
       </div>
-
-      {/* Footer */}
-      <div className="cursor-slide-footer">
-        <button className="back-to-index" id={`back-btn-${index}`} onClick={onBack}>← Index</button>
-        <div className="progress-bar">
-          <div className="progress-fill" style={{ width: `${(index / total) * 100}%` }} />
-        </div>
-        <div className="slide-nav-arrows">
-          <button className="slide-nav-btn" id={`prev-btn-${index}`}
-            onClick={() => onNavigate(index - 1)} disabled={index <= 1}>↑</button>
-          <button className="slide-nav-btn" id={`next-btn-${index}`}
-            onClick={() => onNavigate(index + 1)} disabled={index >= total}>↓</button>
-        </div>
-      </div>
-
       {modal && <CodeModal cursor={cursor} config={config} defaultTab={modal} onClose={() => setModal(null)} />}
     </div>
   );
