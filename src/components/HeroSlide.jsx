@@ -13,12 +13,7 @@ export default function HeroSlide({ onNavigate }) {
 
 
       <div className="hero-left">
-        <div className="hero-brand">
-          <div className="hero-badge">
-            <div className="hero-badge-dot" />
-            Developer Resource
-          </div>
-        </div>
+
 
         <h1 className="hero-title">
           <img src="/logo.png" alt="CursorX Logo" className="hero-logo-img" width="315" height="315" />
