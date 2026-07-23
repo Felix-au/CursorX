@@ -4,6 +4,7 @@ export default function NavDots({ total, current, onNavigate }) {
       {Array.from({ length: total + 1 }, (_, i) => {
         let label = `#${i}`;
         if (i === 0) label = 'Index';
+        else if (i === total - 1) label = 'Tutorial';
         else if (i === total) label = 'Contact';
         
         return (
