@@ -1,6 +1,6 @@
 # CursorX: Interactive Cursor Effects — Quick Guide
 
-A premium gallery of 24 interactive, high-performance mouse cursor effects built with React, Canvas API, and CSS. Scroll through the slides, customize parameters, view underlying code, and export custom React hooks.
+A premium gallery of 20+ interactive, high-performance mouse cursor effects built with React, Canvas API, and CSS. Scroll through the slides, customize parameters, view underlying code, and export custom React hooks.
 
 > [!IMPORTANT]
 > **Unlike heavy visual galleries** that rely on bulky external libraries or third-party web frameworks, CursorX runs **fully client-side** using vanilla CSS, React, and native HTML5 Canvas drawing loops. It runs completely offline with zero loading lag.

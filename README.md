@@ -333,7 +333,7 @@ The **Fluid Glass** cursor captures a DOM clone of the preview area. Check that 
 **Felix Au**
 
 * 🔗 GitHub: [github.com/Felix-au](https://github.com/Felix-au)
-* 📧 Email: [felixogum@gmail.com](mailto:felixogum@gmail.com)
+* 📧 Email: [felixagum@gmail.com](mailto:felixagum@gmail.com)
 
 ---
 
