@@ -1,4 +1,4 @@
-// CursorX — 20 cursor effect definitions (removed: MatrixRain, Clock, EyeTracker, InkSplatter, RepelField)
+// CursorX — 23 cursor effect definitions (removed: MatrixRain, Clock, EyeTracker, InkSplatter, RepelField)
 // Each entry: { id, name, tagline, description, tech, params, code, prompt }
 
 export const CURSORS = [
@@ -1292,6 +1292,75 @@ loop();`,
 3. Faces have looking-direction aware eyes and open mouth.
 4. Generates trailing fading stardust particles in color CONFIG.glowColor (${'"#7c5cfc"'}) from the ghost base.
 Provide React component.`,
+  },
+  {
+    id: 23,
+    name: 'Audio Pulse',
+    tagline: 'Magnetic ring with click ripple waves',
+    description: 'A crisp dot that snaps directly to the cursor and a trailing magnetic ring that expands on hover — with glowing ripple waves radiating outward on every click.',
+    tech: ['DOM + RAF', 'lerp interpolation', 'CSS box-shadow'],
+    params: [
+      { key: 'dotColor',        label: 'Dot Color',              type: 'color',  default: '#00e5ff' },
+      { key: 'ringColor',       label: 'Ring Color',             type: 'color',  default: '#00e5ff' },
+      { key: 'glowColor',       label: 'Glow / Accent Color',    type: 'color',  default: '#6366f1' },
+      { key: 'dotSize',         label: 'Dot Size (px)',          type: 'range',  min: 4,   max: 16,  step: 1,    default: 8 },
+      { key: 'ringSize',        label: 'Ring Size (px)',         type: 'range',  min: 20,  max: 60,  step: 2,    default: 36 },
+      { key: 'ringLerp',        label: 'Ring Lag (lerp factor)', type: 'range',  min: 0.03, max: 0.3, step: 0.01, default: 0.09 },
+      { key: 'glowBlur',        label: 'Glow Blur (px)',         type: 'range',  min: 4,   max: 30,  step: 1,    default: 12 },
+      { key: 'ringBorderWidth', label: 'Ring Border Width (px)', type: 'range',  min: 1,   max: 4,   step: 0.5,  default: 1.5 },
+      { key: 'pointerAnim',     label: 'Pointer Hover State',    type: 'toggle', default: true },
+      { key: 'pointerRingScale', label: 'Hover Ring Scale',      type: 'range',  min: 1.2, max: 3.0, step: 0.1,  default: 1.8 },
+      { key: 'pointerDotScale', label: 'Hover Dot Scale',        type: 'range',  min: 1.0, max: 3.0, step: 0.1,  default: 1.8 },
+      { key: 'clickAnim',       label: 'Click Ripple',           type: 'toggle', default: true },
+      { key: 'rippleMaxSize',   label: 'Ripple Max Size (px)',   type: 'range',  min: 40,  max: 150, step: 5,    default: 90 },
+    ],
+    code: `// Add to your HTML: <div id="cursor-dot"></div> <div id="cursor-ring"></div>
+const dot  = document.getElementById('cursor-dot');
+const ring = document.getElementById('cursor-ring');
+
+// Base styles
+dot.style.cssText  = \`position:fixed;pointer-events:none;z-index:9999;border-radius:50%;\n  width:\${CONFIG.dotSize}px;height:\${CONFIG.dotSize}px;background:\${CONFIG.dotColor};\n  box-shadow:0 0 \${CONFIG.glowBlur}px \${CONFIG.dotColor},0 0 \${CONFIG.glowBlur*1.5}px \${CONFIG.glowColor};\n  transform:translate(-50%,-50%);will-change:left,top;\`;
+ring.style.cssText = \`position:fixed;pointer-events:none;z-index:9998;border-radius:50%;\n  width:\${CONFIG.ringSize}px;height:\${CONFIG.ringSize}px;\n  border:\${CONFIG.ringBorderWidth}px solid \${CONFIG.ringColor};\n  transform:translate(-50%,-50%);will-change:left,top;\`;
+
+let mx=0,my=0,rx=0,ry=0;
+
+// Dot: snap directly to mouse
+window.addEventListener('mousemove', e => {
+  mx = e.clientX; my = e.clientY;
+  dot.style.left = mx+'px'; dot.style.top = my+'px';
+});
+
+// Ring: lerp trail
+(function loop(){
+  rx += (mx - rx) * CONFIG.ringLerp;
+  ry += (my - ry) * CONFIG.ringLerp;
+  ring.style.left = rx+'px'; ring.style.top = ry+'px';
+  requestAnimationFrame(loop);
+})();
+
+// Click ripples
+window.addEventListener('click', e => {
+  if (!CONFIG.clickAnim) return;
+  const el = document.createElement('div');
+  el.style.cssText=\`position:fixed;pointer-events:none;z-index:9997;border-radius:50%;\n  border:2px solid \${CONFIG.dotColor};width:10px;height:10px;\n  transform:translate(-50%,-50%);left:\${e.clientX}px;top:\${e.clientY}px;\`;
+  document.body.appendChild(el);
+  const start = performance.now();
+  (function rippleLoop(now){
+    const t = Math.min((now-start)/600,1);
+    const size = 10+(CONFIG.rippleMaxSize-10)*(1-Math.pow(1-t,2));
+    el.style.width=size+'px'; el.style.height=size+'px';
+    el.style.opacity=1-t;
+    el.style.borderColor = t<0.5 ? CONFIG.dotColor : CONFIG.glowColor;
+    if(t<1) requestAnimationFrame(rippleLoop); else el.remove();
+  })(start);
+});`,
+    prompt: `Implement an "Audio Pulse" cursor effect. Spec:
+1. Crisp dot (\${CONFIG.dotSize}px, color \${CONFIG.dotColor}) snaps directly to mouse — zero lag. Glow: box-shadow using \${CONFIG.glowColor}.
+2. Outer ring (\${CONFIG.ringSize}px, \${CONFIG.ringBorderWidth}px border, color \${CONFIG.ringColor}) trails mouse with lerp factor \${CONFIG.ringLerp}.
+3. Hover state over buttons/links: ring expands to \${CONFIG.pointerRingScale}× and fills with \${CONFIG.glowColor} at 12% opacity; dot scales to \${CONFIG.pointerDotScale}×.
+4. On click: spawn a ripple div that animates from 10px to \${CONFIG.rippleMaxSize}px over 600ms (quadratic ease-out), fading from opacity 1→0. Border transitions from dotColor to glowColor at t=0.5.
+
+Provide a React component scoped to a containerRef preview element. All state via refs + requestAnimationFrame. Returns null.`,
   },
 ];
 

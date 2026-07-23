@@ -23,6 +23,7 @@ import DNAHelixCursor from '../cursors/DNAHelixCursor.jsx';
 import TorchLightCursor from '../cursors/TorchLightCursor.jsx';
 import DifferenceBlendCursor from '../cursors/DifferenceBlendCursor.jsx';
 import GhostTrailCursor from '../cursors/GhostTrailCursor.jsx';
+import AudioPulseCursor from '../cursors/AudioPulseCursor.jsx';
 
 const CURSOR_COMPONENTS = [
   MagneticCursor, ParticleTrailCursor, SpotlightCursor, MorphingBlobCursor,
@@ -30,7 +31,7 @@ const CURSOR_COMPONENTS = [
   GravityPullCursor, ConstellationCursor, FireTrailCursor,
   CrosshairScopeCursor, MirrorGhostCursor, RainbowCometCursor, BubbleFloatCursor,
   RippleWaveCursor, GlitchShiftCursor, WindStreamCursor, DNAHelixCursor, TorchLightCursor,
-  DifferenceBlendCursor, GhostTrailCursor,
+  DifferenceBlendCursor, GhostTrailCursor, AudioPulseCursor,
 ];
 
 const HINTS = {
@@ -43,6 +44,7 @@ const HINTS = {
   20: '🕯 The light flickers and lags — navigate the dark',
   21: '🌓 Hover elements and watch them invert colors',
   22: '👻 Move your mouse to wiggle the floating vector ghost',
+  23: '🔊 Click inside preview to send ripple waves outward',
 };
 
 

@@ -8,7 +8,7 @@ import QuickLinksSection from './components/QuickLinksSection.jsx';
 import Navbar from './components/Navbar.jsx';
 import NavDots from './components/NavDots.jsx';
 
-const TOTAL = CURSORS.length + 2; // 22 cursors + 1 tutorial + 1 contact = 24
+const TOTAL = CURSORS.length + 2; // 23 cursors + 1 tutorial + 1 contact = 25
 
 export default function App() {
   const [current, setCurrent] = useState(0);
