@@ -1,5 +1,13 @@
 import { useEffect, useRef } from 'react';
 
+const checkPointer = (cx, cy) =>
+  document.elementsFromPoint(cx, cy).some(el =>
+    ['BUTTON', 'INPUT', 'A', 'LABEL'].includes(el.tagName) ||
+    el.classList.contains('btn') ||
+    el.classList.contains('demo-custom-select-trigger') ||
+    el.classList.contains('demo-check-label')
+  );
+
 export default function RippleWaveCursor({ containerRef, config }) {
   const canvasRef = useRef(null);
   const dotRef = useRef(null);
@@ -14,6 +22,8 @@ export default function RippleWaveCursor({ containerRef, config }) {
 
     const ctx = canvas.getContext('2d');
     let ripples = [], raf;
+    let mx = -100, my = -100;
+    let time = 0;
 
     const resize = () => { canvas.width = container.offsetWidth; canvas.height = container.offsetHeight; };
     resize();
@@ -30,7 +40,8 @@ export default function RippleWaveCursor({ containerRef, config }) {
     };
     const onMove = (e) => {
       const r = container.getBoundingClientRect();
-      dot.style.left = (e.clientX - r.left) + 'px'; dot.style.top = (e.clientY - r.top) + 'px';
+      mx = e.clientX - r.left; my = e.clientY - r.top;
+      dot.style.left = mx + 'px'; dot.style.top = my + 'px';
       dot.style.opacity = '1';
     };
     const onLeave = () => { dot.style.opacity = '0'; };
@@ -42,6 +53,19 @@ export default function RippleWaveCursor({ containerRef, config }) {
     const loop = () => {
       const { speed = 3.2 } = configRef.current || {};
       ctx.clearRect(0, 0, canvas.width, canvas.height);
+      time += 0.05;
+
+      const rect = container.getBoundingClientRect();
+      const isPointer = checkPointer(rect.left + mx, rect.top + my);
+
+      if (isPointer) {
+        // breathing pulse: expands and retracts rhythmically
+        const breath = 1.0 + (0.3 + Math.sin(time * 5.2) * 0.3);
+        dot.style.transform = `translate(-50%,-50%) scale(${breath})`;
+      } else {
+        dot.style.transform = 'translate(-50%,-50%) scale(1)';
+      }
+
       ripples = ripples.filter(r => r.alpha > 0);
       ripples.forEach(r => {
         r.age++; if (r.age < r.delay) return;
@@ -70,6 +94,7 @@ export default function RippleWaveCursor({ containerRef, config }) {
         position: 'absolute', pointerEvents: 'none', zIndex: 40, opacity: 0,
         width: 9, height: 9, borderRadius: '50%',
         border: '1.5px solid white', transform: 'translate(-50%,-50%)',
+        willChange: 'left,top,transform',
       }} />
     </>
   );

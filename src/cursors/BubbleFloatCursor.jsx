@@ -1,5 +1,13 @@
 import { useEffect, useRef } from 'react';
 
+const checkPointer = (cx, cy) =>
+  document.elementsFromPoint(cx, cy).some(el =>
+    ['BUTTON', 'INPUT', 'A', 'LABEL'].includes(el.tagName) ||
+    el.classList.contains('btn') ||
+    el.classList.contains('demo-custom-select-trigger') ||
+    el.classList.contains('demo-check-label')
+  );
+
 export default function BubbleFloatCursor({ containerRef, config }) {
   const canvasRef = useRef(null);
   const configRef = useRef(config);
@@ -12,6 +20,7 @@ export default function BubbleFloatCursor({ containerRef, config }) {
 
     const ctx = canvas.getContext('2d');
     let bubbles = [], mx = 0, my = 0, frame = 0, raf;
+    let popParticles = [];
 
     const resize = () => { canvas.width = container.offsetWidth; canvas.height = container.offsetHeight; };
     resize();
@@ -21,17 +30,17 @@ export default function BubbleFloatCursor({ containerRef, config }) {
     class Bubble {
       constructor(x, y, cfg) {
         this.x = x; this.y = y;
-        this.r = Math.random() * (cfg.maxSize - 7) + 7;
-        this.vy = -(Math.random() * cfg.riseSpeed + 0.6);
+        this.r = (Math.random() * (cfg.maxSize - 7) + 7) * (cfg.isPointer ? 1.55 : 1.0);
+        this.vy = -(Math.random() * cfg.riseSpeed + 0.6) * (cfg.isPointer ? 1.25 : 1.0);
         this.vx = (Math.random() - 0.5) * 0.9;
         this.wobble = Math.random() * Math.PI * 2;
-        this.wSpd = Math.random() * 0.055 + 0.025;
+        this.wSpd = (Math.random() * 0.055 + 0.025) * (cfg.isPointer ? 1.75 : 1.0);
         this.alpha = 0.72;
         this.hue2 = cfg.hue + Math.random() * 40 - 20;
       }
       update() {
         this.wobble += this.wSpd;
-        this.x += this.vx + Math.sin(this.wobble) * 0.55;
+        this.x += this.vx + Math.sin(this.wobble) * 0.65;
         this.y += this.vy; this.alpha -= 0.004;
       }
       draw(c) {
@@ -50,20 +59,76 @@ export default function BubbleFloatCursor({ containerRef, config }) {
       const r = container.getBoundingClientRect();
       mx = e.clientX - r.left; my = e.clientY - r.top;
     };
+
+    const onClick = () => {
+      // Pop all current bubbles into tiny splash droplets
+      bubbles.forEach(b => {
+        for (let i = 0; i < 5; i++) {
+          const angle = Math.random() * Math.PI * 2;
+          const speed = Math.random() * 2.2 + 1.2;
+          popParticles.push({
+            x: b.x,
+            y: b.y,
+            vx: Math.cos(angle) * speed,
+            vy: Math.sin(angle) * speed,
+            r: Math.random() * 1.5 + 1.0,
+            life: 1.0,
+            hue: b.hue2,
+          });
+        }
+      });
+      bubbles = [];
+    };
+
     container.addEventListener('mousemove', onMove);
+    container.addEventListener('click', onClick);
 
     const loop = () => {
       const { hue = 200, spawnRate = 5, maxSize = 25, riseSpeed = 1.6 } = configRef.current || {};
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       frame++;
-      if (frame % Math.max(1, spawnRate) === 0) bubbles.push(new Bubble(mx, my, { hue, maxSize, riseSpeed }));
+
+      const rect = container.getBoundingClientRect();
+      const isPointer = checkPointer(rect.left + mx, rect.top + my);
+
+      // Double spawn frequency inside pointer state
+      const currentSpawnRate = isPointer ? Math.max(1, Math.floor(spawnRate / 2)) : spawnRate;
+
+      if (frame % Math.max(1, currentSpawnRate) === 0) {
+        bubbles.push(new Bubble(mx, my, { hue, maxSize, riseSpeed, isPointer }));
+      }
+
       bubbles = bubbles.filter(b => b.alpha > 0);
       bubbles.forEach(b => { b.update(); b.draw(ctx); });
+
+      // Update and draw pop particle droplets
+      popParticles.forEach((p, idx) => {
+        p.x += p.vx;
+        p.y += p.vy;
+        p.vy += 0.05; // gravity pull on droplets
+        p.life -= 0.035;
+        if (p.life <= 0) {
+          popParticles.splice(idx, 1);
+          return;
+        }
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r * p.life, 0, Math.PI * 2);
+        ctx.fillStyle = `hsla(${p.hue}, 90%, 75%, ${p.life})`;
+        ctx.fill();
+        ctx.restore();
+      });
+
       raf = requestAnimationFrame(loop);
     };
     loop();
 
-    return () => { container.removeEventListener('mousemove', onMove); ro.disconnect(); cancelAnimationFrame(raf); };
+    return () => {
+      container.removeEventListener('mousemove', onMove);
+      container.removeEventListener('click', onClick);
+      ro.disconnect();
+      cancelAnimationFrame(raf);
+    };
   }, [containerRef]);
 
   return <canvas ref={canvasRef} style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 35 }} />;

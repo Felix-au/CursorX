@@ -1,5 +1,13 @@
 import { useEffect, useRef } from 'react';
 
+const checkPointer = (cx, cy) =>
+  document.elementsFromPoint(cx, cy).some(el =>
+    ['BUTTON', 'INPUT', 'A', 'LABEL'].includes(el.tagName) ||
+    el.classList.contains('btn') ||
+    el.classList.contains('demo-custom-select-trigger') ||
+    el.classList.contains('demo-check-label')
+  );
+
 export default function WindStreamCursor({ containerRef, config }) {
   const canvasRef = useRef(null);
   const configRef = useRef(config);
@@ -25,8 +33,12 @@ export default function WindStreamCursor({ containerRef, config }) {
       const dx = nx - mx, dy = ny - my;
       mx = nx; my = ny;
       const spd = Math.sqrt(dx * dx + dy * dy);
+
+      const isPointer = checkPointer(r.left + mx, r.top + my);
+      const spawnCount = isPointer ? count * 2 : count;
+
       if (spd > minSpeed) {
-        for (let i = 0; i < count; i++) {
+        for (let i = 0; i < spawnCount; i++) {
           streams.push({
             points: [{ x: mx, y: my }],
             vx: dx * 0.28 + (Math.random() - 0.5) * 3.5,
@@ -36,11 +48,35 @@ export default function WindStreamCursor({ containerRef, config }) {
         }
       }
     };
+
+    const onClick = (e) => {
+      const { hue = 200 } = configRef.current || {};
+      const r = container.getBoundingClientRect();
+      const cx = e.clientX - r.left, cy = e.clientY - r.top;
+      // Circular blast of wind streams in 360 degrees
+      for (let i = 0; i < 18; i++) {
+        const angle = (i / 18) * Math.PI * 2 + (Math.random() - 0.5) * 0.2;
+        const speed = Math.random() * 5.0 + 3.0;
+        streams.push({
+          points: [{ x: cx, y: cy }],
+          vx: Math.cos(angle) * speed,
+          vy: Math.sin(angle) * speed,
+          alpha: 0.95,
+          hue: hue + Math.random() * 45 - 22,
+        });
+      }
+    };
+
     container.addEventListener('mousemove', onMove);
+    container.addEventListener('click', onClick);
 
     const loop = () => {
       const { decay = 0.93 } = configRef.current || {};
       ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      const rect = container.getBoundingClientRect();
+      const isPointer = checkPointer(rect.left + mx, rect.top + my);
+
       streams = streams.filter(s => s.alpha > 0.02);
       streams.forEach(s => {
         s.vx *= decay; s.vy *= decay; s.vy += 0.045;
@@ -56,15 +92,25 @@ export default function WindStreamCursor({ containerRef, config }) {
           ctx.quadraticCurveTo(s.points[i].x, s.points[i].y, mx2, my2);
         }
         ctx.strokeStyle = `hsla(${s.hue},80%,70%,${s.alpha})`;
-        ctx.lineWidth = Math.max(0.5, s.alpha * 3.5); ctx.lineCap = 'round';
-        ctx.shadowColor = `hsl(${s.hue},80%,70%)`; ctx.shadowBlur = 5;
+        
+        // Dynamic thickness and glow on hover
+        const thickMult = isPointer ? 6.5 : 3.5;
+        const glowRadius = isPointer ? 12 : 5;
+
+        ctx.lineWidth = Math.max(0.5, s.alpha * thickMult); ctx.lineCap = 'round';
+        ctx.shadowColor = `hsl(${s.hue},80%,70%)`; ctx.shadowBlur = glowRadius;
         ctx.stroke(); ctx.restore();
       });
       raf = requestAnimationFrame(loop);
     };
     loop();
 
-    return () => { container.removeEventListener('mousemove', onMove); ro.disconnect(); cancelAnimationFrame(raf); };
+    return () => {
+      container.removeEventListener('mousemove', onMove);
+      container.removeEventListener('click', onClick);
+      ro.disconnect();
+      cancelAnimationFrame(raf);
+    };
   }, [containerRef]);
 
   return <canvas ref={canvasRef} style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 35 }} />;

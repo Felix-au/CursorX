@@ -1,5 +1,13 @@
 import { useEffect, useRef } from 'react';
 
+const checkPointer = (cx, cy) =>
+  document.elementsFromPoint(cx, cy).some(el =>
+    ['BUTTON', 'INPUT', 'A', 'LABEL'].includes(el.tagName) ||
+    el.classList.contains('btn') ||
+    el.classList.contains('demo-custom-select-trigger') ||
+    el.classList.contains('demo-check-label')
+  );
+
 export default function ConstellationCursor({ containerRef, config }) {
   const canvasRef = useRef(null);
   const configRef = useRef(config);
@@ -12,13 +20,14 @@ export default function ConstellationCursor({ containerRef, config }) {
 
     const ctx = canvas.getContext('2d');
     let mx = 0, my = 0, raf;
+    let clickT = -1;
+    let time = 0;
 
     const resize = () => { canvas.width = container.offsetWidth; canvas.height = container.offsetHeight; };
     resize();
     const ro = new ResizeObserver(resize);
     ro.observe(container);
 
-    // Stars initialised with current starCount — changing count after init keeps existing stars
     const { starCount = 90 } = configRef.current || {};
     const stars = Array.from({ length: starCount }, () => ({
       x: Math.random() * canvas.width || Math.random() * 800,
@@ -33,17 +42,37 @@ export default function ConstellationCursor({ containerRef, config }) {
       mx = e.clientX - r.left; my = e.clientY - r.top;
     };
     const onLeave = () => { mx = -1000; my = -1000; };
+    const onClick = () => {
+      clickT = 0;
+    };
+
     container.addEventListener('mousemove', onMove);
     container.addEventListener('mouseleave', onLeave);
+    container.addEventListener('click', onClick);
 
     const draw = () => {
       const { maxDist = 115, cursorDist = 175, starColor = '#c8c8ff' } = configRef.current || {};
       ctx.clearRect(0, 0, canvas.width, canvas.height);
+      time += 0.05;
+
+      const rect = container.getBoundingClientRect();
+      const isPointer = checkPointer(rect.left + mx, rect.top + my);
+      const pulse = isPointer ? (1.0 + Math.sin(time * 6) * 0.25) : 1.0;
+      const currentCursorDist = cursorDist * (isPointer ? 1.25 : 1.0);
+
+      let clickGlow = 0;
+      if (clickT >= 0) {
+        clickGlow = Math.sin(clickT * Math.PI);
+        clickT += 0.05;
+        if (clickT >= 1) clickT = -1;
+      }
+
       stars.forEach(s => {
         s.x += s.vx; s.y += s.vy;
         if (s.x < 0) s.x = canvas.width; if (s.x > canvas.width) s.x = 0;
         if (s.y < 0) s.y = canvas.height; if (s.y > canvas.height) s.y = 0;
       });
+
       for (let i = 0; i < stars.length; i++) {
         const a = stars[i];
         for (let j = i + 1; j < stars.length; j++) {
@@ -54,15 +83,32 @@ export default function ConstellationCursor({ containerRef, config }) {
             ctx.lineWidth = 0.7; ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
           }
         }
+
         const dc = Math.hypot(a.x - mx, a.y - my);
-        if (dc < cursorDist) {
+        if (dc < currentCursorDist) {
           ctx.beginPath();
-          ctx.strokeStyle = `rgba(92,244,252,${(1 - dc / cursorDist) * 0.75})`;
-          ctx.lineWidth = 1; ctx.moveTo(a.x, a.y); ctx.lineTo(mx, my); ctx.stroke();
+          ctx.strokeStyle = `rgba(92,244,252,${(1 - dc / currentCursorDist) * 0.75 * pulse})`;
+          ctx.lineWidth = isPointer ? 1.5 * pulse : 1.0;
+          ctx.moveTo(a.x, a.y); ctx.lineTo(mx, my); ctx.stroke();
+
+          // Connected stars glow once on click
+          if (clickT >= 0) {
+            ctx.save();
+            ctx.beginPath();
+            ctx.arc(a.x, a.y, a.r * (1 + clickGlow * 3.5), 0, Math.PI * 2);
+            ctx.fillStyle = starColor;
+            ctx.globalAlpha = clickGlow * 0.8;
+            ctx.shadowColor = '#5cf4fc';
+            ctx.shadowBlur = 15 * clickGlow;
+            ctx.fill();
+            ctx.restore();
+          }
         }
+
         ctx.beginPath(); ctx.fillStyle = starColor;
         ctx.arc(a.x, a.y, a.r, 0, Math.PI * 2); ctx.fill();
       }
+
       raf = requestAnimationFrame(draw);
     };
     draw();
@@ -70,6 +116,7 @@ export default function ConstellationCursor({ containerRef, config }) {
     return () => {
       container.removeEventListener('mousemove', onMove);
       container.removeEventListener('mouseleave', onLeave);
+      container.removeEventListener('click', onClick);
       ro.disconnect(); cancelAnimationFrame(raf);
     };
   }, [containerRef]);

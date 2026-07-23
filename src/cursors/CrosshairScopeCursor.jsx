@@ -1,5 +1,13 @@
 import { useEffect, useRef } from 'react';
 
+const checkPointer = (cx, cy) =>
+  document.elementsFromPoint(cx, cy).some(el =>
+    ['BUTTON', 'INPUT', 'A', 'LABEL'].includes(el.tagName) ||
+    el.classList.contains('btn') ||
+    el.classList.contains('demo-custom-select-trigger') ||
+    el.classList.contains('demo-check-label')
+  );
+
 export default function CrosshairScopeCursor({ containerRef, config }) {
   const canvasRef = useRef(null);
   const configRef = useRef(config);
@@ -12,7 +20,7 @@ export default function CrosshairScopeCursor({ containerRef, config }) {
 
     const ctx = canvas.getContext('2d');
     let mx = container.offsetWidth / 2, my = container.offsetHeight / 2;
-    let scan = 0, locked = false, scaleT = 1, scaleC = 1, raf;
+    let scan = 0, scaleT = 1, scaleC = 1, raf;
 
     const resize = () => { canvas.width = container.offsetWidth; canvas.height = container.offsetHeight; };
     resize();
@@ -23,17 +31,23 @@ export default function CrosshairScopeCursor({ containerRef, config }) {
       const r = container.getBoundingClientRect();
       mx = e.clientX - r.left; my = e.clientY - r.top;
     };
-    const onClick = () => { locked = !locked; scaleT = 0.75; setTimeout(() => { scaleT = 1; }, 200); };
+    const onClick = () => { scaleT = 0.75; setTimeout(() => { scaleT = 1; }, 200); };
 
     container.addEventListener('mousemove', onMove);
     container.addEventListener('click', onClick);
 
     const draw = () => {
-      const { color = '#5cf4fc', lockedColor = '#ff4455', radius = 40, scanSpeed = 0.045 } = configRef.current || {};
+      const { color = '#5cf4fc', lockedColor = '#ff4455', radius = 40, scanSpeed = 0.045, pointerAnim = true, pointerSpeedMult = 1.25 } = configRef.current || {};
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      scan += scanSpeed; scaleC += (scaleT - scaleC) * 0.2;
+
+      const rect = container.getBoundingClientRect();
+      const isPointer = pointerAnim && checkPointer(rect.left + mx, rect.top + my);
+
+      const speed = scanSpeed * (isPointer ? pointerSpeedMult : 1.0);
+      scan += speed; scaleC += (scaleT - scaleC) * 0.2;
       const s = scaleC, r = radius * s, tick = 14 * s;
-      const col = locked ? lockedColor : color;
+      const col = isPointer ? lockedColor : color;
+
       ctx.save(); ctx.translate(mx, my);
       ctx.strokeStyle = col; ctx.shadowColor = col; ctx.shadowBlur = 10; ctx.lineWidth = 1.5;
       ctx.beginPath(); ctx.arc(0, 0, r, 0, Math.PI * 2); ctx.stroke();
@@ -59,5 +73,5 @@ export default function CrosshairScopeCursor({ containerRef, config }) {
     };
   }, [containerRef]);
 
-  return <canvas ref={canvasRef} style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 10 }} />;
+  return <canvas ref={canvasRef} style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 42 }} />;
 }

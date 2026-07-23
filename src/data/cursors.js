@@ -622,6 +622,8 @@ Provide React hook with windDirection prop.`,
       { key: 'lockedColor', label: 'Locked Color', type: 'color', default: '#ff4455' },
       { key: 'radius', label: 'Radius (px)', type: 'range', min: 20, max: 80, step: 2, default: 40 },
       { key: 'scanSpeed', label: 'Scan Speed', type: 'range', min: 0.01, max: 0.12, step: 0.005, default: 0.045 },
+      { key: 'pointerAnim', label: 'Pointer State Color', type: 'toggle', default: true },
+      { key: 'pointerSpeedMult', label: 'Pointer Speed Boost', type: 'range', min: 1.0, max: 2.5, step: 0.05, default: 1.25 },
     ],
     code: `const canvas = document.createElement('canvas');
 canvas.style.cssText = 'position:fixed;inset:0;pointer-events:none;z-index:9999;';
@@ -672,6 +674,10 @@ Provide React component with color and scanSpeed props.`,
       { key: 'color', label: 'Ghost Color', type: 'color', default: '#c45cfc' },
       { key: 'size', label: 'Ring Size', type: 'range', min: 10, max: 40, step: 2, default: 20 },
       { key: 'lerp', label: 'Follow Speed', type: 'range', min: 0.06, max: 0.4, step: 0.02, default: 0.14 },
+      { key: 'pointerAnim', label: 'Pointer State Scale', type: 'toggle', default: true },
+      { key: 'pointerScale', label: 'Hover Scale Mult', type: 'range', min: 1.2, max: 4.5, step: 0.1, default: 2.2 },
+      { key: 'clickAnim', label: 'Click Pulse', type: 'toggle', default: true },
+      { key: 'clickScale', label: 'Click Scale Mult', type: 'range', min: 0.2, max: 2.0, step: 0.1, default: 0.8 },
     ],
     code: `const cx=innerWidth/2, cy=innerHeight/2;
 
@@ -888,9 +894,9 @@ Provide React component with click and mousemove ripple variants.`,
     description: 'The cursor fractures into offset RGB channel ghosts with random glitch bursts.',
     tech: ['CSS mix-blend-mode', 'DOM Elements'],
     params: [
-      { key: 'split', label: 'Channel Split (px)', type: 'range', min: 1, max: 16, step: 1, default: 4 },
-      { key: 'glitchInterval', label: 'Glitch Every (ms)', type: 'range', min: 500, max: 5000, step: 250, default: 2000 },
-      { key: 'burstDuration', label: 'Burst Duration (ms)', type: 'range', min: 50, max: 500, step: 25, default: 220 },
+      { key: 'split', label: 'Channel Split (px)', type: 'range', min: 1, max: 20, step: 1, default: 5 },
+      { key: 'glitchInterval', label: 'Glitch Every (ms)', type: 'range', min: 200, max: 2000, step: 50, default: 500 },
+      { key: 'burstDuration', label: 'Burst Duration (ms)', type: 'range', min: 100, max: 1000, step: 50, default: 300 },
     ],
     code: `const mkEl=(bg,zIndex,blend='screen')=>{
   const el=document.createElement('div');
