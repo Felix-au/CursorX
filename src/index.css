@@ -537,7 +537,7 @@ body {
   justify-content: center;
   align-items: center;
   text-align: center;
-  padding: 64px;
+  padding: 96px 64px 32px 64px;
   z-index: 2;
   box-sizing: border-box;
 }
@@ -596,7 +596,7 @@ body {
 }
 
 .hero-logo-img {
-  max-width: 300px;
+  max-width: 315px;
   height: auto;
   display: block;
   margin: 0 auto;
@@ -630,7 +630,7 @@ body {
   flex: 1;
   display: flex;
   align-items: center;
-  padding: 64px;
+  padding: 96px 64px 32px 64px;
   z-index: 2;
   box-sizing: border-box;
   overflow: hidden;
@@ -638,8 +638,8 @@ body {
 
 .hero-gallery-section {
   width: 100%;
-  height: 90%;
-  max-height: calc(90vh - 128px);
+  height: 100%;
+  max-height: calc(100vh - 128px);
   overflow: hidden;
   background: linear-gradient(145deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0.005) 60%, rgba(0, 0, 0, 0.25) 100%);
   border: 1px solid rgba(255, 255, 255, 0.07);
