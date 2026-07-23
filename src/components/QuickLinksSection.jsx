@@ -4,7 +4,7 @@ export default function QuickLinksSection({ onNavigate, tutorialIndex }) {
       <div className="ql-container">
         <div className="ql-col brand-col">
           <button onClick={() => onNavigate && onNavigate(0)} className="ql-brand-btn" aria-label="Go to Hero Section">
-            <img src="/logo.png" alt="CursorX Logo" className="ql-logo" />
+            <img src="/logo.png" alt="CursorX Logo" className="ql-logo" width="190" height="190" />
           </button>
           <div className="brand-details">
             <p className="ql-description">

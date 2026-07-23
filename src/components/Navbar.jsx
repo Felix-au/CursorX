@@ -36,7 +36,7 @@ export default function Navbar({ onNavigate, current, tutorialIndex, contactInde
                   <line x1="3" y1="18" x2="21" y2="18" />
                 </svg>
               ) : (
-                <img src="/logo.png" alt="CursorX Logo" className="nav-logo-img" />
+                <img src="/logo.png" alt="CursorX Logo" className="nav-logo-img" width="64" height="64" />
               )
             )}
             {isHero && (

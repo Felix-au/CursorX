@@ -21,7 +21,7 @@ export default function HeroSlide({ onNavigate }) {
         </div>
 
         <h1 className="hero-title">
-          <img src="/logo.png" alt="CursorX Logo" className="hero-logo-img" />
+          <img src="/logo.png" alt="CursorX Logo" className="hero-logo-img" width="300" height="300" />
         </h1>
         <p className="hero-sub">
           Browse 20+ distinct cursor effects, preview them live, grab the code, get the AI prompt. Ship stunning cursors in minutes.
