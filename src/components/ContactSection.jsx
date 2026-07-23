@@ -1,10 +1,6 @@
 import { useState } from 'react';
 
-const checkPointer = (cx, cy) =>
-  document.elementsFromPoint(cx, cy).some(el =>
-    ['BUTTON', 'INPUT', 'A', 'LABEL', 'TEXTAREA'].includes(el.tagName) ||
-    el.classList.contains('btn')
-  );
+
 
 export default function ContactSection({ index }) {
   const [name, setName] = useState('');

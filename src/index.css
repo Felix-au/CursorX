@@ -1920,5 +1920,160 @@ body {
   max-width: 100%;
 }
 
+/* ============================================================
+   Quick Links Footer Section
+   ============================================================ */
+.quick-links-section {
+  width: 100%;
+  border-top: 1px solid var(--border);
+  background: rgba(8, 8, 10, 0.4);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  padding: 48px 24px 80px; /* Large bottom padding for breathing space above footer */
+  display: flex;
+  justify-content: center;
+  z-index: 2;
+  position: relative;
+  scroll-snap-align: end;
+  scroll-snap-stop: always;
+}
+
+.ql-container {
+  width: 100%;
+  max-width: 1000px;
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 40px;
+}
+
+.ql-col {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.brand-col {
+  padding-right: 40px;
+}
+
+.ql-brand {
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.ql-brand .logo-x {
+  color: var(--text);
+}
+
+.ql-description {
+  font-size: 13px;
+  color: var(--text-2);
+  line-height: 1.6;
+  margin: 0;
+}
+
+.ql-socials {
+  display: flex;
+  gap: 12px;
+  margin-top: 4px;
+}
+
+.ql-social-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.02);
+  color: var(--text-2);
+  transition: var(--transition);
+  text-decoration: none;
+  cursor: none;
+}
+
+.ql-social-btn:hover {
+  color: var(--text);
+  border-color: var(--accent);
+  background: rgba(124, 92, 252, 0.08);
+}
+
+.ql-col-title {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--text-3);
+  margin: 0;
+  padding-top: 4px;
+}
+
+.ql-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.ql-link {
+  font-size: 13px;
+  color: var(--text-2);
+  text-decoration: none;
+  transition: var(--transition);
+  cursor: none;
+}
+
+.ql-link:hover {
+  color: var(--text);
+}
+
+.ql-link-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  font-family: inherit;
+  font-size: 13px;
+  color: var(--text-2);
+  text-align: left;
+  transition: var(--transition);
+  cursor: none;
+  width: 100%;
+}
+
+.ql-link-btn:hover {
+  color: var(--text);
+}
+
+.ql-tech-link {
+  font-size: 13px;
+  color: var(--text-2);
+  text-decoration: none;
+  transition: var(--transition);
+  cursor: none;
+  display: inline-block;
+}
+
+.ql-tech-link:hover {
+  color: var(--text);
+}
+
+/* Mobile responsive for quick links */
+@media (max-width: 768px) {
+  .ql-container {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+  .brand-col {
+    padding-right: 0;
+  }
+}
+
 
 

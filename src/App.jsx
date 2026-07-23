@@ -4,6 +4,7 @@ import HeroSlide from './components/HeroSlide.jsx';
 import CursorSlide from './components/CursorSlide.jsx';
 import ContactSection from './components/ContactSection.jsx';
 import TutorialSection from './components/TutorialSection.jsx';
+import QuickLinksSection from './components/QuickLinksSection.jsx';
 import NavDots from './components/NavDots.jsx';
 
 const TOTAL = CURSORS.length + 2; // 22 cursors + 1 tutorial + 1 contact = 24
@@ -231,6 +232,7 @@ export default function App() {
 
         <TutorialSection index={TOTAL - 1} />
         <ContactSection index={TOTAL} />
+        <QuickLinksSection onNavigate={navigateTo} tutorialIndex={TOTAL - 1} />
       </div>
 
       {/* Persistent Footer */}
