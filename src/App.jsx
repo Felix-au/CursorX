@@ -334,8 +334,8 @@ export default function App() {
       <Cubes
         rows={7}
         cols={14}
-        cubeSize={70}
-        cellGap={18}
+        cubeSize={63}
+        cellGap={25}
         maxAngle={90}
         radius={3}
         borderStyle="1px dashed #5cf4fc"
